@@ -1,0 +1,3 @@
+LOADDATA = {
+  hoge: 'fuga',
+};
