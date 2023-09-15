@@ -13,10 +13,11 @@
   "main": "",
   "types": "./lib/loader.d.ts",
   "scripts": {
-    "dev": "npx genversion --es6 ./js/mod/modules/version.js && vite",
-    "build": "npx genversion --es6 ./js/mod/modules/version.js && vite build",
-    "preview": "vite preview",
-    "release": "npm run build && npx tsc && node ./tools/release.js && node ./tools/releaseSampleMod.js"
+    "build": "genversion --es6 ./js/mod/modules/version.js && vite build",
+    "build:docs": "typedoc",
+    "build:package": "genversion --es6 ./js/mod/modules/version.js && tsc",
+    "build:dist": "npm run build && npm run build:package && node ./tools/release.js && node ./tools/releaseSampleMod.js",
+    "preview:docs": "typedoc --excludeExternals"
   },
   "devDependencies": {
     "genversion": "^3.1.1",
