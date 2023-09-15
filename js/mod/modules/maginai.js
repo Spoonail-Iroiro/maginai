@@ -1,4 +1,5 @@
-import logging from './logging.js';
+import _log from './logging.js';
+import logging from 'loglevel';
 import { Patcher } from './patcher.js';
 import { ModEvent } from './mod-event.js';
 import { version as VERSION } from './version.js';
@@ -278,7 +279,7 @@ class Maginai {
    */
   /**
    * JavaScriptファイルをロード
-   * DOM操作で<script>タグによりロードし、ロードしたscript要素を含むオブジェクトにfullfilledされるPromiseを返す
+   * DOM操作でscriptタグによりロードし、ロードしたscript要素を含むオブジェクトにfullfilledされるPromiseを返す
    * @param {string} path
    * @return {Promise<{script:string}, Error>} promise
    */

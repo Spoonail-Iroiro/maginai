@@ -1,4 +1,4 @@
-import logging from "./logging.js";
+import logging from "loglevel";
 
 const logger = logging.getLogger("maginai.events");
 
