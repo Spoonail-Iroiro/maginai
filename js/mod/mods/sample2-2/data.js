@@ -1,3 +1,0 @@
-LOADDATA = {
-  hoge: 'fuga',
-};
