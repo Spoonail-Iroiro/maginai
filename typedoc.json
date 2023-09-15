@@ -13,11 +13,12 @@
   "plugin": [
     "typedoc-plugin-missing-exports",
   ],
-  "logLevel": "Info",
+  "logLevel": "Verbose",
   "tsconfig": "./tsconfig.typedoc.json",
   "visibilityFilters": {
     "protected": false,
     "private": false,
+    "@internal": false,
     "inherited": true,
     "external": false,
   },
