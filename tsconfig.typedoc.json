@@ -1,0 +1,28 @@
+{
+  // プロジェクトに合わせて変更してください
+  "include": [
+    "./lib",
+    "./js"
+  ],
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2015",
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    // JSファイルは通常、ソースファイルとして無視されますが、
+    // ここではJSファイルを読み込むようにTypeScriptに指示します
+    "allowJs": true,
+    // "checkJs": true,
+    // d.tsファイルを生成します
+    "declaration": true,
+    // コンパイラを実行すると
+    // d.tsファイルのみ出力されます
+    "emitDeclarationOnly": true,
+    "allowUmdGlobalAccess": true,
+    "outDir": "./dist"
+    // "strict": true,
+  }
+}
