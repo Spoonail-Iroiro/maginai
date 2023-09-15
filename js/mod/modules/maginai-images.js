@@ -1,5 +1,10 @@
 /**
- *
+ * `srcInfo`をもとにctxを使用して(x,y)に画像を貼り付けます
+ * （srcInfoがtop/left/width/heightの時用）
+ * @param {OffscreenCanvasRenderingContext2D} ctx
+ * @param {maginaiTypes.DrawInfoTLWH} srcInfo
+ * @param {number} x
+ * @param {number} y
  */
 function pasteTLWH(ctx, srcInfo, x, y) {
   const c = srcInfo;
@@ -16,6 +21,14 @@ function pasteTLWH(ctx, srcInfo, x, y) {
   );
 }
 
+/**
+ * `srcInfo`をもとにctxを使用して(x,y)に画像を貼り付けます
+ * （srcInfoがrectの時用）
+ * @param {OffscreenCanvasRenderingContext2D} ctx
+ * @param {maginaiTypes.DrawInfoRect} srcInfo
+ * @param {number} x
+ * @param {number} y
+ */
 function pasteRect(ctx, srcInfo, x, y) {
   const c = srcInfo;
   ctx.drawImage(

@@ -1,9 +1,17 @@
-import logging from "loglevel";
+import logging from 'loglevel';
 
-const logger = logging.getLogger("maginai.events");
+const logger = logging.getLogger('maginai.events');
 
+/**
+ * イベントクラス
+ */
 class ModEvent {
-  constructor(name, description = "Event") {
+  /**
+   * @private
+   * @param {string} name イベント名
+   * @param {string} description 説明
+   */
+  constructor(name, description = 'Event') {
     if (name === undefined) {
       throw new Error(`Name cannot be undefined`);
     }
@@ -13,6 +21,11 @@ class ModEvent {
     this.hasHandler = false;
   }
 
+  /**
+   * イベントの発火
+   * @private
+   * @param {object} e イベントオブジェクト
+   */
   invoke(e) {
     for (const handler of this.handlers) {
       try {
@@ -26,11 +39,19 @@ class ModEvent {
     }
   }
 
+  /**
+   * イベントハンドラーの追加
+   * @param {Function} handler
+   */
   addHandler(handler) {
     this.handlers.push(handler);
     this.hasHandler = true;
   }
 
+  /**
+   * イベントハンドラーの削除
+   * @param {Function} handler
+   */
   removeHandler(handler) {
     if (this.handlers.indexOf(handler) === -1) {
       throw new Error(`Cannot remove unregistered handler`);
