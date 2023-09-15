@@ -108,35 +108,31 @@ class MaginaiEvents {
 }
 
 class Maginai {
-  /** @type {MaginaiImage?} */
-  #image = null;
-  /**
-   * ゲーム内ログへ出力するメッセージのキュー
-   * @type {string[]}
-   */
-  #inGameDebugLogQueue;
-
   constructor() {
     /**
      * loadJsで読み込まれたことのあるJavaScriptパス
+     * @private
      * @type {Record<string,boolean>}
      */
     this.loadedJs = {};
 
     /**
-     * ゲームロードが完了したか
-     * gameLoadFinishedイベントのガード用
+     * gameLoadFinishedイベントが発生したことがあるならtrue、ないならfalse
+     * 上記イベントの制御用
+     * @private
      */
     this.isGameLoadFinished = false;
 
     /**
-     * ダミーに差し替え前のtGameMain
+     * ダミーに差し替える前のtGameMain
+     * @private
      * @type {any}
      */
     this.origtGameMain = null;
 
     /**
      * 各Modのロード中に発生したエラーについて、エラーとModNameの組のlist
+     * @private
      * @type {[(Error|ErrorEvent), string][]}
      */
     this.errorsOnLoadMods = [];
@@ -145,17 +141,46 @@ class Maginai {
      * Modのロードのメインプロセスでエラーが発生したかどうか（個別Modは関係なし）
      * 初期はtrueで成功で完了時にfalseにセット
      * タイトルへの表示等用
+     * @private
      */
     this.isModLoadFatalErrorOccured = true;
 
+    /**
+     * タイトル画面等への情報表示用Canvas制御クラス
+     * @private
+     * @type {MaginaiImage?}
+     */
+    this.image = null;
+
+    /**
+     * ゲーム内ログへ出力するメッセージのキュー
+     * @private
+     * @type {string[]}
+     */
+    this.inGameDebugLogQueue = [];
+
     // 以下サブモジュールの公開
+    /**
+     * maginai.patcherサブモジュール
+     * メソッドのパッチに便利なメソッドを提供する
+     * 詳細はPatcherクラス定義へ
+     */
     this.patcher = new Patcher();
 
+    /**
+     * maginai.loggingサブモジュール===loglevelモジュール
+     * maginai.logging.getLogger("<modName>")で各Mod用loggerオブジェクトを取得、
+     * logger.debug("message")、logger.info("message")等でログ出力可能
+     * 各Modでのログはこれを使用することが推奨されます
+     */
     this.logging = logging;
 
+    /**
+     * maginai.eventsサブモジュール
+     * 各種のイベント（ModEventオブジェクト）を定義しておりハンドラーの設定などが可能
+     * 詳細はMaginaiEvents定義へ
+     */
     this.events = new MaginaiEvents();
-
-    this.#inGameDebugLogQueue = [];
   }
 
   /**
@@ -166,7 +191,7 @@ class Maginai {
     logger.info(`Mod loader 'maginai' v${VERSION}`);
 
     // Name shortcuts and control 'this' bind
-    this.#image = new MaginaiImage();
+    this.image = new MaginaiImage();
     const magi = this;
     const ev = this.events;
 
@@ -209,7 +234,7 @@ class Maginai {
           // Inject drawing labels for maginai, before passed callback called
           const newCB = (isOk, ...cbArgs) => {
             if (isOk) {
-              magi.#image.draw(
+              magi.image.draw(
                 tWgm.screen.layers.ground,
                 magi.isModLoadFatalErrorOccured,
                 magi.errorsOnLoadMods
@@ -230,11 +255,11 @@ class Maginai {
       const rtnFn = function (...args) {
         const rtn = origMethod.call(this, ...args);
 
-        for (let message of magi.#inGameDebugLogQueue) {
+        for (let message of magi.inGameDebugLogQueue) {
           origMethod.call(this, message);
         }
         // clear
-        magi.#inGameDebugLogQueue.length = 0;
+        magi.inGameDebugLogQueue.length = 0;
         return rtn;
       };
       return rtnFn;
@@ -329,7 +354,7 @@ class Maginai {
    */
   logToInGameLogDebug(message) {
     // option is not used currently
-    this.#inGameDebugLogQueue.push(message);
+    this.inGameDebugLogQueue.push(message);
   }
 
   /**
