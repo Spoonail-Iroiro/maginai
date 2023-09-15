@@ -1,0 +1,25 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    //"./lib/loader.d.ts"
+    "./js/mod/loader.js"
+    //"./lib/*.d.ts",
+    //"./lib/**/*.d.ts"
+  ],
+  "includeVersion": true,
+  "markedOptions": {
+    "breaks": true
+  },
+  "plugin": [
+    "typedoc-plugin-missing-exports",
+  ],
+  "logLevel": "Info",
+  "tsconfig": "./tsconfig.typedoc.json",
+  "visibilityFilters": {
+    "protected": false,
+    "private": false,
+    "inherited": true,
+    "external": false,
+  },
+  "out": "_docs"
+}
