@@ -13,6 +13,7 @@ const devRoot = path.resolve('./js/mod');
 const buildRoot = path.resolve('./game/game/js/mod');
 const releaseArchiveName = `maginai-${version}.zip`;
 const distDir = path.resolve('./dist');
+const assetDir = path.resolve('./assets');
 if (path.dirname(distDir) !== projDir) {
   throw new Error(`distDir is not under project ${projDir}, ${distDir}`);
 }
@@ -26,9 +27,12 @@ const files = [
   ['mods_default', 'mods'],
 ];
 
+// make tempdir
 const tempDir = fs.mkdtempSync(os.tmpdir() + '/');
+// define release dirs
 const releaseDir = path.join(tempDir, 'maginai');
-fs.mkdirSync(releaseDir);
+// make releaseDir by copying assets
+fs.cpSync(assetDir, releaseDir, { recursive: true });
 const modDir = path.join(releaseDir, 'mod');
 fs.mkdirSync(modDir);
 
