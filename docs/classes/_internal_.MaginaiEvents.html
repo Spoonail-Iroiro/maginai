@@ -17,7 +17,10 @@
 <li><a href="_internal_.MaginaiEvents.html">MaginaiEvents</a></li></ul>
 <h1>Class MaginaiEvents</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>ゲーム中で発生するイベント定義<br>各Modはここで定義されているModEventのaddHandlerを呼び出しハンドラを登録することで<br>特定イベントに対する処理を定義できる</p>
+<div class="tsd-comment tsd-typography"><p><code>maginai.events</code>サブモジュールクラス<br>直接インスタンス化せず<code>maginai.events</code>から使用してください</p>
+<p>各Modはここで定義されているイベントの<code>addHandler</code>を呼び出しハンドラを登録可能</p>
+<pre><code class="language-js"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">ev</span><span class="hl-1"> = </span><span class="hl-3">maginai</span><span class="hl-1">.</span><span class="hl-3">events</span><span class="hl-1">;</span><br/><span class="hl-3">ev</span><span class="hl-1">.</span><span class="hl-3">gameLoadFinished</span><span class="hl-1">.</span><span class="hl-4">addHandler</span><span class="hl-1">(() </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-3">console</span><span class="hl-1">.</span><span class="hl-4">log</span><span class="hl-1">(</span><span class="hl-5">&quot;ロード終了&quot;</span><span class="hl-1">)</span><br/><span class="hl-1">});</span>
+</code><button>Copy</button></pre>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
@@ -25,7 +28,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">MaginaiEvents</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/d56b9ef/js/mod/modules/maginai.js#L96">js/mod/modules/maginai.js:96</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/a9f3b3e/js/mod/modules/maginai.js#L108">js/mod/modules/maginai.js:108</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -54,36 +57,36 @@
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="afterRefresh" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>after<wbr/>Refresh</span><a href="#afterRefresh" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">after<wbr/>Refresh</span><span class="tsd-signature-symbol">:</span> <a href="_internal_.ModEvent.html" class="tsd-signature-type tsd-kind-class">ModEvent</a><span class="tsd-signature-symbol"> = ...</span></div>
+<div class="tsd-signature"><span class="tsd-kind-property">after<wbr/>Refresh</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = ...</span></div>
 <div class="tsd-comment tsd-typography"><p>毎フレーム・本来の処理の後</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/d56b9ef/js/mod/modules/maginai.js#L105">js/mod/modules/maginai.js:105</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/a9f3b3e/js/mod/modules/maginai.js#L117">js/mod/modules/maginai.js:117</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="beforeRefresh" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>before<wbr/>Refresh</span><a href="#beforeRefresh" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">before<wbr/>Refresh</span><span class="tsd-signature-symbol">:</span> <a href="_internal_.ModEvent.html" class="tsd-signature-type tsd-kind-class">ModEvent</a><span class="tsd-signature-symbol"> = ...</span></div>
+<div class="tsd-signature"><span class="tsd-kind-property">before<wbr/>Refresh</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = ...</span></div>
 <div class="tsd-comment tsd-typography"><p>毎フレーム・本来の処理の前</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/d56b9ef/js/mod/modules/maginai.js#L103">js/mod/modules/maginai.js:103</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/a9f3b3e/js/mod/modules/maginai.js#L115">js/mod/modules/maginai.js:115</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="gameLoadFinished" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>game<wbr/>Load<wbr/>Finished</span><a href="#gameLoadFinished" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">game<wbr/>Load<wbr/>Finished</span><span class="tsd-signature-symbol">:</span> <a href="_internal_.ModEvent.html" class="tsd-signature-type tsd-kind-class">ModEvent</a><span class="tsd-signature-symbol"> = ...</span></div>
+<div class="tsd-signature"><span class="tsd-kind-property">game<wbr/>Load<wbr/>Finished</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = ...</span></div>
 <div class="tsd-comment tsd-typography"><p>ゲームデータのロードが終了し、1度目のタイトル画面表示直前</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/d56b9ef/js/mod/modules/maginai.js#L107">js/mod/modules/maginai.js:107</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/a9f3b3e/js/mod/modules/maginai.js#L119">js/mod/modules/maginai.js:119</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="tWgmLoad" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>t<wbr/>Wgm<wbr/>Load</span><a href="#tWgmLoad" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">t<wbr/>Wgm<wbr/>Load</span><span class="tsd-signature-symbol">:</span> <a href="_internal_.ModEvent.html" class="tsd-signature-type tsd-kind-class">ModEvent</a><span class="tsd-signature-symbol"> = ...</span></div>
+<div class="tsd-signature"><span class="tsd-kind-property">t<wbr/>Wgm<wbr/>Load</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = ...</span></div>
 <div class="tsd-comment tsd-typography"><p>tGameMainがnewされtWgmにセットされた時<br>※ゲームデータのロードは終わっていない可能性あり</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/d56b9ef/js/mod/modules/maginai.js#L99">js/mod/modules/maginai.js:99</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/Spoonail-Iroiro/maginai/blob/a9f3b3e/js/mod/modules/maginai.js#L111">js/mod/modules/maginai.js:111</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -95,6 +98,7 @@
 <ul id="tsd-filter-options">
 <li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-checkbox"></use></svg><span>Protected</span></label></li>
 <li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-private" name="private"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-checkbox"></use></svg><span>Private</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-internal" name="internal"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-checkbox"></use></svg><span>Internal</span></label></li>
 <li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-checkbox"></use></svg><span>Inherited</span></label></li>
 <li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-checkbox"></use></svg><span>External</span></label></li></ul></form></div>
 <div class="tsd-theme-toggle">
