@@ -136,6 +136,13 @@ class Maginai {
     this.isGameLoadFinished = false;
 
     /**
+     * tWgmを1度だけ初期化するために$(document).readyとmain postprocessの
+     * どちらか遅い方で初期化する必要があるのでその制御用
+     * 早い方（`new tGameMain`しない）が呼び出されたかどうかのフラグ
+     */
+    this.isFirstDummytWgmMainLoadFinished = false;
+
+    /**
      * ダミーに差し替える前のtGameMain
      * @internal
      * @type {any}
@@ -291,29 +298,41 @@ class Maginai {
       return rtnFn;
     });
 
+    const readyLogger = magi.logging.getLogger('maginai.ready');
+
     // Modのロード前にゲームがロードされるのを防ぐためtGameMainクラスをダミーに置き換える
     // （tGameMainのnew≒ゲームの諸々の初期化）
     // このためModからtGameMainクラスにアクセスする場合はmaginai.origtGameMainを参照する必要がある
     this.origtGameMain = tGameMain;
     tGameMain = function (...args) {
-      if (tWgm === null) {
-        logger.debug(`tWgm is not loaded yet`);
+      if (!magi.isFirstDummytWgmMainLoadFinished) {
+        readyLogger.debug(`First dummy tWgm load`);
+        magi.isFirstDummytWgmMainLoadFinished = true;
         return {};
       } else {
-        throw new Error(
-          'ゲームのロードが先に行われたためModのロードに失敗しました。'
-        );
+        try {
+          readyLogger.debug(`Second true tWgm load`);
+          // loadtWgm自体がtWgmを設定するが、そのまま返す（のでもう一度tWgmへの代入が行われるが、特に影響なし）
+          const rtn = magi.loadtWgm();
+          return rtn;
+        } catch (e) {
+          readyLogger.error(`Fatal error occured during new tGameMain()`);
+          magi.isModLoadFatalErrorOccured = true;
+          throw e;
+        }
       }
     };
   }
 
   /**
-   * ゲームをロードする
    * @private
+   * ゲームをロードする
+   * @return {any} new tGameMain({})
    */
   loadtWgm() {
     tWgm = new this.origtGameMain({});
     this.ontWgmLoaded({});
+    return tWgm;
   }
 
   /**
@@ -453,6 +472,7 @@ class Maginai {
    * @private
    */
   loadMods() {
+    const postProcessLogger = this.logging.getLogger('maginai.postprocess');
     const rtnPromise = this.loadJsData('./js/mod/mods/mods_load.js')
       .then((loaded) => {
         let promise = Promise.resolve();
@@ -463,7 +483,14 @@ class Maginai {
       })
       .then(() => {
         logger.info('Completed loading all mods. Starting the game...');
-        this.loadtWgm();
+        if (!this.isFirstDummytWgmMainLoadFinished) {
+          postProcessLogger.debug('First dummy tWgm load. Doing nothing');
+          this.isFirstDummytWgmMainLoadFinished = true;
+        } else {
+          postProcessLogger.debug('Second true tWgm load');
+          this.loadtWgm();
+        }
+        // ※readyの方でtrueに設定し直される可能性がある
         this.isModLoadFatalErrorOccured = false;
       })
       .catch((e) => {
