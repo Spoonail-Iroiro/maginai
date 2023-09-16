@@ -1,8 +1,8 @@
 {
   // プロジェクトに合わせて変更してください
   "include": [
-    "./lib",
-    "./js"
+    "./js",
+    "@types"
   ],
   "compilerOptions": {
     "target": "ES2020",

@@ -1,11 +1,47 @@
+/**
+ * `maginai.patcher`サブモジュールクラス
+ * 直接インスタンス化せず`maginai.patcher`から使用してください
+ */
 class Patcher {
-  patchMethod(Cls, methodName, newMethodFactory) {
+  /**
+   * 指定したクラスのメソッドを新しいメソッドに置き換え（パッチ）する
+   * ```js
+   * class HelloClass {
+   *   a = 1;
+   *   hello(){
+   *     console.log("Hello", this.a);
+   *   }
+   * }
+   * const helloobj = new HelloClass();
+   * maginai.patcher.patchMethod(
+   *   HelloClass, // HelloClassの
+   *   "hello", // helloメソッドをパッチする
+   *   (origMethod) => {
+   *   // 新しいhelloメソッドは…
+   *   const rtnFn = function () {
+   *     // もとのメソッドを呼び出した後に'Bye'というメッセージを出力する
+   *     origMethod.call(this);
+   *     console.log("Bye");
+   *   };
+   *   return rtnFn;
+   * })
+   * // パッチ以降はhelloメソッドの呼び出しは、新しいhelloメソッドを呼ぶ
+   * helloobj.hello()
+   * // Hello 1
+   * // Bye
+   * ```
+   * @param {Function} cls パッチ対象クラス
+   * @param {string} methodName パッチ対象メソッド名
+   * @param {(origMethod: Function) => Function} newMethodFactory 新しい`methodName`メソッドとなる関数を返すファクトリ関数
+   *     origMethodは元々の`methodName`メソッド
+   */
+  patchMethod(cls, methodName, newMethodFactory) {
     // Prevent patch undefined method
-    if (Cls.prototype[methodName] === undefined) {
-      throw new Error(`Cannot patch ${Cls.name}.prototype.${methodName}`);
+    if (cls.prototype[methodName] === undefined) {
+      throw new Error(`Cannot patch ${cls.name}.prototype.${methodName}`);
     }
     // Prevent newMethodFactory forgets return new method
-    const newMethod = newMethodFactory(Cls.prototype[methodName]);
+    const newMethod = newMethodFactory(cls.prototype[methodName]);
     if (newMethod === undefined) {
       throw new Error(
         `No new method returned from new method factory: ${newMethodFactory}`
@@ -14,9 +50,9 @@ class Patcher {
     // Old method is saved as __${methodName} method
     // TODO: Save all versions?
     const origMethodKey = `__${methodName}`;
-    Cls.prototype[origMethodKey] = Cls.prototype[methodName];
+    cls.prototype[origMethodKey] = cls.prototype[methodName];
     // Assign new method
-    Cls.prototype[methodName] = newMethod;
+    cls.prototype[methodName] = newMethod;
   }
 }
 
