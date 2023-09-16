@@ -22,5 +22,6 @@
     "inherited": true,
     "external": false,
   },
+  "readme": "./assets/readme.txt",
   "out": "_docs"
 }
