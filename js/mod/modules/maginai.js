@@ -375,9 +375,10 @@ class Maginai {
 
   /**
    * JavaScriptファイルから`var LOADDATA=...`で定義されたデータをロードする
+   * 非同期
    * ほぼunion.jsの`loadJsData`のvendorize
    * @param {string} path
-   * @returns {any} ロードされたデータ
+   * @returns {Promise<any>} ロードされたデータにfullfilledされるPromise
    */
   loadJsData(path) {
     const promise = this.loadJs(path).then((e) => {
