@@ -144,7 +144,10 @@ class Maginai {
 
     /**
      * ダミーに差し替える前のtGameMain
-     * @internal
+     * maginaiでは`new tGameMain()`を遅らせるため、`tGameMain`クラスを
+     * ダミーにパッチするため、Modからは`tGameMain`でアクセスできなくなる
+     * もし本来の`tGameMain`のメソッドにパッチしたいなどでアクセスする場合
+     * この`origtGameMain`を使用すること
      * @type {any}
      */
     this.origtGameMain = null;

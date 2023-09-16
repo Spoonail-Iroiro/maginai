@@ -1,6 +1,6 @@
 {
   "name": "maginai",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Spoonail",
   "repository": {
     "type": "git",
@@ -17,7 +17,9 @@
     "build:docs": "typedoc",
     "build:package": "genversion --es6 ./js/mod/modules/version.js && tsc",
     "build:dist": "npm run dev && npm run build:package && node ./tools/release.js && node ./tools/releaseSampleMod.js",
-    "preview:docs": "typedoc --excludeExternals"
+    "preview:docs": "typedoc --excludeExternals",
+    "preview:package": "npm run build:dist && npm pack"
+
   },
   "devDependencies": {
     "genversion": "^3.1.1",
