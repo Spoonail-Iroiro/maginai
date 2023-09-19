@@ -107,15 +107,25 @@ class MaginaiImage {
  */
 class MaginaiEvents {
   /** tGameMainがnewされtWgmにセットされた時
-   * ※ゲームデータのロードは終わっていない可能性あり */
+   * ※ゲームデータのロードは終わっていない可能性あり
+   * callback type: ({}) => void
+   */
   tWgmLoad = new ModEvent('tWgmLoad');
   /** key press */
   // keyClick = new ModEvent("keyClick");
-  /** 毎フレーム・本来の処理の前 */
+  /** 毎フレーム・本来の処理の前
+   * callback type: ({frame: number}) => void
+   *   frame 前回更新からの経過フレーム
+   */
   beforeRefresh = new ModEvent('beforeRefresh');
-  /** 毎フレーム・本来の処理の後 */
+  /** 毎フレーム・本来の処理の後
+   * callback type: ({frame: number}) => void
+   *   frame 前回更新からの経過フレーム
+   */
   afterRefresh = new ModEvent('afterRefresh');
-  /** ゲームデータのロードが終了し、1度目のタイトル画面表示直前 */
+  /** ゲームデータのロードが終了し、1度目のタイトル画面表示直前
+   * callback type: ({}) => void
+   */
   gameLoadFinished = new ModEvent('gameLoadFinished');
 }
 
