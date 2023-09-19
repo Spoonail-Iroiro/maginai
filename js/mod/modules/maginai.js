@@ -221,7 +221,7 @@ class Maginai {
   /**
    * 初期化処理（union.jsのロードが必要）
    * Maginaiのインスタンス作成だけであればunion.jsは不要
-   * @private
+   * @internal
    */
   init() {
     logger.info(`Mod loader 'maginai' v${VERSION}`);
@@ -328,7 +328,7 @@ class Maginai {
   }
 
   /**
-   * @private
+   * @internal
    * ゲームをロードする
    * @return {any} new tGameMain({})
    */
@@ -341,7 +341,7 @@ class Maginai {
   /**
    * ゲームのロード直後処理
    * @param {object} e
-   * @private
+   * @internal
    */
   ontWgmLoaded(e) {
     // tWgmLoadイベント発生
@@ -473,7 +473,7 @@ class Maginai {
    * mods_load.jsのmodsから読み込み順と対象modNameを取得
    * 各modNameで1modのロード処理（getModLoadPromise参照）を生成し連結
    * その後はloadtWgmでゲームロード開始
-   * @private
+   * @internal
    */
   loadMods() {
     const postProcessLogger = this.logging.getLogger('maginai.postprocess');

@@ -7,7 +7,7 @@ const logger = logging.getLogger('maginai.events');
  */
 class ModEvent {
   /**
-   * @private
+   * @internal
    * @param {string} name イベント名
    * @param {string} description 説明
    */
