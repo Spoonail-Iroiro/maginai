@@ -17,19 +17,19 @@ class MaginaiImage {
      */
     this.cvs = new OffscreenCanvas(500, 100);
     /**
-     * @type {OffscreenCanvasRenderingContext2D}
      * @internal
+     * @type {OffscreenCanvasRenderingContext2D}
      */
     this.ctx = this.cvs.getContext('2d');
     this.ctx.imageSmoothingEnabled = false;
   }
 
   /**
+   * @private
    * 画面にmaginaiの情報を表示するためのcanvas,context,rectを作成し返す
    * @param {boolean} isMainFailed
    * @param {[(Error|ErrorEvent), string][]} failedMods
    * @return {maginaiTypes.DrawInfoRect} drawInfo
-   * @private
    */
   getImageInfo(isMainFailed, failedMods) {
     const gm = tWgm;
@@ -122,16 +122,16 @@ class MaginaiEvents {
 class Maginai {
   constructor() {
     /**
+     * @internal
      * loadJsで読み込まれたことのあるJavaScriptパス
      * @type {Record<string,boolean>}
-     * @internal
      */
     this.loadedJs = {};
 
     /**
+     * @internal
      * gameLoadFinishedイベントが発生したことがあるならtrue、ないならfalse
      * 上記イベントの制御用
-     * @internal
      */
     this.isGameLoadFinished = false;
 
@@ -153,39 +153,39 @@ class Maginai {
     this.origtGameMain = null;
 
     /**
-     * 各Modのロード中に発生したエラーについて、エラーとModNameの組のlist
      * @internal
+     * 各Modのロード中に発生したエラーについて、エラーとModNameの組のlist
      * @type {[(Error|ErrorEvent), string][]}
      */
     this.errorsOnLoadMods = [];
 
     /**
+     * @internal
      * Modのロードのメインプロセスでエラーが発生したかどうか（個別Modは関係なし）
      * 初期はtrueで成功で完了時にfalseにセット
      * タイトルへの表示等用
-     * @internal
      */
     this.isModLoadFatalErrorOccured = true;
 
     /**
-     * タイトル画面等への情報表示用Canvas制御クラス
      * @internal
+     * タイトル画面等への情報表示用Canvas制御クラス
      * @type {MaginaiImage?}
      */
     this.image = null;
 
     /**
-     * ゲーム内ログへ出力するメッセージのキュー
      * @internal
+     * ゲーム内ログへ出力するメッセージのキュー
      * @type {string[]}
      */
     this.inGameDebugLogQueue = [];
 
     /**
+     * @internal
      * ロード中のModのPostprocess
      * Modのロード→Mod自身の`init.js`から`setModPostprocess`でset→maginaiから`popModPostprocess`でpopし実行→次のModのロード…
      * というサイクルでPostprocessを実行する
-     * @internal
      * @type {Promise<any>}
      */
     this.current_mod_postprocess = null;
@@ -219,9 +219,9 @@ class Maginai {
   }
 
   /**
+   * @internal
    * 初期化処理（union.jsのロードが必要）
    * Maginaiのインスタンス作成だけであればunion.jsは不要
-   * @internal
    */
   init() {
     logger.info(`Mod loader 'maginai' v${VERSION}`);
@@ -339,9 +339,9 @@ class Maginai {
   }
 
   /**
+   * @internal
    * ゲームのロード直後処理
    * @param {object} e
-   * @internal
    */
   ontWgmLoaded(e) {
     // tWgmLoadイベント発生
@@ -416,9 +416,9 @@ class Maginai {
   }
 
   /**
+   * @private
    * ModのJavaScriptロード後に実行されるPromiseをpopする
    * 事前にsetされていなくてもPromise.resolve()を返し、エラーにならない
-   * @private
    * @return {Promise<any>} setされていたPromise
    */
   popModPostprocess() {
@@ -428,6 +428,7 @@ class Maginai {
   }
 
   /**
+   * @private
    * 1Modのロード処理Promiseの生成
    * 1Modのロード処理は
    * 独自エラーハンドラのset→Mod JavaScriptのロード→Postprocessの実行→独自エラーハンドラをunset
@@ -438,7 +439,6 @@ class Maginai {
    * ＝一部がエラーでもほかは問題なく終了できる
    * @param {string} modName
    * @return {Promise<any>} promise
-   * @private
    */
   getModLoadPromise(modName) {
     const onError = (e) => {
@@ -469,11 +469,11 @@ class Maginai {
   }
 
   /**
+   * @internal
    * ロード処理 - すべてのModのロードからゲームロード終了まで
    * mods_load.jsのmodsから読み込み順と対象modNameを取得
    * 各modNameで1modのロード処理（getModLoadPromise参照）を生成し連結
    * その後はloadtWgmでゲームロード開始
-   * @internal
    */
   loadMods() {
     const postProcessLogger = this.logging.getLogger('maginai.postprocess');
