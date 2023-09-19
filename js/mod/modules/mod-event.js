@@ -22,8 +22,8 @@ class ModEvent {
   }
 
   /**
-   * イベントの発火
    * @private
+   * イベントの発火
    * @param {object} e イベントオブジェクト
    */
   invoke(e) {
