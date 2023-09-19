@@ -1,3 +1,5 @@
+※右上のハンバーガーボタンから目次を出せます
+
 # 最もシンプルなMod
 Mod名を決めその名前のフォルダを作り、その中に`init.js`ファイルを作成します。  
 例として`mysample`というModにしてみます。
@@ -177,6 +179,9 @@ maginaiではこのための便利なメソッドとして`maginai.patcher`の`p
 Modユーザーが内容を改変できる部分がある場合、`init.js`を直接編集させるのではなく、外部ファイルを用意したほうがいいでしょう。  
 [こちらの例](#postprocess)はファイル読み込みの処理例になっています。
 
+注意点としてファイルパスは`index.html`からの相対パスである必要があります。  
+よって、例えばModフォルダ直下に入れたファイルは./js/mod/mods/<Mod名>/<ファイル名>`といったパスになります。
+
 # `maginai` API
 `maginai`が公開するすべての機能のドキュメントは以下で公開されています。  
 https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
@@ -199,7 +204,7 @@ https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
 
 https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#logging
 
-loggerを使うことでどのModからのログなのかわかりやすく、ユーザーが表示レベルを制御できます。  
+loggerを使うことでどのModからのログなのかわかりやすく、ユーザーが表示レベル等を制御できます。  
 
 ![logger-log](docassets/log-with-logger.png)
 
@@ -208,11 +213,16 @@ loggerを使うことでどのModからのログなのかわかりやすく、�
 IIFEでなくグローバルに書いた場合、たとえば同じ`const hoge`という変数を使用するModが複数ロードされると、後にロードされるModは失敗します。  
 
 ※`const`や`let`はブロックスコープを作りますが、`var`が紛れ込まない保証はないことと、モジュールによるスコープ制限が利用できないためIIFEを推奨します  
-
 ## `tGameMain`クラスはそのまま使用できない
 `tGameMain`クラスはゲーム初期化を遅らせるためダミーになっており直接使用できません。  
 メソッドのパッチなどでアクセスしたい場合は以下に記載の通りとしてください。  
 https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#origtGameMain
+
+## Mod名は重複しない特徴的なものを付けるようにする
+Modはフォルダで導入するため同じMod名で別のModを入れることはできません。  
+また外部ファイルを読み込むModの場合、今のところ参照先を抽象化する機能がなく、Modフォルダ名を変えると動作しなくなります。  
+（アップデートで改善する可能性があります）  
+他と被りにくい名前を付けるようにしましょう。  
 
 # Q&A
 
