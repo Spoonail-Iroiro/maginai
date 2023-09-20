@@ -186,7 +186,8 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 
 # `maginai` API
 `maginai`が公開するすべての機能のドキュメントは以下で公開されています。  
-[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html)
+[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html)  
+※`Internal`マークがついてるものは内部用でModからの利用は想定されていません  
 
 `maginai`は実際には`Maginai`クラスインスタンスですので`Maginai`クラス下に公開されているものを使用できます。  
 
