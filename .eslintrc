@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "globals": {
+    "tGameKeyboard": true,
+    "tWgm": true,
+    "tGameMenu": true,
+    "tGameRoutineMap": true,
+    "tGameTitle": true,
+    "tGameText": true,
+    "tGameLog": true,
+    "tGameMain": true,
+    "tGameRefresh": true,
+    "LOADDATA": true
+  },
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-unused-vars": "warn"
+  }
+}
