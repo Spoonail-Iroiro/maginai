@@ -48,4 +48,11 @@ export default defineConfig({
       },
     },
   ],
+  test: {
+    setupFiles: ['./tests/vitest.setup.ts'],
+
+    alias: {
+      '@': resolve(__dirname, './js/mod'),
+    },
+  },
 });
