@@ -105,7 +105,7 @@ class MaginaiImage {
  * });
  * ```
  */
-class MaginaiEvents {
+export class MaginaiEvents {
   /** tGameMainがnewされtWgmにセットされた時
    * ※ゲームデータのロードは終わっていない可能性あり
    * callback type: ({}) => void
@@ -129,7 +129,7 @@ class MaginaiEvents {
   gameLoadFinished = new ModEvent('gameLoadFinished');
 }
 
-class Maginai {
+export class Maginai {
   constructor() {
     /**
      * @internal
@@ -518,7 +518,3 @@ class Maginai {
     return rtnPromise;
   }
 }
-
-const maginai = new Maginai();
-
-export default maginai;
