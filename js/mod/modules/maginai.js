@@ -1,4 +1,5 @@
-import logging from './logging.js';
+import _log from './logging.js';
+import logging from 'loglevel';
 import { Patcher } from './patcher.js';
 import { ModEvent } from './mod-event.js';
 import { version as VERSION } from './version.js';
@@ -11,17 +12,24 @@ const logger = logging.getLogger('maginai');
  */
 class MaginaiImage {
   constructor() {
+    /**
+     * @internal
+     */
     this.cvs = new OffscreenCanvas(500, 100);
+    /**
+     * @internal
+     * @type {OffscreenCanvasRenderingContext2D}
+     */
     this.ctx = this.cvs.getContext('2d');
     this.ctx.imageSmoothingEnabled = false;
-    this.lastRect = [0, 0, 0, 0];
   }
 
   /**
+   * @private
    * 画面にmaginaiの情報を表示するためのcanvas,context,rectを作成し返す
    * @param {boolean} isMainFailed
    * @param {[(Error|ErrorEvent), string][]} failedMods
-   * @return {maginai.DrawInfoRect} drawInfo
+   * @return {maginaiTypes.DrawInfoRect} drawInfo
    */
   getImageInfo(isMainFailed, failedMods) {
     const gm = tWgm;
@@ -77,87 +85,151 @@ class MaginaiImage {
    */
   draw(targetLayer, isMainFailed, failedMods) {
     const info = this.getImageInfo(isMainFailed, failedMods);
-    // targetLayer.ctx.clearRect(...this.lastRect);
     const dx = 5;
     const dy = targetLayer.cvs.height - info.rect[3];
     const drawRect = [dx, dy, info.rect[2], info.rect[3]];
     // targetLayer.ctx.clearRect(...drawRect);
     maginaiImage.pasteRect(targetLayer.ctx, info, drawRect[0], drawRect[1]);
-    this.lastRect = drawRect;
   }
 }
 
 /**
- * ゲーム中で発生するイベント定義
- * 各Modはここで定義されているModEventのaddHandlerを呼び出しハンドラを登録することで
- * 特定イベントに対する処理を定義できる
+ * `maginai.events`サブモジュールクラス
+ * 直接インスタンス化せず`maginai.events`から使用してください
+ *
+ * 各Modはここで定義されているイベントの`addHandler`を呼び出しハンドラを登録可能
+ * ```js
+ * const ev = maginai.events;
+ * ev.gameLoadFinished.addHandler(() => {
+ *   console.log("ロード終了")
+ * });
+ * ```
  */
 class MaginaiEvents {
   /** tGameMainがnewされtWgmにセットされた時
-   * ※ゲームデータのロードは終わっていない可能性あり */
+   * ※ゲームデータのロードは終わっていない可能性あり
+   * callback type: ({}) => void
+   */
   tWgmLoad = new ModEvent('tWgmLoad');
   /** key press */
   // keyClick = new ModEvent("keyClick");
-  /** 毎フレーム・本来の処理の前 */
+  /** 毎フレーム・本来の処理の前
+   * callback type: ({frame: number}) => void
+   *   frame 前回更新からの経過フレーム
+   */
   beforeRefresh = new ModEvent('beforeRefresh');
-  /** 毎フレーム・本来の処理の後 */
+  /** 毎フレーム・本来の処理の後
+   * callback type: ({frame: number}) => void
+   *   frame 前回更新からの経過フレーム
+   */
   afterRefresh = new ModEvent('afterRefresh');
-  /** ゲームデータのロードが終了し、1度目のタイトル画面表示直前 */
+  /** ゲームデータのロードが終了し、1度目のタイトル画面表示直前
+   * callback type: ({}) => void
+   */
   gameLoadFinished = new ModEvent('gameLoadFinished');
 }
 
 class Maginai {
-  /** @type {MaginaiImage?} */
-  #image = null;
-  /**
-   * ゲーム内ログへ出力するメッセージのキュー
-   * @type {string[]}
-   */
-  #inGameDebugLogQueue;
-
   constructor() {
     /**
+     * @internal
      * loadJsで読み込まれたことのあるJavaScriptパス
      * @type {Record<string,boolean>}
      */
     this.loadedJs = {};
 
     /**
-     * ゲームロードが完了したか
-     * gameLoadFinishedイベントのガード用
+     * @internal
+     * gameLoadFinishedイベントが発生したことがあるならtrue、ないならfalse
+     * 上記イベントの制御用
      */
     this.isGameLoadFinished = false;
 
     /**
-     * ダミーに差し替え前のtGameMain
+     * tWgmを1度だけ初期化するために$(document).readyとmain postprocessの
+     * どちらか遅い方で初期化する必要があるのでその制御用
+     * 早い方（`new tGameMain`しない）が呼び出されたかどうかのフラグ
+     */
+    this.isFirstDummytWgmMainLoadFinished = false;
+
+    /**
+     * ダミーに差し替える前のtGameMain
+     * maginaiでは`new tGameMain()`を遅らせるため、`tGameMain`クラスを
+     * ダミーにパッチするため、Modからは`tGameMain`でアクセスできなくなる
+     * もし本来の`tGameMain`のメソッドにパッチしたいなどでアクセスする場合
+     * この`origtGameMain`を使用すること
      * @type {any}
      */
     this.origtGameMain = null;
 
     /**
+     * @internal
      * 各Modのロード中に発生したエラーについて、エラーとModNameの組のlist
      * @type {[(Error|ErrorEvent), string][]}
      */
     this.errorsOnLoadMods = [];
 
     /**
+     * @internal
      * Modのロードのメインプロセスでエラーが発生したかどうか（個別Modは関係なし）
      * 初期はtrueで成功で完了時にfalseにセット
      * タイトルへの表示等用
      */
     this.isModLoadFatalErrorOccured = true;
 
+    /**
+     * @internal
+     * タイトル画面等への情報表示用Canvas制御クラス
+     * @type {MaginaiImage?}
+     */
+    this.image = null;
+
+    /**
+     * @internal
+     * ゲーム内ログへ出力するメッセージのキュー
+     * @type {string[]}
+     */
+    this.inGameDebugLogQueue = [];
+
+    /**
+     * @internal
+     * ロード中のModのPostprocess
+     * Modのロード→Mod自身の`init.js`から`setModPostprocess`でset→maginaiから`popModPostprocess`でpopし実行→次のModのロード…
+     * というサイクルでPostprocessを実行する
+     * @type {Promise<any>}
+     */
+    this.current_mod_postprocess = null;
+
     // 以下サブモジュールの公開
+    /**
+     * `maginai.patcher`サブモジュール
+     * メソッドのパッチに便利なメソッドを提供する
+     * 詳細は`Patcher`クラス定義へ
+     */
     this.patcher = new Patcher();
 
+    /**
+     * `maginai.logging`サブモジュール===`loglevel`モジュール（maginai用に設定済）
+     * maginai用各Modでのログはこれを使用することが推奨されます
+     * ```js
+     * const logger = maginai.logging.getLogger("myMod") // getLoggerの引数はMod名を推奨
+     * // ログレベルはtrace/debug/info/warn/errorの5段階
+     * logger.info('infoレベルログ')
+     * logger.debug('debugレベルログ')
+     * ```
+     */
     this.logging = logging;
 
+    /**
+     * `maginai.events`サブモジュール
+     * 各種のイベント（`ModEvent`オブジェクト）を定義しておりハンドラーの設定などが可能
+     * 詳細は`MaginaiEvents`定義へ
+     */
     this.events = new MaginaiEvents();
-
-    this.#inGameDebugLogQueue = [];
   }
 
   /**
+   * @internal
    * 初期化処理（union.jsのロードが必要）
    * Maginaiのインスタンス作成だけであればunion.jsは不要
    */
@@ -165,7 +237,7 @@ class Maginai {
     logger.info(`Mod loader 'maginai' v${VERSION}`);
 
     // Name shortcuts and control 'this' bind
-    this.#image = new MaginaiImage();
+    this.image = new MaginaiImage();
     const magi = this;
     const ev = this.events;
 
@@ -208,7 +280,7 @@ class Maginai {
           // Inject drawing labels for maginai, before passed callback called
           const newCB = (isOk, ...cbArgs) => {
             if (isOk) {
-              magi.#image.draw(
+              magi.image.draw(
                 tWgm.screen.layers.ground,
                 magi.isModLoadFatalErrorOccured,
                 magi.errorsOnLoadMods
@@ -229,58 +301,69 @@ class Maginai {
       const rtnFn = function (...args) {
         const rtn = origMethod.call(this, ...args);
 
-        for (let message of magi.#inGameDebugLogQueue) {
+        for (let message of magi.inGameDebugLogQueue) {
           origMethod.call(this, message);
         }
         // clear
-        magi.#inGameDebugLogQueue.length = 0;
+        magi.inGameDebugLogQueue.length = 0;
         return rtn;
       };
       return rtnFn;
     });
+
+    const readyLogger = magi.logging.getLogger('maginai.ready');
 
     // Modのロード前にゲームがロードされるのを防ぐためtGameMainクラスをダミーに置き換える
     // （tGameMainのnew≒ゲームの諸々の初期化）
     // このためModからtGameMainクラスにアクセスする場合はmaginai.origtGameMainを参照する必要がある
     this.origtGameMain = tGameMain;
     tGameMain = function (...args) {
-      if (tWgm === null) {
-        logger.debug(`tWgm is not loaded yet`);
+      if (!magi.isFirstDummytWgmMainLoadFinished) {
+        readyLogger.debug(`First dummy tWgm load`);
+        magi.isFirstDummytWgmMainLoadFinished = true;
         return {};
       } else {
-        throw new Error(
-          'ゲームのロードが先に行われたためModのロードに失敗しました。'
-        );
+        try {
+          readyLogger.debug(`Second true tWgm load`);
+          // loadtWgm自体がtWgmを設定するが、そのまま返す（のでもう一度tWgmへの代入が行われるが、特に影響なし）
+          const rtn = magi.loadtWgm();
+          return rtn;
+        } catch (e) {
+          readyLogger.error(`Fatal error occured during new tGameMain()`);
+          magi.isModLoadFatalErrorOccured = true;
+          throw e;
+        }
       }
     };
   }
 
   /**
+   * @internal
    * ゲームをロードする
+   * @return {any} new tGameMain({})
    */
   loadtWgm() {
     tWgm = new this.origtGameMain({});
     this.ontWgmLoaded({});
+    return tWgm;
   }
 
   /**
+   * @internal
    * ゲームのロード直後処理
+   * @param {object} e
    */
   ontWgmLoaded(e) {
     // tWgmLoadイベント発生
     this.events.tWgmLoad.invoke(e);
-    // C#スタイルでイベントを呼ぶべき処理自体をメソッドに抜き出し（継承のため）しているが不要かも
+    // C#スタイルで、イベントを呼ぶべき処理自体をメソッドに抜き出し（継承のため）しているが不要かも
   }
 
   /**
-   * @typedef {object} FullfilledScriptElement
-   * @prop {HTMLScriptElement} script
-   */
-  /**
    * JavaScriptファイルをロード
-   * DOM操作で<script>タグによりロードし、ロードしたscript要素を含むオブジェクトにfullfilledされるPromiseを返す
+   * DOM操作でscriptタグによりロードし、ロードしたscript要素を含むオブジェクトにfullfilledされる`Promise`を返す
    * @param {string} path
-   * @return {Promise<{script:string}, Error>} promise
+   * @return {Promise<{script:HTMLScriptElement}, Error>} promise
    */
   loadJs(path) {
     const script = document.createElement('script');
@@ -305,9 +388,10 @@ class Maginai {
 
   /**
    * JavaScriptファイルから`var LOADDATA=...`で定義されたデータをロードする
-   * ほぼunion.jsのloadJsDataのvendorize
+   * 非同期
+   * ほぼunion.jsの`loadJsData`のvendorize
    * @param {string} path
-   * @returns {any} ロードされたデータ
+   * @returns {Promise<any>} ロードされたデータにfullfilledされるPromise
    */
   loadJsData(path) {
     const promise = this.loadJs(path).then((e) => {
@@ -320,21 +404,21 @@ class Maginai {
   }
 
   /**
-   * ゲーム内ログへログ出力します（デバッグ用）
-   * ※ゲーム内の処理でログが出力されるときに"相乗り"して出力するため出力タイミングが遅れることがあります
-   *   デバッグやエラー表示目的での使用を意図しています
-   *   MOD動作本来のログ表示（アイテムの使用表示等）は直接addAndViewLogの使用をおすすめします
+   * ゲーム内ログへログ出力する（デバッグ用）
+   * ゲーム内の処理でログが出力されるときに"相乗り"して出力するため、タイトル等で呼んでも確実に出力されるかわりに
+   * 出力タイミングが遅れる可能性あるため、デバッグやエラー表示目的での使用を意図している
+   * MOD動作本来のログ（アイテムの使用表示等）は直接`addAndViewLog`を使用することを推奨
    * @param {string} message
    */
   logToInGameLogDebug(message) {
     // option is not used currently
-    this.#inGameDebugLogQueue.push(message);
+    this.inGameDebugLogQueue.push(message);
   }
 
   /**
-   * ModのJavaScriptロード後に実行されるPromiseをセットする
-   * ロード中のMod自身から呼ぶべきであり、それ以外の場面で呼んではいけない
-   * PromiseでないものをPromise.resolve()で変換して受け付け、エラーにならない
+   * ModのJavaScriptロード後に実行される`Promise`をセットする
+   * `init.js`実行中のMod自身から呼ぶべきであり、それ以外の場面で呼んではいけない
+   * `Promise`でないものも`Promise.resolve()`で変換して受け付け、エラーにならない
    * @param {Promise<any>} promise
    */
   setModPostprocess(promise) {
@@ -342,6 +426,7 @@ class Maginai {
   }
 
   /**
+   * @private
    * ModのJavaScriptロード後に実行されるPromiseをpopする
    * 事前にsetされていなくてもPromise.resolve()を返し、エラーにならない
    * @return {Promise<any>} setされていたPromise
@@ -353,6 +438,7 @@ class Maginai {
   }
 
   /**
+   * @private
    * 1Modのロード処理Promiseの生成
    * 1Modのロード処理は
    * 独自エラーハンドラのset→Mod JavaScriptのロード→Postprocessの実行→独自エラーハンドラをunset
@@ -361,6 +447,7 @@ class Maginai {
    * 集計はerrorsOnLoadModsに集められる
    * またエラーは外に伝搬しないため、個別のModのエラーは他のModやメイン処理に影響しない
    * ＝一部がエラーでもほかは問題なく終了できる
+   * @param {string} modName
    * @return {Promise<any>} promise
    */
   getModLoadPromise(modName) {
@@ -392,12 +479,14 @@ class Maginai {
   }
 
   /**
+   * @internal
    * ロード処理 - すべてのModのロードからゲームロード終了まで
    * mods_load.jsのmodsから読み込み順と対象modNameを取得
    * 各modNameで1modのロード処理（getModLoadPromise参照）を生成し連結
    * その後はloadtWgmでゲームロード開始
    */
   loadMods() {
+    const postProcessLogger = this.logging.getLogger('maginai.postprocess');
     const rtnPromise = this.loadJsData('./js/mod/mods/mods_load.js')
       .then((loaded) => {
         let promise = Promise.resolve();
@@ -408,7 +497,14 @@ class Maginai {
       })
       .then(() => {
         logger.info('Completed loading all mods. Starting the game...');
-        this.loadtWgm();
+        if (!this.isFirstDummytWgmMainLoadFinished) {
+          postProcessLogger.debug('First dummy tWgm load. Doing nothing');
+          this.isFirstDummytWgmMainLoadFinished = true;
+        } else {
+          postProcessLogger.debug('Second true tWgm load');
+          this.loadtWgm();
+        }
+        // ※readyの方でtrueに設定し直される可能性がある
         this.isModLoadFatalErrorOccured = false;
       })
       .catch((e) => {

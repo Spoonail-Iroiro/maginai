@@ -1,7 +1,11 @@
 {
   "name": "maginai",
-  "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "author": "Spoonail",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Spoonail-Iroiro/maginai"
+  },
   "files": [
     "lib/"
   ],
@@ -9,13 +13,17 @@
   "main": "",
   "types": "./lib/loader.d.ts",
   "scripts": {
-    "dev": "npx genversion --es6 ./js/mod/modules/version.js && vite",
-    "build": "npx genversion --es6 ./js/mod/modules/version.js && vite build",
-    "preview": "vite preview",
-    "release": "npm run build && npx tsc && node ./tools/release.js && node ./tools/releaseSampleMod.js"
+    "dev": "genversion --es6 ./js/mod/modules/version.js && vite build",
+    "build:docs": "typedoc",
+    "build:package": "genversion --es6 ./js/mod/modules/version.js && tsc",
+    "build:dist": "npm run dev && npm run build:package && node ./tools/release.js && node ./tools/releaseSampleMod.js",
+    "preview:docs": "typedoc --excludeExternals",
+    "preview:package": "npm run build:dist && npm pack"
   },
   "devDependencies": {
     "genversion": "^3.1.1",
+    "typedoc": "^0.25.1",
+    "typedoc-plugin-missing-exports": "^2.1.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.5"
   },

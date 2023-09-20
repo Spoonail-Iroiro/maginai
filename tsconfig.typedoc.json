@@ -1,7 +1,7 @@
 {
   // プロジェクトに合わせて変更してください
   "include": [
-    "js/mod/loader.js",
+    "./js",
     "@types"
   ],
   "compilerOptions": {
@@ -22,7 +22,7 @@
     // d.tsファイルのみ出力されます
     "emitDeclarationOnly": true,
     "allowUmdGlobalAccess": true,
-    "outDir": "./lib"
+    "outDir": "./dist"
     // "strict": true,
   }
 }
