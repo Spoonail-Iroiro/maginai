@@ -1,16 +1,21 @@
-declare namespace maginaiTypes {
-  type DrawInfoRect = {
-    cvs: OffscreenCanvas;
-    ctx: OffscreenCanvasRenderingContext2D;
-    rect: [number, number, number, number];
-  };
+declare class tGameKeyboard {}
+declare class tGameMenu {}
+declare class tGameRoutineMap {}
+declare class tGameTitle {}
+declare class tGameText {}
+declare class tGameLog {}
+declare class tGameRefresh {}
 
-  type DrawInfoTLWH = {
-    cvs: OffscreenCanvas;
-    ctx: OffscreenCanvasRenderingContext2D;
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-  };
+declare var LOADDATA: any;
+
+declare class tGameMain {
+  tGameKeyboard: tGameKeyboard;
+  tGameMenu: tGameMenu;
+  tGameRoutineMap: tGameRoutineMap;
+  tGameTitle: tGameTitle;
+  tGameText: tGameText;
+  tGameLog: tGameLog;
+  tGameRefresh: tGameRefresh;
 }
+
+declare var tWgm: tGameMain;
