@@ -21,6 +21,7 @@
     "preview:package": "npm run build:dist && npm pack"
   },
   "devDependencies": {
+    "eslint": "^8.49.0",
     "genversion": "^3.1.1",
     "typedoc": "^0.25.1",
     "typedoc-plugin-missing-exports": "^2.1.0",
