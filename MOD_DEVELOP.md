@@ -93,20 +93,9 @@ maginai.setModPostprocess(postprocess);
 （現在あまり数がないですが追加予定です）  
 https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
 
-#### やりたい機能の実現が難しい場合
-お気軽に作者までご相談ください。  
-Modの実装ケースには対応したつもりですが、考慮漏れがあるかもしれません。  
-（連絡先は`README.md`トップにあります）
-
-#### 作成例
-Mod導入手順にあるsample Modや、この作例リポジトリのModコード等を例として使用できます。  
-
-https://github.com/Spoonail-Iroiro/maginai-buildsample
-
-また、この作例リポジトリはESModuleで実装しビルドでMod用スクリプトに変換する構成の例にもなっています。  
 
 ### はじめての人向け
-まだModとか作ってないよ！という方向けの説明です。  
+まだModとか作ってないよという方向けの説明です。  
 （とはいえ、ゲームの中身の理解はどうしても必要になるのですが）
 
 #### ロードされたデータを変更する
@@ -182,15 +171,27 @@ Modユーザーが内容を改変できる部分がある場合、`init.js`を�
 注意点としてファイルパスは`index.html`からの相対パスである必要があります。  
 よって、例えばModフォルダ直下に入れたファイルは./js/mod/mods/<Mod名>/<ファイル名>`といったパスになります。
 
+### 欲しい機能の実現が難しい場合
+お気軽に作者までご相談ください。  
+Modの実装ケースには対応したつもりですが、考慮漏れがあるかもしれません。  
+（連絡先は`README.md`トップにあります）
+
+### 作成例
+Mod導入手順にあるsample Modや、この作例リポジトリのModコード等を例として使用できます。  
+
+https://github.com/Spoonail-Iroiro/maginai-buildsample
+
+また、この作例リポジトリはESModuleで実装しビルドでMod用スクリプトに変換する構成の例にもなっています。  
+
 # `maginai` API
 `maginai`が公開するすべての機能のドキュメントは以下で公開されています。  
-https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
+[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html)
 
 `maginai`は実際には`Maginai`クラスインスタンスですので`Maginai`クラス下に公開されているものを使用できます。  
 
 よく使用されると思われる機能は以下です。  
 （ここまでに紹介した基本機能系は省略）  
-詳細はドキュメントを参照してください  
+詳細はドキュメントを参照してください。  
 - `loadJsData` - `var LOADDATA = ...`形式のjsファイルからデータを読み込む
 - `logToInGameLogDebug` - ゲーム内ログにログ出力（デバッグ用）
 
@@ -202,7 +203,7 @@ https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
 いくつかの例ではわかりやすさのため`console.log`でログ出力していますが、実際のModコードでは非推奨です。  
 かわりに以下に掲載の例の通り、`Logger`オブジェクトを取得してログ出力を行ってください。  
 
-https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#logging
+[https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#logging](https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#logging)
 
 loggerを使うことでどのModからのログなのかわかりやすく、ユーザーが表示レベル等を制御できます。  
 
@@ -236,8 +237,6 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 ※コピーして自分のModを作成する場合は各種設定の`buildsample`を自分のMod名に置換してください  
 
 ## Q. `maginai`の型定義はないの？
-あります。  
-
 ```sh
 npm install maginai
 ```
@@ -251,10 +250,19 @@ import maginai from 'maginai';
 
 maginai.events.tWgmLoad.addHandler(...
 ```
-よって最終的にはESModule→スクリプトへのビルドが必要になります  
-またその場合、`maginai`をimportではなくグローバル変数として参照し、かつMod自体にはバンドルしない設定が必要です。  
+よって最終的にはESModule→スクリプトへのビルドか、配布前にimport文を削除する対応が必要になります。
+
+ビルドを行う場合、`maginai`をimportではなくグローバル変数として参照し、かつMod自体にはバンドルしない設定が必要です。  
 以下の作例ではviteにおいてそのように設定していますので参考にしてください。  
 https://github.com/Spoonail-Iroiro/maginai-buildsample  
+
+### `maginai.events`の型が表示されない
+現在準備中です。  
+JSDocにはハンドラへの引数の型を記載していますので参考にして下さい。  
+
+### `maginai.logging`の型が表示されない
+現在準備中です。  
+基本的には案内の通り`getLogger`でloggerの取得と`logger.info`等でのログのみ使用してください。
 
 ### Q. グローバル変数として参照できる型はないの？
 準備中です（貢献歓迎です！）
