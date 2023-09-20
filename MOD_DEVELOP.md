@@ -81,12 +81,13 @@ maginai.setModPostprocess(postprocess);
 `addHandler`メソッドを呼び出しイベントハンドラーとなる関数を登録することで実行されます。  
 
 ```js
-(function () {
-  // ゲームのロードが完了したときにメッセージを表示するイベントハンドラーを登録
-  maginai.events.gameLoadFinished.addHandler(() => {
-    logMessage(message);
-  });
-})();
+// init.js
+// ...
+// ゲームのロードが完了したときにメッセージを表示するイベントハンドラーを登録
+maginai.events.gameLoadFinished.addHandler(() => {
+  logMessage(message);
+});
+// ...
 ```
 
 すべてのイベントは以下に掲載されています。  
