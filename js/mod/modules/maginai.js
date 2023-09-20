@@ -146,6 +146,7 @@ class Maginai {
     this.isGameLoadFinished = false;
 
     /**
+     * @internal
      * tWgmを1度だけ初期化するために$(document).readyとmain postprocessの
      * どちらか遅い方で初期化する必要があるのでその制御用
      * 早い方（`new tGameMain`しない）が呼び出されたかどうかのフラグ
