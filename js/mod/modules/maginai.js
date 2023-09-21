@@ -394,14 +394,12 @@ export class Maginai {
    * @param {string} path
    * @returns {Promise<any>} ロードされたデータにfullfilledされるPromise
    */
-  loadJsData(path) {
-    const promise = this.loadJs(path).then((e) => {
-      e.script.parentNode.removeChild(e.script);
-      const loaded = LOADDATA;
-      LOADDATA = undefined;
-      return loaded;
-    });
-    return promise;
+  async loadJsData(path) {
+    const e = await this.loadJs(path);
+    e.script.parentNode.removeChild(e.script);
+    const loaded = LOADDATA;
+    LOADDATA = undefined;
+    return loaded;
   }
 
   /**
@@ -451,32 +449,25 @@ export class Maginai {
    * @param {string} modName
    * @return {Promise<any>} promise
    */
-  getModLoadPromise(modName) {
+  async loadOneMod(modName) {
+    const abortController = new AbortController();
     const onError = (e) => {
       logger.error('Error during mod loading:', modName, e.error ?? e);
       this.errorsOnLoadMods.push([e, modName]);
     };
-    const abortController = new AbortController();
-    const promise = Promise.resolve()
-      .then(() => {
-        //EventListener for collect errors on mod loading
-        window.addEventListener('error', onError, {
-          signal: abortController.signal,
-        });
-      })
-      .then(() => this.loadJs(`./js/mod/mods/${modName}/init.js`))
-      .then(() => this.popModPostprocess())
-      .catch((e) => {
-        this.popModPostprocess(); // Ensure the postprocess is not remained
-        onError(e);
-        // logger.error("Error on loading mod", modName, e);
-      })
-      .finally(() => {
-        logger.info(`Mod loaded: ${modName}`);
-        abortController.abort();
-        // window.removeEventListener("error", onError);
+    try {
+      window.addEventListener('error', onError, {
+        signal: abortController.signal,
       });
-    return promise;
+      await this.loadJs(`./js/mod/mods/${modName}/init.js`);
+      await this.popModPostprocess();
+    } catch (e) {
+      this.popModPostprocess(); // Ensure no postprocesses are remained
+      onError(e);
+    } finally {
+      logger.info(`Mod loaded: ${modName}`);
+      abortController.abort();
+    }
   }
 
   /**
@@ -486,35 +477,31 @@ export class Maginai {
    * 各modNameで1modのロード処理（getModLoadPromise参照）を生成し連結
    * その後はloadtWgmでゲームロード開始
    */
-  loadMods() {
+  async loadMods() {
     const postProcessLogger = this.logging.getLogger('maginai.postprocess');
-    const rtnPromise = this.loadJsData('./js/mod/mods/mods_load.js')
-      .then((loaded) => {
-        let promise = Promise.resolve();
-        for (const modName of loaded['mods']) {
-          promise = promise.then(() => this.getModLoadPromise(modName));
-        }
-        return promise;
-      })
-      .then(() => {
-        logger.info('Completed loading all mods. Starting the game...');
-        if (!this.isFirstDummytWgmMainLoadFinished) {
-          postProcessLogger.debug('First dummy tWgm load. Doing nothing');
-          this.isFirstDummytWgmMainLoadFinished = true;
-        } else {
-          postProcessLogger.debug('Second true tWgm load');
-          this.loadtWgm();
-        }
-        // ※readyの方でtrueに設定し直される可能性がある
-        this.isModLoadFatalErrorOccured = false;
-      })
-      .catch((e) => {
-        // 各Modでのエラーはそれぞれで処理済のため、ここでcatchされるのはfatal errorのはず
-        // （必要なファイルが存在しない、mod_load.jsの構造がおかしい…etc）
-        logger.error('Mod load failed:', e);
-        throw e;
-      });
+    try {
+      const loaded = await this.loadJsData('./js/mod/mods/mods_load.js');
 
-    return rtnPromise;
+      for (const modName of loaded['mods']) {
+        await this.loadOneMod(modName);
+      }
+
+      logger.info('Completed loading all mods. Starting the game...');
+
+      if (!this.isFirstDummytWgmMainLoadFinished) {
+        postProcessLogger.debug('First dummy tWgm load. Doing nothing');
+        this.isFirstDummytWgmMainLoadFinished = true;
+      } else {
+        postProcessLogger.debug('Second true tWgm load');
+        this.loadtWgm();
+      }
+      // ※readyの方でtrueに設定し直される可能性がある
+      this.isModLoadFatalErrorOccured = false;
+    } catch (e) {
+      // 各Modでのエラーはそれぞれで処理済のため、ここでcatchされるのはfatal errorのはず
+      // （必要なファイルが存在しない、mod_load.jsの構造がおかしい…etc）
+      logger.error('Mod load main proccess failed:', e);
+      throw e;
+    }
   }
 }
