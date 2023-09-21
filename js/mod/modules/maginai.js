@@ -362,13 +362,16 @@ export class Maginai {
 
   /**
    * JavaScriptファイルをロード
-   * DOM操作でscriptタグによりロードし、ロードしたscript要素を含むオブジェクトにfullfilledされる`Promise`を返す
+   * DOM操作でscriptタグによりロードし、ロードしたscript要素を含むオブジェクトを返す
    * @param {string} path
-   * @return {Promise<{script:HTMLScriptElement}, Error>} promise
+   * @return {Promise<{script:HTMLScriptElement}}
    */
-  loadJs(path) {
+  async loadJs(path) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
+    // async functionだがPromiseを明示的に返す
+    // 外部から見たときに非同期関数としてわかりやすくする/内部で発生するエラーを非同期エラーとするため
+    // async functionでない場合例えば上のcreateElementでの例外は同期エラーとなり.catchで捕捉できない
     const promise = new Promise((resolve, reject) => {
       script.onload = () => {
         this.loadedJs[path] = true;
@@ -388,11 +391,10 @@ export class Maginai {
   }
 
   /**
-   * JavaScriptファイルから`var LOADDATA=...`で定義されたデータをロードする
+   * JavaScriptファイルから`var LOADDATA=...`で定義されたデータをロードし返す
    * 非同期
-   * ほぼunion.jsの`loadJsData`のvendorize
    * @param {string} path
-   * @returns {Promise<any>} ロードされたデータにfullfilledされるPromise
+   * @returns {Promise<any>} ロードされたデータ
    */
   async loadJsData(path) {
     const e = await this.loadJs(path);
@@ -438,16 +440,13 @@ export class Maginai {
 
   /**
    * @private
-   * 1Modのロード処理Promiseの生成
-   * 1Modのロード処理は
-   * 独自エラーハンドラのset→Mod JavaScriptのロード→Postprocessの実行→独自エラーハンドラをunset
-   * となる
+   * 1Modのロード処理
+   * 独自エラーハンドラのset→Mod init.jsのロード→Postprocessのpopと実行→独自エラーハンドラをunset
    * 独自エラーハンドラによりどのModからエラーが発生したかの識別と集計が可能
    * 集計はerrorsOnLoadModsに集められる
    * またエラーは外に伝搬しないため、個別のModのエラーは他のModやメイン処理に影響しない
-   * ＝一部がエラーでもほかは問題なく終了できる
+   * 非同期
    * @param {string} modName
-   * @return {Promise<any>} promise
    */
   async loadOneMod(modName) {
     const abortController = new AbortController();
@@ -476,6 +475,7 @@ export class Maginai {
    * mods_load.jsのmodsから読み込み順と対象modNameを取得
    * 各modNameで1modのロード処理（getModLoadPromise参照）を生成し連結
    * その後はloadtWgmでゲームロード開始
+   * 非同期
    */
   async loadMods() {
     const postProcessLogger = this.logging.getLogger('maginai.postprocess');
