@@ -199,7 +199,7 @@ export class Maginai {
      * というサイクルでPostprocessを実行する
      * @type {Promise<any>}
      */
-    this.current_mod_postprocess = null;
+    this.currentModPostprocess = null;
 
     // 以下サブモジュールの公開
     /**
@@ -423,7 +423,7 @@ export class Maginai {
    * @param {Promise<any>} promise
    */
   setModPostprocess(promise) {
-    this.current_mod_postprocess = Promise.resolve(promise);
+    this.currentModPostprocess = Promise.resolve(promise);
   }
 
   /**
@@ -433,8 +433,8 @@ export class Maginai {
    * @return {Promise<any>} setされていたPromise
    */
   popModPostprocess() {
-    const rtn = this.current_mod_postprocess ?? Promise.resolve();
-    this.current_mod_postprocess = undefined;
+    const rtn = this.currentModPostprocess ?? Promise.resolve();
+    this.currentModPostprocess = undefined;
     return rtn;
   }
 
