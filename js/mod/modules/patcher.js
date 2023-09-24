@@ -40,9 +40,18 @@ class Patcher {
   patchMethod(cls, methodName, newMethodFactory) {
     // Prevent patch undefined method
     if (cls.prototype[methodName] === undefined) {
+      let message = `Cannot patch ${cls.name}.prototype.${methodName}.`;
+      // 似た名前のメソッドを提案する
       const methodNames = Object.getOwnPropertyNames(cls.prototype);
       const closestMethod = closest(methodName, methodNames);
-      throw new Error(`Cannot patch ${cls.name}.prototype.${methodName}. Did you mean '${closestMethod}'?`);
+      if (closestMethod !== undefined) {
+        // n文字違いまでなら提案する
+        const n = methodName.length / 2;
+        if (distance(methodName, closestMethod) <= n) {
+          message += ` Did you mean '${closestMethod}'?`;
+        }
+      }
+      throw new Error(message);
     }
     // Prevent newMethodFactory forgets return new method
     const newMethod = newMethodFactory(cls.prototype[methodName]);
