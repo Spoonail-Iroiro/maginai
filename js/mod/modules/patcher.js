@@ -40,13 +40,9 @@ class Patcher {
   patchMethod(cls, methodName, newMethodFactory) {
     // Prevent patch undefined method
     if (cls.prototype[methodName] === undefined) {
-      let message = `Cannot patch ${cls.name}.prototype.${methodName}.`;
       const methodNames = Object.getOwnPropertyNames(cls.prototype);
       const closestMethod = closest(methodName, methodNames);
-      if (distance(methodName, closestMethod) <= 2) {
-        message += ` Did you mean '${closestMethod}'?`;
-      }
-      throw new Error(message);
+      throw new Error(`Cannot patch ${cls.name}.prototype.${methodName}. Did you mean '${closestMethod}'?`);
     }
     // Prevent newMethodFactory forgets return new method
     const newMethod = newMethodFactory(cls.prototype[methodName]);
