@@ -1,3 +1,5 @@
+import { closest, distance } from "fastest-levenshtein";
+
 /**
  * `maginai.patcher`サブモジュールクラス
  * 直接インスタンス化せず`maginai.patcher`から使用してください
@@ -38,7 +40,13 @@ class Patcher {
   patchMethod(cls, methodName, newMethodFactory) {
     // Prevent patch undefined method
     if (cls.prototype[methodName] === undefined) {
-      throw new Error(`Cannot patch ${cls.name}.prototype.${methodName}`);
+      let message = `Cannot patch ${cls.name}.prototype.${methodName}.`;
+      const methodNames = Object.getOwnPropertyNames(cls.prototype);
+      const closestMethod = closest(methodName, methodNames);
+      if (distance(methodName, closestMethod) <= 2) {
+        message += ` Did you mean '${closestMethod}'?`;
+      }
+      throw new Error(message);
     }
     // Prevent newMethodFactory forgets return new method
     const newMethod = newMethodFactory(cls.prototype[methodName]);
