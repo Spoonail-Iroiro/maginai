@@ -17,6 +17,7 @@
     "build:docs": "typedoc",
     "build:package": "genversion --es6 ./js/mod/modules/version.js && tsc",
     "build:dist": "npm run dev && npm run build:package && node ./tools/release.js && node ./tools/releaseSampleMod.js",
+    "test": "vitest",
     "preview:docs": "typedoc --excludeExternals",
     "preview:package": "npm run build:dist && npm pack"
   },
@@ -26,7 +27,8 @@
     "typedoc": "^0.25.1",
     "typedoc-plugin-missing-exports": "^2.1.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vitest": "^0.34.4"
   },
   "dependencies": {
     "fastest-levenshtein": "^1.0.16",
