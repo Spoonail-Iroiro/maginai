@@ -1,7 +1,7 @@
 import _log from './logging.js';
 import logging from 'loglevel';
 import { Patcher } from './patcher.js';
-import { ModEvent } from './mod-event.js';
+import { ModEvent } from './event/mod-event.js';
 import { version as VERSION } from './version.js';
 import * as maginaiImage from './maginai-images';
 

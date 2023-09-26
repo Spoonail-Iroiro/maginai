@@ -1,7 +1,7 @@
 import logging from 'loglevel';
 import { readableTypeof } from './util.js';
 
-const logger = logging.getLogger('maginai.events');
+const logger = logging.getLogger('maginai.event');
 
 /**
  * イベントクラス
@@ -32,7 +32,7 @@ class ModEvent {
   }
 
   /**
-   * @private
+   * @internal
    * イベントの発火
    * @param {object} e イベントオブジェクト
    */
