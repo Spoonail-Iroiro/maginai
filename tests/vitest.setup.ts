@@ -1,5 +1,13 @@
-declare var testGlobalDefined: boolean | undefined;
-declare var maginaiConfig: any;
+import { should } from 'vitest';
+import logging from 'loglevel';
+
+// Enable should style assertion
+should();
+
+declare global {
+  var testGlobalDefined: boolean | undefined;
+  var maginaiConfig: any;
+}
 
 if (!globalThis.testGlobalDefined) {
   // Mocking config.js
