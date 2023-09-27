@@ -10,6 +10,7 @@
     "tGameLog": true,
     "tGameMain": true,
     "tGameRefresh": true,
+    "maginaiConfig": true,
     "LOADDATA": true
   },
   "env": {
