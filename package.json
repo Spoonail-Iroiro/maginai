@@ -18,6 +18,7 @@
     "build:package": "genversion --es6 ./js/mod/modules/version.js && tsc",
     "build:dist": "npm run dev && npm run build:package && node ./tools/release.js && node ./tools/releaseSampleMod.js",
     "test": "vitest",
+    "test:dev": "npx vitest --inspect-brk --test-timeout 100000 --single-thread",
     "preview:docs": "typedoc --excludeExternals",
     "preview:package": "npm run build:dist && npm pack"
   },
