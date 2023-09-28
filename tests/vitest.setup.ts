@@ -10,12 +10,12 @@ declare global {
 }
 
 // Set log level for test
-logging.setLevel('silent');
+logging.setLevel('error');
 
 if (!globalThis.testGlobalDefined) {
   // Mocking config.js
   globalThis.maginaiConfig = {
-    logLevel: 'silent',
+    logLevel: 'error',
   };
   globalThis.testGlobalDefined = true;
 }
