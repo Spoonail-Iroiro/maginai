@@ -1,7 +1,7 @@
 import logging from 'loglevel';
-import { readableTypeof } from './util.js';
+import { readableTypeof } from '../util.js';
 
-const logger = logging.getLogger('maginai.events');
+const logger = logging.getLogger('maginai.event');
 
 /**
  * イベントクラス
@@ -32,7 +32,7 @@ class ModEvent {
   }
 
   /**
-   * @private
+   * @internal
    * イベントの発火
    * @param {object} e イベントオブジェクト
    */
@@ -75,7 +75,9 @@ class ModEvent {
       );
     }
     if (this.handlers.indexOf(handler) === -1) {
-      throw new Error(`handlerが登録されていないためイベントハンドラーの削除に失敗しました`);
+      throw new Error(
+        `handlerが登録されていないためイベントハンドラーの削除に失敗しました`
+      );
     }
 
     this.handlers = this.handlers.filter((elm) => elm !== handler);
