@@ -1,4 +1,5 @@
 import logging from 'loglevel';
+import { readableTypeof } from './util.js';
 
 const logger = logging.getLogger('maginai.events');
 
@@ -12,8 +13,17 @@ class ModEvent {
    * @param {string} description 説明
    */
   constructor(name, description = 'Event') {
-    if (name === undefined) {
-      throw new Error(`Name cannot be undefined`);
+    if (typeof name !== 'string') {
+      const type = readableTypeof(name);
+      throw new Error(
+        `nameの値が${type}のためModEventを作成できませんでした。nameは文字列である必要があります。`
+      );
+    }
+    if (typeof description !== 'string') {
+      const type = readableTypeof(description);
+      throw new Error(
+        `descriptionの値が${type}のためModEventを作成できませんでした。descriptionは文字列である必要があります。`
+      );
     }
     this.name = name;
     this.description = description;
@@ -31,9 +41,8 @@ class ModEvent {
       try {
         handler(e);
       } catch (ex) {
-        logger.error(
-          `An error occured during event ${this.name} is handled by ${handler}`
-        );
+        // TODO: 「xxxx(Mod名)によって登録された～」を追加する
+        logger.error(`${this.name}イベント中に次のエラーが発生しました`);
         logger.error(ex);
       }
     }
@@ -44,6 +53,12 @@ class ModEvent {
    * @param {Function} handler
    */
   addHandler(handler) {
+    if (typeof handler !== 'function') {
+      const type = readableTypeof(handler);
+      throw new Error(
+        `handlerの値が${type}のためイベントハンドラーとして追加できませんでした。handlerは関数である必要があります。`
+      );
+    }
     this.handlers.push(handler);
     this.hasHandler = true;
   }
@@ -53,8 +68,14 @@ class ModEvent {
    * @param {Function} handler
    */
   removeHandler(handler) {
+    if (typeof handler !== 'function') {
+      const type = readableTypeof(handler);
+      throw new Error(
+        `handlerの値が${type}のためイベントハンドラーの削除に失敗しました。handlerは関数である必要があります。`
+      );
+    }
     if (this.handlers.indexOf(handler) === -1) {
-      throw new Error(`Cannot remove unregistered handler`);
+      throw new Error(`handlerが登録されていないためイベントハンドラーの削除に失敗しました`);
     }
 
     this.handlers = this.handlers.filter((elm) => elm !== handler);
