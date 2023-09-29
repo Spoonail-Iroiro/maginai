@@ -1,5 +1,7 @@
+import { afterEach } from 'node:test';
 import { should } from 'vitest';
 import logging from 'loglevel';
+import { applyAllLogger } from './test-util';
 
 // Enable should style assertion
 should();
@@ -9,8 +11,11 @@ declare global {
   var maginaiConfig: any;
 }
 
-// Set log level for test
-logging.setLevel('error');
+afterEach(() => {
+  applyAllLogger((logger) => logger.resetLevel());
+});
+
+logging.setDefaultLevel('error');
 
 if (!globalThis.testGlobalDefined) {
   // Mocking config.js

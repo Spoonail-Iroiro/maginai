@@ -1,5 +1,6 @@
 import { ModEvent } from '@/modules/event/mod-event';
 import { it, vi, should } from 'vitest';
+import { applyAllLogger } from '../../test-util.js';
 
 it('has no handlers first', () => {
   const event = new ModEvent('Test');
@@ -22,6 +23,7 @@ it('can add handlers and invoke() calls handlers', () => {
 });
 
 it('Errors on a handler does not affect others', () => {
+  applyAllLogger((logger) => logger.setLevel('silent', false));
   const event = new ModEvent('Test');
   const mockError = new Error();
   const [h1, h2] = [
