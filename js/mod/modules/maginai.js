@@ -2,8 +2,13 @@ import _log from './logging.js';
 import logging from 'loglevel';
 import { Patcher } from './patcher.js';
 import { ModEvent } from './event/mod-event.js';
+import { CancelableModEvent } from './event/cancelable-mod-event.js';
 import { version as VERSION } from './version.js';
 import * as maginaiImage from './maginai-images';
+import {
+  ModCommandKey,
+  MOD_COMMAND_KEY_CODES,
+} from './control/mod-command-key.js';
 
 const logger = logging.getLogger('maginai');
 
@@ -108,25 +113,56 @@ class MaginaiImage {
 export class MaginaiEvents {
   /** tGameMainがnewされtWgmにセットされた時
    * ※ゲームデータのロードは終わっていない可能性あり
-   * callback type: ({}) => void
+   * callback type: `({}) => void`
    */
   tWgmLoad = new ModEvent('tWgmLoad');
   /** key press */
   // keyClick = new ModEvent("keyClick");
   /** 毎フレーム・本来の処理の前
-   * callback type: ({frame: number}) => void
-   *   frame 前回更新からの経過フレーム
+   * callback type: `({frame: number}) => void`
+   *   `frame` 前回更新からの経過フレーム
    */
   beforeRefresh = new ModEvent('beforeRefresh');
   /** 毎フレーム・本来の処理の後
-   * callback type: ({frame: number}) => void
-   *   frame 前回更新からの経過フレーム
+   * callback type: `({frame: number}) => void`
+   * - `frame` 前回更新からの経過フレーム
    */
   afterRefresh = new ModEvent('afterRefresh');
   /** ゲームデータのロードが終了し、1度目のタイトル画面表示直前
-   * callback type: ({}) => void
+   * callback type: `({}) => void`
    */
   gameLoadFinished = new ModEvent('gameLoadFinished');
+
+  /**
+   * Mod用コマンドキーがクリックされた時のイベント
+   * Mod用コマンドキーの一覧はmaginai.MOD_COMMAND_KEY_CODESを参照
+   *
+   * 設定されるハンドラーはキーを処理する場合trueを返す必要がある
+   * また引数eのe.endを呼び出すまでデフォルト状態の更新が一時停止されキー受付を止めるため、
+   * タイトル画面に戻るなどの一部例外を除いては、処理終了時にe.endを呼び出す必要がある
+   * callback type: `({keyCode: string, end: ()=>void}) => boolean`
+   * - `keyCode` クリックされたキーのキーコード
+   * - `end` デフォルト状態へ戻る関数
+   * ```js
+   * maginai.events.commandKeyClick.addHandler((e) => {
+   *   // このハンドラーではF1キーが押されたときに処理を行う
+   *   if (e.keyCode === 'f1') {
+   *     console.log('F1キーが押されました')
+   *     // 処理完了時はe.end()を呼び再びデフォルトの状態でキー入力可能にする
+   *     e.end();
+   *     // ここではすぐに処理が完了するためe.endを同期的に呼んでいるが
+   *     // メニューを開くなど非同期的処理が行われる場合は処理完了時の
+   *     // コールバック内等で呼ぶ必要がある
+   *
+   *     // 処理対象のキーが押されたのでtrueを返す（後続のキー処理は行われなくなる）
+   *     // ※trueを返さない場合他のキー処理と重複し予期しない結果になる可能性がある
+   *     return true;
+   *   }
+   *   // F1キー以外が押されたときはスルー（trueを返さない、e.endも呼ばない）
+   * });
+   * ```
+   */
+  commandKeyClick; // ModCommandKeyのフィールドから公開
 }
 
 export class Maginai {
@@ -201,6 +237,17 @@ export class Maginai {
      */
     this.currentModPostprocess = null;
 
+    /**
+     * @internal
+     * Modコマンドキー設定用クラスオブジェクト
+     */
+    this.modCommandKey = new ModCommandKey();
+
+    /**
+     * Modコマンドキーとして設定可能なキーコード
+     */
+    this.MOD_COMMAND_KEY_CODES = MOD_COMMAND_KEY_CODES;
+
     // 以下サブモジュールの公開
     /**
      * `maginai.patcher`サブモジュール
@@ -227,6 +274,7 @@ export class Maginai {
      * 詳細は`MaginaiEvents`定義へ
      */
     this.events = new MaginaiEvents();
+    this.events.commandKeyClick = this.modCommandKey.commandKeyClick;
   }
 
   /**
@@ -336,6 +384,9 @@ export class Maginai {
         }
       }
     };
+
+    // Modコマンドキー関連のパッチ
+    this.modCommandKey.init();
   }
 
   /**
