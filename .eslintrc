@@ -10,6 +10,8 @@
     "tGameLog": true,
     "tGameMain": true,
     "tGameRefresh": true,
+    "tGameOpening": true,
+    "tGameSave": true,
     "maginaiConfig": true,
     "LOADDATA": true
   },
