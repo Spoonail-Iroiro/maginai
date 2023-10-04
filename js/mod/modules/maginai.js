@@ -134,6 +134,14 @@ export class MaginaiEvents {
   gameLoadFinished = new ModEvent('gameLoadFinished');
 
   /**
+   * セーブデータのロードが終了し、操作可能となる直前
+   * またはゲームをはじめから開始時、はじまりの地が表示される時
+   * イベント引数のisNewGameは前者の場合false、後者の場合true
+   * callback type: `({isNewGame: boolean}) => void`
+   */
+  saveLoaded = new ModEvent('saveLoaded');
+
+  /**
    * Mod用コマンドキーがクリックされた時のイベント
    * Mod用コマンドキーの一覧はmaginai.MOD_COMMAND_KEY_CODESを参照
    *
@@ -298,6 +306,36 @@ export class Maginai {
           magi.isGameLoadFinished = true;
         }
         return origMethod.call(this, ...args);
+      };
+      return rtnFn;
+    });
+
+    // loadActにパッチし、セーブロード時にsaveLoadedイベントがinvokeされるようにする
+    this.patcher.patchMethod(tGameSave, 'loadAct', (origMethod) => {
+      const rtnFn = function (a, b, c, callback, ...args) {
+        const newCallback = (isOk, ...cbArgs) => {
+          const cbRtn = callback(isOk, ...cbArgs);
+          if (isOk) {
+            magi.events.saveLoaded.invoke({ isNewGame: false });
+          }
+          return cbRtn;
+        };
+        return origMethod.call(this, a, b, c, newCallback, ...args);
+      };
+      return rtnFn;
+    });
+
+    // ゲームをはじめから開始した場合はloadActが呼び出されないため
+    // tGameOpening.viewに渡されるcallback実行後にsaveLoadedイベントが
+    // invokeされるようにする
+    this.patcher.patchMethod(tGameOpening, 'view', (origMethod) => {
+      const rtnFn = function (a, callback, ...args) {
+        const newCallback = (...cbArgs) => {
+          const cbRtn = callback(...cbArgs);
+          magi.events.saveLoaded.invoke({ isNewGame: true });
+          return cbRtn;
+        };
+        return origMethod.call(this, a, newCallback, ...args);
       };
       return rtnFn;
     });
