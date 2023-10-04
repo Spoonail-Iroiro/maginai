@@ -1,9 +1,10 @@
 (function () {
+  const logger = maginai.logging.getLogger('sample1');
   maginai.events.tWgmLoad.addHandler((e) => {
     tWgm.isL = true;
   });
   maginai.events.gameLoadFinished.addHandler((e) =>
-    console.log('Game load finished!')
+    logger.info('Game load finished!')
   );
   maginai.events.commandKeyClick.addHandler((e) => {
     if (e.keyCode === 'f4') {
@@ -11,5 +12,8 @@
       e.end();
       return true;
     }
+  });
+  maginai.events.saveLoaded.addHandler((e) => {
+    logger.info(`Save loaded. isNewGame: ${e.isNewGame}`);
   });
 })();
