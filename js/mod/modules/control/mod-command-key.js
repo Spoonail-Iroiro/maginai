@@ -14,7 +14,7 @@ export const MOD_COMMAND_KEY_CODES = [
 
 export class ModCommandKey {
   constructor() {
-    this.commandKeyClick = new CancelableModEvent('commandKeyClick');
+    this.commandKeyClicked = new CancelableModEvent('commandKeyClicked');
     this.isViewAbilityBlocked = false;
   }
 
@@ -72,7 +72,7 @@ export class ModCommandKey {
             const clicked = origMethod.call(this, keyCode, ...rest);
             if (clicked) {
               logger.debug(`${keyCode} clicked`);
-              const handled = self.commandKeyClick.invoke({
+              const handled = self.commandKeyClicked.invoke({
                 keyCode,
                 end,
               });

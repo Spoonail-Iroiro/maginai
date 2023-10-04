@@ -116,7 +116,12 @@ export class MaginaiEvents {
    * ※ゲームデータのロードは終わっていない可能性あり
    * callback type: `({}) => void`
    */
-  tWgmLoad = new ModEvent('tWgmLoad');
+  tWgmLoaded = new ModEvent('tWgmLoad');
+
+  /**
+   * @deprecated old name of tWgmLoaded
+   */
+  tWgmLoad = this.tWgmLoaded;
 
   /**
    * 毎フレーム・本来の処理の前
@@ -157,7 +162,7 @@ export class MaginaiEvents {
    * - `keyCode` クリックされたキーのキーコード
    * - `end` デフォルト状態へ戻る関数
    * ```js
-   * maginai.events.commandKeyClick.addHandler((e) => {
+   * maginai.events.commandKeyClicked.addHandler((e) => {
    *   // このハンドラーではF1キーが押されたときに処理を行う
    *   if (e.keyCode === 'f1') {
    *     console.log('F1キーが押されました')
@@ -175,7 +180,7 @@ export class MaginaiEvents {
    * });
    * ```
    */
-  commandKeyClick; // ModCommandKeyのフィールドから公開
+  commandKeyClicked; // ModCommandKeyのフィールドから公開
 }
 
 export class Maginai {
@@ -287,7 +292,7 @@ export class Maginai {
      * 詳細は`MaginaiEvents`定義へ
      */
     this.events = new MaginaiEvents();
-    this.events.commandKeyClick = this.modCommandKey.commandKeyClick;
+    this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
   }
 
   /**
