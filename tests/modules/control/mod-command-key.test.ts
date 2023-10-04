@@ -8,7 +8,6 @@ import {
   SpyInstance,
 } from 'vitest';
 import { ModCommandKey } from '@/modules/control/mod-command-key.js';
-import { applyAllLogger } from '../../test-util';
 
 declare var tWgm: any;
 declare var tGameKeyboard: any;
@@ -153,7 +152,7 @@ vanillaHandleDescribe(
         // すべてのハンドラーがtrueを返さないのでバニラのコマンドキーの処理が行われるはず
         // キーに応じてviewSkillが呼ばれたか、どのキーが最後にチェックされたか、setFrameActionが1回だけ呼ばれたかを確認
         viewSkillSpy.mock.calls.length.should.be.equal(viewSkillCalls);
-        isClickSpy.mock.lastCall.should.be.deep.equal([isClickLastCall]);
+        isClickSpy.mock.lastCall!.should.be.deep.equal([isClickLastCall]);
         setFrameActionSpy.mock.calls.length.should.be.equal(1);
       }
     );
