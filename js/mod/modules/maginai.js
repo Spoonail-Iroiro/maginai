@@ -111,24 +111,34 @@ class MaginaiImage {
  * ```
  */
 export class MaginaiEvents {
-  /** tGameMainがnewされtWgmにセットされた時
+  /**
+   * tGameMainがnewされtWgmにセットされた時
    * ※ゲームデータのロードは終わっていない可能性あり
    * callback type: `({}) => void`
    */
-  tWgmLoad = new ModEvent('tWgmLoad');
-  /** key press */
-  // keyClick = new ModEvent("keyClick");
-  /** 毎フレーム・本来の処理の前
+  tWgmLoaded = new ModEvent('tWgmLoad');
+
+  /**
+   * @deprecated old name of tWgmLoaded
+   */
+  tWgmLoad = this.tWgmLoaded;
+
+  /**
+   * 毎フレーム・本来の処理の前
    * callback type: `({frame: number}) => void`
    *   `frame` 前回更新からの経過フレーム
    */
   beforeRefresh = new ModEvent('beforeRefresh');
-  /** 毎フレーム・本来の処理の後
+
+  /**
+   * 毎フレーム・本来の処理の後
    * callback type: `({frame: number}) => void`
    * - `frame` 前回更新からの経過フレーム
    */
   afterRefresh = new ModEvent('afterRefresh');
-  /** ゲームデータのロードが終了し、1度目のタイトル画面表示直前
+
+  /**
+   * ゲームデータのロードが終了し、1度目のタイトル画面表示直前
    * callback type: `({}) => void`
    */
   gameLoadFinished = new ModEvent('gameLoadFinished');
@@ -152,7 +162,7 @@ export class MaginaiEvents {
    * - `keyCode` クリックされたキーのキーコード
    * - `end` デフォルト状態へ戻る関数
    * ```js
-   * maginai.events.commandKeyClick.addHandler((e) => {
+   * maginai.events.commandKeyClicked.addHandler((e) => {
    *   // このハンドラーではF1キーが押されたときに処理を行う
    *   if (e.keyCode === 'f1') {
    *     console.log('F1キーが押されました')
@@ -170,7 +180,7 @@ export class MaginaiEvents {
    * });
    * ```
    */
-  commandKeyClick; // ModCommandKeyのフィールドから公開
+  commandKeyClicked; // ModCommandKeyのフィールドから公開
 }
 
 export class Maginai {
@@ -282,7 +292,7 @@ export class Maginai {
      * 詳細は`MaginaiEvents`定義へ
      */
     this.events = new MaginaiEvents();
-    this.events.commandKeyClick = this.modCommandKey.commandKeyClick;
+    this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
   }
 
   /**

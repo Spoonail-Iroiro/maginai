@@ -1,12 +1,12 @@
 (function () {
   const logger = maginai.logging.getLogger('sample1');
-  maginai.events.tWgmLoad.addHandler((e) => {
+  maginai.events.tWgmLoaded.addHandler((e) => {
     tWgm.isL = true;
   });
   maginai.events.gameLoadFinished.addHandler((e) =>
     logger.info('Game load finished!')
   );
-  maginai.events.commandKeyClick.addHandler((e) => {
+  maginai.events.commandKeyClicked.addHandler((e) => {
     if (e.keyCode === 'f4') {
       tWgm.tGameLog.addAndViewLog('F4キーが押されました');
       e.end();

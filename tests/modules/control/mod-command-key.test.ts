@@ -137,7 +137,7 @@ vanillaHandleDescribe(
       }) => {
         // ハンドラーを登録
         for (const h of handlers) {
-          commandKey.commandKeyClick.addHandler(h);
+          commandKey.commandKeyClicked.addHandler(h);
         }
 
         // keysが押されている状態でのフレーム処理をシミュレート
@@ -172,12 +172,12 @@ commandKeyTest(
   }) => {
     // handled==trueを返さないハンドラーを登録
     const hNoHandle = vi.fn((e: CommandKeyClickEventArg) => {});
-    commandKey.commandKeyClick.addHandler(hNoHandle);
+    commandKey.commandKeyClicked.addHandler(hNoHandle);
 
     // 処理を行いhandledを返すハンドラーの準備
     const modKeyFn = vi.fn(); // ハンドラーから呼び出されるMod独自のコマンドキー処理
     // f2キーが押された時に処理を行うハンドラーを登録
-    commandKey.commandKeyClick.addHandler((e: CommandKeyClickEventArg) => {
+    commandKey.commandKeyClicked.addHandler((e: CommandKeyClickEventArg) => {
       if (e.keyCode === 'f2') {
         const end = e.end;
         modKeyFn();
@@ -224,7 +224,7 @@ commandKeyTest(
     const h1 = vi.fn((e: CommandKeyClickEventArg) => {
       return true;
     });
-    commandKey.commandKeyClick.addHandler(h1);
+    commandKey.commandKeyClicked.addHandler(h1);
 
     // f1キーが押された状態でのフレーム処理をシミュレート
     tWgm.tGameKeyboard.setKey(['f1']);
