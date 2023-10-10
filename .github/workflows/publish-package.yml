@@ -1,0 +1,17 @@
+name: Publish npm package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.0
+      - uses: actions/setup-node@v3.8.1
+        with:
+          node-version: 18.x
+      - run: npm ci
+      # demo: should "publish" in maginai
+      - run: npm pack
