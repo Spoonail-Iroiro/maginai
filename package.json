@@ -20,7 +20,11 @@
     "test": "vitest",
     "test:dev": "npx vitest --inspect-brk --test-timeout 100000 --single-thread",
     "preview:docs": "typedoc --excludeExternals",
-    "preview:package": "npm run build:dist && npm pack"
+    "genversion": "genversion --es6 ./js/mod/modules/version.js",
+    "npver": "npm version --no-commit-hooks --no-git-tag-version",
+    "bump-version:major": "npm run npver -- major && npm run genversion",
+    "bump-version:minor": "npm run npver -- minor && npm run genversion",
+    "bump-version:patch": "npm run npver -- patch && npm run genversion"
   },
   "devDependencies": {
     "eslint": "^8.49.0",
