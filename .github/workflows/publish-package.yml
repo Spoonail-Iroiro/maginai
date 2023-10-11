@@ -13,5 +13,4 @@ jobs:
         with:
           node-version: 18.x
       - run: npm ci
-      # demo: should "publish" in maginai
-      - run: npm pack
+      - run: npm publish
