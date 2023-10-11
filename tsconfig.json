@@ -2,7 +2,7 @@
   // プロジェクトに合わせて変更してください
   "include": [
     "js/mod/loader.js",
-    "@types"
+    "types"
   ],
   "compilerOptions": {
     "target": "ES2020",

@@ -26,7 +26,7 @@ Ubuntu 22.04 LTS
 
 ```text
 ./
-├── @types
+├── types
 │   └── maginai-images.d.ts
 ├── CONTRIBUTION.md
 ├── README.md
