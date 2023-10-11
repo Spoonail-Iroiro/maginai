@@ -11,7 +11,7 @@ Misskey:https://misskey.io/@Spoonail
 
 もちろん、issueともし修正があればそれに紐付けたPRを作成いただければ作業しやすく助かります。  
 
-## 開発
+## Development
 
 ### Requirement
 
@@ -22,19 +22,14 @@ Ubuntu 22.04 LTS
 
 ### Install and Dev Build
 
-リポジトリのclone後、
-```sh
-npm install
-```
+リポジトリのclone後、異世界の創造者フォルダを`game/`としてコピー  
 
-異世界の創造者フォルダの中身をすべて`game/`にコピー
 ```text
 ./
 ├── @types
 │   └── maginai-images.d.ts
 ├── CONTRIBUTION.md
 ├── README.md
-├── dist
 ├── game
 │   ├── Game.exe
 │   ├── Game.exe.config
@@ -45,23 +40,71 @@ npm install
 │   ...
 ```
 
-以下でMODローダーのビルド
-`game/`に配置したゲームフォルダ下に出力されるため、そのままゲームを起動して動作確認可能
+```sh
+npm install
+```
+
+以下でMODローダーのビルド  
+
 ```
 npm run dev
 ```
 
-### Build Distribution Files
+`game/js/mod`に出力されるため、そのままゲームを起動して動作確認可能  
+
+
+### Branches
+- `develop` 
+  - 開発ブランチ
+  - PRはこちら宛に
+- `master`
+  - リリースブランチ
+  - `develop`からのPRでのみ更新
+- `gh-pages`
+  - [ドキュメント](https://spoonail-iroiro.github.io/maginai/)GitHub Pages用
+  - Actionsにより自動更新
+
+### Test
+vitestを使用  
+`tests`フォルダ下のテスト対象の`*.test.ts`をテストコードとする  
+階層は`js/mod`をルートとしてテスト対象と対応するように（例えば`js/mod/modules/maginai.ts`のテストなら`tests/modules/maginai.test.ts`）  
+
+### Release
+※作業は基本Spoonailが行います
+
+- `npm run bump-version:{major/minor/patch}`でversion更新 
+- `develop`->`master`へrelease PRを作成
+  - タイトルは`Release: vX.Y.Z`
+- PRの各種チェックに合格したら`master`へmerge
+  - Actionsによりrelease draftの作成
+- 作成されたdraftを確認、changelogの生成と必要なら変更
+  - 配布バイナリの添付とバージョン番号タグは自動
+- releaseを確定
+  - Actionsによりtypedocドキュメント生成、`gh-pages`へのpush
+  - Actionsにより`npm publish`
+
+### Scripts
+
+#### 配布zipと型定義パッケージのビルド
 ```
-npm run build:dist
+npm run build
 ```
 
 `dist/`下に配布zip出力  
 `dist/maginai/`フォルダがzipの内容  
 `libs/`下にMOD開発用パッケージ用の型定義出力  
 
-TODO: CI  
+#### ドキュメント
+```
+npm run preview:docs
+```
+外部モジュールを除いたドキュメントのビルド  
+開発中の確認は基本これで  
 
-### Test
-TODO
+```
+npm run build:docs
+```
+すべてのページのビルド（外部モジュールまで含むため遅い）
+
+
 
