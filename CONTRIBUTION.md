@@ -73,7 +73,7 @@ vitestを使用
 ※作業は基本Spoonailが行います
 
 - `npm run bump-version:{major/minor/patch}`でversion更新 
-- `develop`->`master`へrelease PRを作成
+- `develop`->`master`へ[release PR](https://github.com/spoonail-iroiro/maginai/compare/master...develop?quick_pull=1&template=release.md&title=Release:+vX.Y.Z)を作成
   - タイトルは`Release: vX.Y.Z`
 - PRの各種チェックに合格したら`master`へmerge
   - Actionsによりrelease draftの作成

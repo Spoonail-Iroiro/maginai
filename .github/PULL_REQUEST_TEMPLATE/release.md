@@ -1,2 +1,1 @@
 - [ ] Bump version
-- [ ] Set title "Release: vX.Y.Z"
