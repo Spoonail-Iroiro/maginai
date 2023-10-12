@@ -1,28 +1,21 @@
 {
-  // プロジェクトに合わせて変更してください
   "include": [
-    "./js",
+    "js/mod/loader.js",
+    "js/mod/modules",
     "types"
   ],
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ES2015",
+    "target": "ESNext",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "lib": [
       "ES2020",
       "DOM",
       "DOM.Iterable"
     ],
-    // JSファイルは通常、ソースファイルとして無視されますが、
-    // ここではJSファイルを読み込むようにTypeScriptに指示します
     "allowJs": true,
-    // "checkJs": true,
-    // d.tsファイルを生成します
     "declaration": true,
-    // コンパイラを実行すると
-    // d.tsファイルのみ出力されます
     "emitDeclarationOnly": true,
-    "allowUmdGlobalAccess": true,
     "outDir": "./dist"
-    // "strict": true,
   }
 }
