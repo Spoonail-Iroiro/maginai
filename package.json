@@ -17,9 +17,8 @@
     "./*": "./lib/modules/*"
   },
   "scripts": {
-    "prepare": "npm run build",
+    "prepare": "npm run build:package",
     "dev": "vite build",
-    "build": "npm run build:package && npm run build:dist",
     "build:dist": "rimraf dist && npm run dev && node ./tools/release.js",
     "build:package": "rimraf lib && tsc",
     "build:docs": "typedoc",
