@@ -183,6 +183,7 @@ export class MaginaiEvents {
 
 export class Maginai {
   constructor() {
+    this.VERSION = VERSION;
     /**
      * @internal
      * loadJsで読み込まれたことのあるJavaScriptパス
