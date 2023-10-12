@@ -7,6 +7,7 @@ import {
   ModCommandKey,
   MOD_COMMAND_KEY_CODES,
 } from './control/mod-command-key.js';
+import { versionToversionInfo } from './util.js';
 
 const logger = logging.getLogger('maginai');
 
@@ -183,6 +184,20 @@ export class MaginaiEvents {
 
 export class Maginai {
   constructor() {
+    /**
+     * バージョン文字列
+     * @type {string}
+     */
+    this.VERSION = VERSION;
+
+    /**
+     * バージョン情報
+     * バージョン文字列を[major, minor, patch, preid, prerelease]に分解したもの
+     * prereleaseでない時、(preid, prerelease)は(null, null)
+     * @type {[number, number, number, string, number]}
+     */
+    this.VERSION_INFO = versionToversionInfo(VERSION);
+
     /**
      * @internal
      * loadJsで読み込まれたことのあるJavaScriptパス
