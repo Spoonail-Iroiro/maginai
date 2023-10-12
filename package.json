@@ -12,6 +12,10 @@
   "type": "module",
   "main": "",
   "types": "./lib/loader.d.ts",
+  "exports": {
+    ".": "./lib/loader.d.ts",
+    "./*": "./lib/modules/*"
+  },
   "scripts": {
     "prepare": "npm run build",
     "dev": "vite build",
