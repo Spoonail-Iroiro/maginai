@@ -1,4 +1,4 @@
-import { ModEvent } from './mod-event';
+import { ModEvent } from './mod-event.js';
 import logging from 'loglevel';
 
 const logger = logging.getLogger('maginai.event');
