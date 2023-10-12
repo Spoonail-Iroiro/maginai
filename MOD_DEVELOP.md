@@ -245,31 +245,39 @@ npm install maginai
 でインストール可能です。  
 （現在型のみのためテスト等ではmockする必要があります）  
 
-現在importでのみ参照可能です。  
+### グローバル変数として参照する場合
+`moduleResolution`が`Node16`または`Bundler`のtypescriptプロジェクトにおいて、以下の内容の型定義ファイルをプロジェクトに含めることでグローバル変数maginaiの型定義をすることができます。
+```ts
+declare var maginai: import('maginai/maginai.js').Maginai;
+```
+
+`moduleResolution`が上記以外のプロジェクトにおいても以下のようにして同様に型定義可能ですが、内部モジュール構成については今後変更の可能性もあるため非推奨です。
+
+```ts
+declare var maginai: import('maginai/lib/modules/maginai.js').Maginai;
+```
+
+### importで参照する場合
+ビルド・バンドルを行う構成の場合、ソースでは以下のようにimportでmaginaiモジュールを参照し、ビルド後はバンドルに含まずグローバル変数として参照するよう設定を行うことができます。
 ```js
 import maginai from 'maginai';
 
 maginai.events.tWgmLoad.addHandler(...
 ```
-よって最終的にはESModule→スクリプトへのビルドか、配布前にimport文を削除する対応が必要になります。
 
-ビルドを行う場合、`maginai`をimportではなくグローバル変数として参照し、かつMod自体にはバンドルしない設定が必要です。  
-以下の作例ではviteにおいてそのように設定していますので参考にしてください。  
+ビルド後はバンドルに含まずグローバル変数として参照する設定については、以下の作例でviteにおいてそのように設定していますので参考にしてください。  
 https://github.com/Spoonail-Iroiro/maginai-buildsample  
 
-### `maginai.events`の型が表示されない
+### `maginai.events`のハンドラー型が表示されない
 現在準備中です。  
-JSDocにはハンドラへの引数の型を記載していますので参考にして下さい。  
+JSDocにはハンドラーへの引数の型を記載していますので参考にして下さい。  
 
 ### `maginai.logging`の型が表示されない
 現在準備中です。  
 基本的には案内の通り`getLogger`でloggerの取得と`logger.info`等でのログのみ使用してください。
 
-### Q. グローバル変数として参照できる型はないの？
-準備中です（貢献歓迎です！）
-
 ### Q. `union.js`の型はないの？
-準備中です（貢献歓迎です！）
+maginai本体とは別パッケージとして準備中です。
 
 ## Q. async functionは使えないの？
 使用できます。  
