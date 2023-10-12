@@ -194,7 +194,9 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 （ここまでに紹介した基本機能系は省略）  
 詳細はドキュメントを参照してください。  
 - `loadJsData` - `var LOADDATA = ...`形式のjsファイルからデータを読み込む
-- `logToInGameLogDebug` - ゲーム内ログにログ出力（デバッグ用）
+- `logToInGameLogDebug` - ゲーム内ログにログ出力（デバッグ・エラー表示用）
+- `VERSION`, `VERSION_INFO` - `maginai`のバージョン情報
+  - ※v0.2.0では存在しないプロパティのため比較の際は注意して下さい
 
 # 実装における注意事項
 動作するModを実装するにはここまで説明した通りで問題ありませんが  
