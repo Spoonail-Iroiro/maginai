@@ -1,9 +1,13 @@
-import _log from './logging.js';
 import logging from 'loglevel';
 import { Patcher } from './patcher.js';
-import { ModEvent } from './mod-event.js';
+import { ModEvent } from './event/mod-event.js';
 import { version as VERSION } from './version.js';
 import * as maginaiImage from './maginai-images';
+import {
+  ModCommandKey,
+  MOD_COMMAND_KEY_CODES,
+} from './control/mod-command-key.js';
+import { versionToversionInfo } from './util.js';
 
 const logger = logging.getLogger('maginai');
 
@@ -105,32 +109,95 @@ class MaginaiImage {
  * });
  * ```
  */
-class MaginaiEvents {
-  /** tGameMainがnewされtWgmにセットされた時
+export class MaginaiEvents {
+  /**
+   * tGameMainがnewされtWgmにセットされた時
    * ※ゲームデータのロードは終わっていない可能性あり
-   * callback type: ({}) => void
+   * callback type: `({}) => void`
    */
-  tWgmLoad = new ModEvent('tWgmLoad');
-  /** key press */
-  // keyClick = new ModEvent("keyClick");
-  /** 毎フレーム・本来の処理の前
-   * callback type: ({frame: number}) => void
-   *   frame 前回更新からの経過フレーム
+  tWgmLoaded = new ModEvent('tWgmLoad');
+
+  /**
+   * @deprecated old name of tWgmLoaded
+   */
+  tWgmLoad = this.tWgmLoaded;
+
+  /**
+   * 毎フレーム・本来の処理の前
+   * callback type: `({frame: number}) => void`
+   *   `frame` 前回更新からの経過フレーム
    */
   beforeRefresh = new ModEvent('beforeRefresh');
-  /** 毎フレーム・本来の処理の後
-   * callback type: ({frame: number}) => void
-   *   frame 前回更新からの経過フレーム
+
+  /**
+   * 毎フレーム・本来の処理の後
+   * callback type: `({frame: number}) => void`
+   * - `frame` 前回更新からの経過フレーム
    */
   afterRefresh = new ModEvent('afterRefresh');
-  /** ゲームデータのロードが終了し、1度目のタイトル画面表示直前
-   * callback type: ({}) => void
+
+  /**
+   * ゲームデータのロードが終了し、1度目のタイトル画面表示直前
+   * callback type: `({}) => void`
    */
   gameLoadFinished = new ModEvent('gameLoadFinished');
+
+  /**
+   * セーブデータのロードが終了し、操作可能となる直前
+   * またはゲームをはじめから開始時、はじまりの地が表示される時
+   * イベント引数のisNewGameは前者の場合false、後者の場合true
+   * callback type: `({isNewGame: boolean}) => void`
+   */
+  saveLoaded = new ModEvent('saveLoaded');
+
+  /**
+   * Mod用コマンドキーがクリックされた時のイベント
+   * Mod用コマンドキーの一覧はmaginai.MOD_COMMAND_KEY_CODESを参照
+   *
+   * 設定されるハンドラーはキーを処理する場合trueを返す必要がある
+   * また引数eのe.endを呼び出すまでデフォルト状態の更新が一時停止されキー受付を止めるため、
+   * タイトル画面に戻るなどの一部例外を除いては、処理終了時にe.endを呼び出す必要がある
+   * callback type: `({keyCode: string, end: ()=>void}) => boolean`
+   * - `keyCode` クリックされたキーのキーコード
+   * - `end` デフォルト状態へ戻る関数
+   * ```js
+   * maginai.events.commandKeyClicked.addHandler((e) => {
+   *   // このハンドラーではF1キーが押されたときに処理を行う
+   *   if (e.keyCode === 'f1') {
+   *     console.log('F1キーが押されました')
+   *     // 処理完了時はe.end()を呼び再びデフォルトの状態でキー入力可能にする
+   *     e.end();
+   *     // ここではすぐに処理が完了するためe.endを同期的に呼んでいるが
+   *     // メニューを開くなど非同期的処理が行われる場合は処理完了時の
+   *     // コールバック内等で呼ぶ必要がある
+   *
+   *     // 処理対象のキーが押されたのでtrueを返す（後続のキー処理は行われなくなる）
+   *     // ※trueを返さない場合他のキー処理と重複し予期しない結果になる可能性がある
+   *     return true;
+   *   }
+   *   // F1キー以外が押されたときはスルー（trueを返さない、e.endも呼ばない）
+   * });
+   * ```
+   */
+  commandKeyClicked; // ModCommandKeyのフィールドから公開
 }
 
-class Maginai {
+export class Maginai {
   constructor() {
+    /**
+     * バージョン文字列
+     * @type {string}
+     */
+    this.VERSION = VERSION;
+
+    /**
+     * バージョン情報
+     * バージョン文字列を[major, minor, patch, preid, prerelease]に分解したもの
+     * prereleaseでない時、(preid, prerelease)は(null, null)
+     * @type {[number, number, number, string, number]}
+     */
+    this.VERSION_INFO = versionToversionInfo(VERSION);
+
     /**
      * @internal
      * loadJsで読み込まれたことのあるJavaScriptパス
@@ -146,6 +213,7 @@ class Maginai {
     this.isGameLoadFinished = false;
 
     /**
+     * @internal
      * tWgmを1度だけ初期化するために$(document).readyとmain postprocessの
      * どちらか遅い方で初期化する必要があるのでその制御用
      * 早い方（`new tGameMain`しない）が呼び出されたかどうかのフラグ
@@ -198,7 +266,18 @@ class Maginai {
      * というサイクルでPostprocessを実行する
      * @type {Promise<any>}
      */
-    this.current_mod_postprocess = null;
+    this.currentModPostprocess = null;
+
+    /**
+     * @internal
+     * Modコマンドキー設定用クラスオブジェクト
+     */
+    this.modCommandKey = new ModCommandKey();
+
+    /**
+     * Modコマンドキーとして設定可能なキーコード
+     */
+    this.MOD_COMMAND_KEY_CODES = MOD_COMMAND_KEY_CODES;
 
     // 以下サブモジュールの公開
     /**
@@ -226,6 +305,7 @@ class Maginai {
      * 詳細は`MaginaiEvents`定義へ
      */
     this.events = new MaginaiEvents();
+    this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
   }
 
   /**
@@ -249,6 +329,36 @@ class Maginai {
           magi.isGameLoadFinished = true;
         }
         return origMethod.call(this, ...args);
+      };
+      return rtnFn;
+    });
+
+    // loadActにパッチし、セーブロード時にsaveLoadedイベントがinvokeされるようにする
+    this.patcher.patchMethod(tGameSave, 'loadAct', (origMethod) => {
+      const rtnFn = function (a, b, c, callback, ...args) {
+        const newCallback = (isOk, ...cbArgs) => {
+          const cbRtn = callback(isOk, ...cbArgs);
+          if (isOk) {
+            magi.events.saveLoaded.invoke({ isNewGame: false });
+          }
+          return cbRtn;
+        };
+        return origMethod.call(this, a, b, c, newCallback, ...args);
+      };
+      return rtnFn;
+    });
+
+    // ゲームをはじめから開始した場合はloadActが呼び出されないため
+    // tGameOpening.viewに渡されるcallback実行後にsaveLoadedイベントが
+    // invokeされるようにする
+    this.patcher.patchMethod(tGameOpening, 'view', (origMethod) => {
+      const rtnFn = function (a, callback, ...args) {
+        const newCallback = (...cbArgs) => {
+          const cbRtn = callback(...cbArgs);
+          magi.events.saveLoaded.invoke({ isNewGame: true });
+          return cbRtn;
+        };
+        return origMethod.call(this, a, newCallback, ...args);
       };
       return rtnFn;
     });
@@ -335,6 +445,9 @@ class Maginai {
         }
       }
     };
+
+    // Modコマンドキー関連のパッチ
+    this.modCommandKey.init();
   }
 
   /**
@@ -355,19 +468,22 @@ class Maginai {
    */
   ontWgmLoaded(e) {
     // tWgmLoadイベント発生
-    this.events.tWgmLoad.invoke(e);
+    this.events.tWgmLoaded.invoke(e);
     // C#スタイルで、イベントを呼ぶべき処理自体をメソッドに抜き出し（継承のため）しているが不要かも
   }
 
   /**
    * JavaScriptファイルをロード
-   * DOM操作でscriptタグによりロードし、ロードしたscript要素を含むオブジェクトにfullfilledされる`Promise`を返す
+   * DOM操作でscriptタグによりロードし、ロードしたscript要素を含むオブジェクトを返す
    * @param {string} path
-   * @return {Promise<{script:HTMLScriptElement}, Error>} promise
+   * @return {Promise<{script:HTMLScriptElement}}
    */
-  loadJs(path) {
+  async loadJs(path) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
+    // async functionだがPromiseを明示的に返す
+    // 外部から見たときに非同期関数としてわかりやすくする/内部で発生するエラーを非同期エラーとするため
+    // async functionでない場合例えば上のcreateElementでの例外は同期エラーとなり.catchで捕捉できない
     const promise = new Promise((resolve, reject) => {
       script.onload = () => {
         this.loadedJs[path] = true;
@@ -387,20 +503,17 @@ class Maginai {
   }
 
   /**
-   * JavaScriptファイルから`var LOADDATA=...`で定義されたデータをロードする
+   * JavaScriptファイルから`var LOADDATA=...`で定義されたデータをロードし返す
    * 非同期
-   * ほぼunion.jsの`loadJsData`のvendorize
    * @param {string} path
-   * @returns {Promise<any>} ロードされたデータにfullfilledされるPromise
+   * @returns {Promise<any>} ロードされたデータ
    */
-  loadJsData(path) {
-    const promise = this.loadJs(path).then((e) => {
-      e.script.parentNode.removeChild(e.script);
-      const loaded = LOADDATA;
-      LOADDATA = undefined;
-      return loaded;
-    });
-    return promise;
+  async loadJsData(path) {
+    const e = await this.loadJs(path);
+    e.script.parentNode.removeChild(e.script);
+    const loaded = LOADDATA;
+    LOADDATA = undefined;
+    return loaded;
   }
 
   /**
@@ -422,7 +535,7 @@ class Maginai {
    * @param {Promise<any>} promise
    */
   setModPostprocess(promise) {
-    this.current_mod_postprocess = Promise.resolve(promise);
+    this.currentModPostprocess = Promise.resolve(promise);
   }
 
   /**
@@ -432,50 +545,40 @@ class Maginai {
    * @return {Promise<any>} setされていたPromise
    */
   popModPostprocess() {
-    const rtn = this.current_mod_postprocess ?? Promise.resolve();
-    this.current_mod_postprocess = undefined;
+    const rtn = this.currentModPostprocess ?? Promise.resolve();
+    this.currentModPostprocess = undefined;
     return rtn;
   }
 
   /**
    * @private
-   * 1Modのロード処理Promiseの生成
-   * 1Modのロード処理は
-   * 独自エラーハンドラのset→Mod JavaScriptのロード→Postprocessの実行→独自エラーハンドラをunset
-   * となる
+   * 1Modのロード処理
+   * 独自エラーハンドラのset→Mod init.jsのロード→Postprocessのpopと実行→独自エラーハンドラをunset
    * 独自エラーハンドラによりどのModからエラーが発生したかの識別と集計が可能
    * 集計はerrorsOnLoadModsに集められる
    * またエラーは外に伝搬しないため、個別のModのエラーは他のModやメイン処理に影響しない
-   * ＝一部がエラーでもほかは問題なく終了できる
+   * 非同期
    * @param {string} modName
-   * @return {Promise<any>} promise
    */
-  getModLoadPromise(modName) {
+  async loadOneMod(modName) {
+    const abortController = new AbortController();
     const onError = (e) => {
       logger.error('Error during mod loading:', modName, e.error ?? e);
       this.errorsOnLoadMods.push([e, modName]);
     };
-    const abortController = new AbortController();
-    const promise = Promise.resolve()
-      .then(() => {
-        //EventListener for collect errors on mod loading
-        window.addEventListener('error', onError, {
-          signal: abortController.signal,
-        });
-      })
-      .then(() => this.loadJs(`./js/mod/mods/${modName}/init.js`))
-      .then(() => this.popModPostprocess())
-      .catch((e) => {
-        this.popModPostprocess(); // Ensure the postprocess is not remained
-        onError(e);
-        // logger.error("Error on loading mod", modName, e);
-      })
-      .finally(() => {
-        logger.info(`Mod loaded: ${modName}`);
-        abortController.abort();
-        // window.removeEventListener("error", onError);
+    try {
+      window.addEventListener('error', onError, {
+        signal: abortController.signal,
       });
-    return promise;
+      await this.loadJs(`./js/mod/mods/${modName}/init.js`);
+      await this.popModPostprocess();
+    } catch (e) {
+      this.popModPostprocess(); // Ensure no postprocesses are remained
+      onError(e);
+    } finally {
+      logger.info(`Mod loaded: ${modName}`);
+      abortController.abort();
+    }
   }
 
   /**
@@ -484,40 +587,33 @@ class Maginai {
    * mods_load.jsのmodsから読み込み順と対象modNameを取得
    * 各modNameで1modのロード処理（getModLoadPromise参照）を生成し連結
    * その後はloadtWgmでゲームロード開始
+   * 非同期
    */
-  loadMods() {
+  async loadMods() {
     const postProcessLogger = this.logging.getLogger('maginai.postprocess');
-    const rtnPromise = this.loadJsData('./js/mod/mods/mods_load.js')
-      .then((loaded) => {
-        let promise = Promise.resolve();
-        for (const modName of loaded['mods']) {
-          promise = promise.then(() => this.getModLoadPromise(modName));
-        }
-        return promise;
-      })
-      .then(() => {
-        logger.info('Completed loading all mods. Starting the game...');
-        if (!this.isFirstDummytWgmMainLoadFinished) {
-          postProcessLogger.debug('First dummy tWgm load. Doing nothing');
-          this.isFirstDummytWgmMainLoadFinished = true;
-        } else {
-          postProcessLogger.debug('Second true tWgm load');
-          this.loadtWgm();
-        }
-        // ※readyの方でtrueに設定し直される可能性がある
-        this.isModLoadFatalErrorOccured = false;
-      })
-      .catch((e) => {
-        // 各Modでのエラーはそれぞれで処理済のため、ここでcatchされるのはfatal errorのはず
-        // （必要なファイルが存在しない、mod_load.jsの構造がおかしい…etc）
-        logger.error('Mod load failed:', e);
-        throw e;
-      });
+    try {
+      const loaded = await this.loadJsData('./js/mod/mods/mods_load.js');
 
-    return rtnPromise;
+      for (const modName of loaded['mods']) {
+        await this.loadOneMod(modName);
+      }
+
+      logger.info('Completed loading all mods. Starting the game...');
+
+      if (!this.isFirstDummytWgmMainLoadFinished) {
+        postProcessLogger.debug('First dummy tWgm load. Doing nothing');
+        this.isFirstDummytWgmMainLoadFinished = true;
+      } else {
+        postProcessLogger.debug('Second true tWgm load');
+        this.loadtWgm();
+      }
+      // ※readyの方でtrueに設定し直される可能性がある
+      this.isModLoadFatalErrorOccured = false;
+    } catch (e) {
+      // 各Modでのエラーはそれぞれで処理済のため、ここでcatchされるのはfatal errorのはず
+      // （必要なファイルが存在しない、mod_load.jsの構造がおかしい…etc）
+      logger.error('Mod load main proccess failed:', e);
+      throw e;
+    }
   }
 }
-
-const maginai = new Maginai();
-
-export default maginai;

@@ -1,8 +1,19 @@
 (function () {
-  maginai.events.tWgmLoad.addHandler((e) => {
+  const logger = maginai.logging.getLogger('sample1');
+  maginai.events.tWgmLoaded.addHandler((e) => {
     tWgm.isL = true;
   });
   maginai.events.gameLoadFinished.addHandler((e) =>
-    console.log('Game load finished!')
+    logger.info('Game load finished!')
   );
+  maginai.events.commandKeyClicked.addHandler((e) => {
+    if (e.keyCode === 'f4') {
+      tWgm.tGameLog.addAndViewLog('F4キーが押されました');
+      e.end();
+      return true;
+    }
+  });
+  maginai.events.saveLoaded.addHandler((e) => {
+    logger.info(`Save loaded. isNewGame: ${e.isNewGame}`);
+  });
 })();

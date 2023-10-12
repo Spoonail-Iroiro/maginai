@@ -1,4 +1,6 @@
-import maginai from './modules/maginai.js';
+import { Maginai } from './modules/maginai.js';
+
+const maginai = new Maginai();
 
 maginai.init();
 

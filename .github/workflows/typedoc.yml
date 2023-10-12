@@ -1,0 +1,32 @@
+name: Push typedoc to github pages
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.0
+      - uses: actions/setup-node@v3.8.1
+        with:
+          node-version: 18.x
+
+      - name: get-package-version
+        id: package-version
+        run: |
+          jq -e -r ".version" package.json > temp-version
+          echo "PACKAGE_VERSION="`cat temp-version` >> "$GITHUB_OUTPUT"
+      - run: npm ci
+      - run: npm run build:docs
+      - uses: JamesIves/github-pages-deploy-action@v4.4.3
+        with:
+          folder: ./_docs
+          branch: gh-pages
+          target-folder: ./docs
+          commit-message: Update docs for maginai v${{steps.package-version.outputs.PACKAGE_VERSION}}
+          force: false

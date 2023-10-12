@@ -23,12 +23,12 @@ console.log("Hello, world!");
 
 おめでとうございます！初めてのModができました。
 
-## ゲームに影響を与える
+# ゲームに影響を与える
 これだけではせっかくのModなのにゲーム内に何も影響を与えていませんね。  
 ゲームを変更するコードを全部自分で書いてもいいのですが、maginaiはいくつか便利な仕組みを提供します。  
 maginaiが提供するメソッドやモジュールはModのコード内ならいつでも`maginai`グローバル変数からアクセスできます。  
 
-### わかる人向け
+## わかる人向け
 すでにゲームを改変するコードを書いている方向けの説明です。
 
 ゲーム本体`union.js`とmaginaiのエントリポイント`loader.js`、Modの`init.js`、およびmaginaiが提供するイベントの実行順は以下の通りになります  
@@ -38,7 +38,7 @@ maginaiが提供するメソッドやモジュールはModのコード内なら�
 4. あるModのPostprocess（非同期処理が完了するまで次のModの3に進まない）
 5. （`mods_load.js`にあるすべてのModを読み込むまで3と4を繰り返し）
 6. `tWgm = new tGameMain`
-7. `tWgmLoad`イベント
+7. `tWgmLoaded`イベント
 8. `gameLoadFinished`イベント（タイトル画面表示直前）
 9. タイトル画面表示
 
@@ -49,10 +49,10 @@ Modがゲームを変更するコードを書く場所は主に以下の通り�
     - `maginai.setModPostprocess`で`Promise`をセットします（後述）
 - データの変更…`gameLoadFinished`イベント（後述）
     - タイトル画面表示直前で、`tWgm`のメンバーである`tGameTalkResource`等の各クラスのインスタンス化・初期化が完了しているため会話データ等の変更が可能です
-- セーブデータ読み込み後
-    - ※現在イベント開発中です
+- セーブデータ読み込み後…`saveLoaded`イベント（後述）
+    - セーブデータを選択後読み込みが終了し操作可能になる直前のため、個別のセーブデータにアクセスする変更が可能です
 
-#### Postprocess
+### Postprocess
 `init.js`に書けるのは同期コードだけになるので、非同期処理を次のModのロードの前（かつ、ゲームのロード前）に完了するにはmaginaiが提供するPostprocess機能を使用します。  
 `maginai.setModPostprocess`を`Promise`オブジェクトを引数に呼び出すことで、その`Promise`が完了するまで次のModは読み込まれません。  
 
@@ -76,7 +76,7 @@ maginai.setModPostprocess(postprocess);
 // ...
 ```
 
-#### イベント
+### イベント
 `maginai.events`下にはゲーム中の特定のタイミングで実行されるイベントが定義されています。  
 `addHandler`メソッドを呼び出しイベントハンドラーとなる関数を登録することで実行されます。  
 
@@ -91,15 +91,13 @@ maginai.events.gameLoadFinished.addHandler(() => {
 ```
 
 すべてのイベントは以下に掲載されています。  
-（現在あまり数がないですが追加予定です）  
 https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
 
-
-### はじめての人向け
+## はじめての人向け
 まだModとか作ってないよという方向けの説明です。  
 （とはいえ、ゲームの中身の理解はどうしても必要になるのですが）
 
-#### ロードされたデータを変更する
+### ロードされたデータを変更する
 キャラの会話データやアイテムのマスタデータ等を差し替えることで、ゲーム中の動作を変更できます。  
 
 ここで注意としては、`init.js`が読み込まれるのはModのロード中で、ゲームのロード前であることです。  
@@ -123,12 +121,12 @@ https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
 })();
 ```
 
-##### ※`(function(){`〜`})();`は何？
+#### ※`(function(){`〜`})();`は何？
 IIFEというもので、`init.js`のようなスクリプトファイルで他のスクリプトと変数が干渉しないようにする書き方です。  
 よくわからなければModのコードは基本`(function(){`〜`})();`を書いてからその間に書くものとしてください。  
 
 
-#### メソッドの動作を変更する
+### メソッドの動作を変更する
 各種メソッドをModで定義したメソッドに差し替える（モンキーパッチ）で動作を変更できます。  
 
 maginaiではこのための便利なメソッドとして`maginai.patcher`の`patchMethod`メソッドを用意しています。
@@ -165,19 +163,19 @@ maginaiではこのための便利なメソッドとして`maginai.patcher`の`p
 第三引数の関数は引数でパッチ前のメソッドorigMethodが渡されるので、内部で`origMethod.call(this, ...`とすることでもともとのメソッドを呼び出すことができます。  
 引数の一部だけ加工・前処理や後処理だけ記述するといったことが可能です。  
 
-#### 外部データを読み込む
+### 外部データを読み込む
 Modユーザーが内容を改変できる部分がある場合、`init.js`を直接編集させるのではなく、外部ファイルを用意したほうがいいでしょう。  
 [こちらの例](#postprocess)はファイル読み込みの処理例になっています。
 
 注意点としてファイルパスは`index.html`からの相対パスである必要があります。  
 よって、例えばModフォルダ直下に入れたファイルは./js/mod/mods/<Mod名>/<ファイル名>`といったパスになります。
 
-### 欲しい機能の実現が難しい場合
+## 欲しい機能の実現が難しい場合
 お気軽に作者までご相談ください。  
 Modの実装ケースには対応したつもりですが、考慮漏れがあるかもしれません。  
 （連絡先は`README.md`トップにあります）
 
-### 作成例
+## 作成例
 Mod導入手順にあるsample Modや、この作例リポジトリのModコード等を例として使用できます。  
 
 https://github.com/Spoonail-Iroiro/maginai-buildsample
@@ -186,7 +184,8 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 
 # `maginai` API
 `maginai`が公開するすべての機能のドキュメントは以下で公開されています。  
-[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html)
+[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html)  
+※`Internal`マークがついてるものは内部用でModからの利用は想定されていません  
 
 `maginai`は実際には`Maginai`クラスインスタンスですので`Maginai`クラス下に公開されているものを使用できます。  
 
@@ -194,7 +193,9 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 （ここまでに紹介した基本機能系は省略）  
 詳細はドキュメントを参照してください。  
 - `loadJsData` - `var LOADDATA = ...`形式のjsファイルからデータを読み込む
-- `logToInGameLogDebug` - ゲーム内ログにログ出力（デバッグ用）
+- `logToInGameLogDebug` - ゲーム内ログにログ出力（デバッグ・エラー表示用）
+- `VERSION`, `VERSION_INFO` - `maginai`のバージョン情報
+  - ※v0.2.0では存在しないプロパティのため比較の際は注意して下さい
 
 # 実装における注意事項
 動作するModを実装するにはここまで説明した通りで問題ありませんが  
@@ -245,31 +246,39 @@ npm install maginai
 でインストール可能です。  
 （現在型のみのためテスト等ではmockする必要があります）  
 
-現在importでのみ参照可能です。  
+### グローバル変数として参照する場合
+`moduleResolution`が`Node16`または`Bundler`のtypescriptプロジェクトにおいて、以下の内容の型定義ファイルをプロジェクトに含めることでグローバル変数maginaiの型定義をすることができます。
+```ts
+declare var maginai: import('maginai/maginai.js').Maginai;
+```
+
+`moduleResolution`が上記以外のプロジェクトにおいても以下のようにして同様に型定義可能ですが、内部モジュール構成については今後変更の可能性もあるため非推奨です。
+
+```ts
+declare var maginai: import('maginai/lib/modules/maginai.js').Maginai;
+```
+
+### importで参照する場合
+ビルド・バンドルを行う構成の場合、ソースでは以下のようにimportでmaginaiモジュールを参照し、ビルド後はバンドルに含まずグローバル変数として参照するよう設定を行うことができます。
 ```js
 import maginai from 'maginai';
 
-maginai.events.tWgmLoad.addHandler(...
+maginai.events.tWgmLoaded.addHandler(...
 ```
-よって最終的にはESModule→スクリプトへのビルドか、配布前にimport文を削除する対応が必要になります。
 
-ビルドを行う場合、`maginai`をimportではなくグローバル変数として参照し、かつMod自体にはバンドルしない設定が必要です。  
-以下の作例ではviteにおいてそのように設定していますので参考にしてください。  
+ビルド後はバンドルに含まずグローバル変数として参照する設定については、以下の作例でviteにおいてそのように設定していますので参考にしてください。  
 https://github.com/Spoonail-Iroiro/maginai-buildsample  
 
-### `maginai.events`の型が表示されない
+### `maginai.events`のハンドラー型が表示されない
 現在準備中です。  
-JSDocにはハンドラへの引数の型を記載していますので参考にして下さい。  
+JSDocにはハンドラーへの引数の型を記載していますので参考にして下さい。  
 
 ### `maginai.logging`の型が表示されない
 現在準備中です。  
 基本的には案内の通り`getLogger`でloggerの取得と`logger.info`等でのログのみ使用してください。
 
-### Q. グローバル変数として参照できる型はないの？
-準備中です（貢献歓迎です！）
-
 ### Q. `union.js`の型はないの？
-準備中です（貢献歓迎です！）
+maginai本体とは別パッケージとして準備中です。
 
 ## Q. async functionは使えないの？
 使用できます。  

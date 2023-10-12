@@ -1,6 +1,6 @@
 {
   "name": "maginai",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Spoonail",
   "repository": {
     "type": "git",
@@ -12,22 +12,38 @@
   "type": "module",
   "main": "",
   "types": "./lib/loader.d.ts",
+  "exports": {
+    ".": "./lib/loader.d.ts",
+    "./*": "./lib/modules/*"
+  },
   "scripts": {
-    "dev": "genversion --es6 ./js/mod/modules/version.js && vite build",
+    "prepare": "npm run build:package",
+    "dev": "vite build",
+    "build:dist": "rimraf dist && npm run dev && node ./tools/release.js",
+    "build:package": "rimraf lib && tsc",
     "build:docs": "typedoc",
-    "build:package": "genversion --es6 ./js/mod/modules/version.js && tsc",
-    "build:dist": "npm run dev && npm run build:package && node ./tools/release.js && node ./tools/releaseSampleMod.js",
+    "build:sample": "node ./tools/releaseSampleMod.js",
+    "test": "vitest run",
+    "test:dev": "vitest --inspect-brk --test-timeout 100000 --single-thread",
     "preview:docs": "typedoc --excludeExternals",
-    "preview:package": "npm run build:dist && npm pack"
+    "genversion": "genversion --es6 ./js/mod/modules/version.js",
+    "npver": "npm version --no-commit-hooks --no-git-tag-version",
+    "bump-version:major": "npm run npver -- major && npm run genversion",
+    "bump-version:minor": "npm run npver -- minor && npm run genversion",
+    "bump-version:patch": "npm run npver -- patch && npm run genversion"
   },
   "devDependencies": {
+    "eslint": "^8.49.0",
     "genversion": "^3.1.1",
+    "rimraf": "^5.0.5",
     "typedoc": "^0.25.1",
     "typedoc-plugin-missing-exports": "^2.1.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vitest": "^0.34.4"
   },
   "dependencies": {
+    "fastest-levenshtein": "^1.0.16",
     "loglevel": "^1.8.1",
     "loglevel-plugin-prefix": "^0.8.4"
   }

@@ -8,6 +8,7 @@ export default defineConfig({
     target: 'es2015',
     outDir: resolve(__dirname, 'game/game/js/mod'),
     emptyOutDir: true,
+    sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'js/mod/loader.js'),
       name: 'maginai',
@@ -47,4 +48,11 @@ export default defineConfig({
       },
     },
   ],
+  test: {
+    setupFiles: ['./tests/vitest.setup.ts'],
+
+    alias: {
+      '@': resolve(__dirname, './js/mod'),
+    },
+  },
 });

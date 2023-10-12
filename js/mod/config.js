@@ -1,3 +1,3 @@
-var maginai_config = {
+var maginaiConfig = {
   logLevel: 'info',
 };

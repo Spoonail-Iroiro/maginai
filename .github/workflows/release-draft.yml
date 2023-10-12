@@ -1,0 +1,59 @@
+name: Make Release Draft
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  draft-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.0
+      - uses: actions/setup-node@v3.8.1
+        with:
+          node-version: 18.x
+      # - name: get-package-version
+      #   id: package-version
+      #   uses: martinbeentjes/npm-get-version-action@v1.3.1
+      - name: get-package-version
+        id: package-version
+        run: |
+          jq -e -r ".version" package.json > temp-version
+          echo "PACKAGE_VERSION="`cat temp-version` >> "$GITHUB_OUTPUT"
+      # check if package version tag already exists, which means stable release already exists
+      - uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          retries: 3
+          script: |
+            const tag = 'v${{steps.package-version.outputs.PACKAGE_VERSION}}';
+            if (tag === 'v') {
+              throw new Error("Couldn't get package version. Abort")
+            }
+            try {
+              const result = await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'tags/' + tag,
+              });
+              throw new Error(`Tag ${tag} already exists. Abort`);
+            } catch (ex) {
+              if (ex.status !== undefined && ex.status === 404) {
+                console.log(`${tag} doesn't exist. Continue`);
+              } else {
+                throw ex;
+              }
+            }
+      - run: npm ci
+      - run: npm run build:dist
+      - uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{steps.package-version.outputs.PACKAGE_VERSION}}
+          draft: true
+          target_commitish: master
+          files: |
+            ./dist/maginai-*.zip
