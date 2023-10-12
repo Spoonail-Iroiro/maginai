@@ -85,14 +85,20 @@ vitestを使用
 
 ### Scripts
 
-#### 配布zipと型定義パッケージのビルド
+#### 型定義パッケージのビルド
 ```
-npm run build
+npm run build:package
+```
+
+`libs/`下にMOD開発用パッケージ用の型定義出力  
+
+#### 配布zipのビルド
+```
+npm run build:dist
 ```
 
 `dist/`下に配布zip出力  
 `dist/maginai/`フォルダがzipの内容  
-`libs/`下にMOD開発用パッケージ用の型定義出力  
 
 #### ドキュメント
 ```
