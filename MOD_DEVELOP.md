@@ -278,8 +278,8 @@ JSDocにはハンドラーへの引数の型を記載していますので参考
 基本的には案内の通り`getLogger`でloggerの取得と`logger.info`等でのログのみ使用してください。
 
 ## Q. `union.js`の型はないの？
-パッケージ`maginai-game-types`としてインストール可能です。
-詳細は以下リポジトリreadmeを参照下さい。
+パッケージ`maginai-game-types`としてインストール可能です。  
+詳細は以下リポジトリreadmeを参照下さい。  
 https://github.com/Spoonail-Iroiro/maginai-game-types
 
 ## Q. async functionは使えないの？
