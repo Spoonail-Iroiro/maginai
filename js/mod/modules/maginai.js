@@ -3,6 +3,7 @@ import { Patcher } from './patcher.js';
 import { ModEvent } from './event/mod-event.js';
 import { version as VERSION } from './version.js';
 import * as maginaiImage from './maginai-images';
+import { ModSave } from './mod-save.js';
 import {
   ModCommandKey,
   MOD_COMMAND_KEY_CODES,
@@ -180,6 +181,13 @@ export class MaginaiEvents {
    * ```
    */
   commandKeyClicked; // ModCommandKeyのフィールドから公開
+
+  /**
+   * セーブの直前
+   * 各Modはこのイベントハンドラ内でmaginai.modSave.setSaveObjectでセーブオブジェクトをセットすることでセーブに書き込まれる
+   * setSaveObject自体は他のタイミングでも有効だが、このイベントを利用することでセーブ直前にのみセーブデータ作成処理を行える
+   */
+  saveObjectRequired; // maginai.modSaveのフィールドから公開
 }
 
 export class Maginai {
@@ -300,12 +308,20 @@ export class Maginai {
     this.logging = logging;
 
     /**
+     * `maginai.modSave`サブモジュール
+     * Mod用セーブデータの取得・セットが可能
+     * 詳細は`ModSave`定義へ
+     */
+    this.modSave = new ModSave();
+
+    /**
      * `maginai.events`サブモジュール
      * 各種のイベント（`ModEvent`オブジェクト）を定義しておりハンドラーの設定などが可能
      * 詳細は`MaginaiEvents`定義へ
      */
     this.events = new MaginaiEvents();
     this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
+    this.events.saveObjectRequired = this.modSave.saveObjectRequired;
   }
 
   /**
@@ -448,6 +464,9 @@ export class Maginai {
 
     // Modコマンドキー関連のパッチ
     this.modCommandKey.init();
+
+    // Mod用セーブ関連のパッチ
+    this.modSave.init();
   }
 
   /**
