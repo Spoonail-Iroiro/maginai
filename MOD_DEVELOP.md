@@ -37,10 +37,12 @@ maginaiが提供するメソッドやモジュールはModのコード内なら�
 3. あるModの`init.js`
 4. あるModのPostprocess（非同期処理が完了するまで次のModの3に進まない）
 5. （`mods_load.js`にあるすべてのModを読み込むまで3と4を繰り返し）
-6. `tWgm = new tGameMain`
+6. `tWgm = new tGameMain({});`
 7. `tWgmLoaded`イベント
 8. `gameLoadFinished`イベント（タイトル画面表示直前）
 9. タイトル画面表示
+10. （ユーザーがセーブを選択）
+11. `saveLoaded`イベント
 
 Modがゲームを変更するコードを書く場所は主に以下の通りになるかと思います。  
 - メソッドの変更…`init.js`に直接
@@ -184,7 +186,7 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 
 # `maginai` API
 `maginai`が公開するすべての機能のドキュメントは以下で公開されています。  
-[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html)  
+[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html)  
 ※`Internal`マークがついてるものは内部用でModからの利用は想定されていません  
 
 `maginai`は実際には`Maginai`クラスインスタンスですので`Maginai`クラス下に公開されているものを使用できます。  
@@ -196,6 +198,9 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 - `logToInGameLogDebug` - ゲーム内ログにログ出力（デバッグ・エラー表示用）
 - `VERSION`, `VERSION_INFO` - `maginai`のバージョン情報
   - ※v0.2.0では存在しないプロパティのため比較の際は注意して下さい
+- `modSave` - Mod用セーブデータ読み込み/書き込み用サブモジュール
+  - セーブロード直後イベント`saveLoaded`、セーブ直前イベント`saveObjectRequired`と合わせて使用し、セーブデータにMod用データを読み書きすることが可能
+
 
 # 実装における注意事項
 動作するModを実装するにはここまで説明した通りで問題ありませんが  
