@@ -6,7 +6,63 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  * `maginai.modSave`サブモジュールクラス
  * 直接インスタンス化せず`maginai.modSave`から使用してください
  *
- * `maginai.modSave`
+ * `setSaveObject(name, obj)`でキー`name`に対応するセーブオブジェクトとして、`obj`をセットする
+ * 次にセーブ処理が行われるときにそのオブジェクトがセーブデータに保存される
+ *
+ * `getSaveObject(name)`で現在読み込まれているセーブデータの、キーが`name`のセーブオブジェクトを取得する
+ *
+ * `removeSaveObject(name)`でキー`name`のセーブオブジェクトを削除する
+ *
+ * いずれもタイトル画面などでセーブデータが読み込まれていない場合には例外を発生させる
+ *
+ * maginaiイベントの`saveLoaded`はセーブ読み込み直後、`saveObjectRequired`はセーブデータ書き込み直前のイベントのため
+ * `getSaveObject`・`setSaveObject`はそれらのイベント内での使用を推奨
+ * （それ以外のタイミングで随時使用することも可能）
+ *
+ * 使用例：
+ * ```typescript
+ * // セーブ回数をカウントするmod init.js
+ * (function () {
+ *   let saveCount;
+ *   const logger = maginai.logging.getLogger('sample4');
+ *   // タイプ数削減のためサブモジュールを変数に格納
+ *   const sv = maginai.modSave;
+ *   const ev = maginai.events;
+ *
+ *   // セーブデータのロード完了時に…
+ *   ev.saveLoaded.addHandler(() => {
+ *     // getSaveObjectで現在読み込んでいるセーブデータ内の`sample4`のセーブオブジェクトを取得
+ *     const saveObj = sv.getSaveObject('sample4');
+ *     if (saveObj === undefined) {
+ *       // `sample4`のセーブオブジェクトが存在しない場合undefinedが返されるので、saveCountの初期値0をセット
+ *       saveCount = 0;
+ *     } else {
+ *       // セーブオブジェクトが存在すればその中のsaveCountをセット
+ *       saveCount = saveObj.saveCount;
+ *     }
+ *     // ログにセーブから読み込んだsaveCountを表示
+ *     logger.info(
+ *       `セーブオブジェクトがロードされました。saveCount:` + saveCount.toString()
+ *     );
+ *   });
+ *
+ *   // セーブデータ書き込み直前に…
+ *   ev.saveObjectRequired.addHandler(() => {
+ *     // saveCountを+1
+ *     saveCount += 1;
+ *
+ *     // `sample4`のセーブオブジェクトとして、オブジェクトにsaveCountを含めてセット
+ *     sv.setSaveObject('sample4', { saveCount });
+ *     logger.info(`セーブがセットされました`);
+ *   });
+ * })();
+ * ```
+ *
+ * 注意：
+ * - どのmodからでも同じnameで同じセーブオブジェクトへアクセスできるため、nameには衝突しない一意の名前が必要（基本的にはmod名をnameに指定することを推奨）
+ * - セーブオブジェクトはセーブデータへ書き込まれる過程で`JSON.stringify`処理されるため、JSON化不可能なメソッドなどのオブジェクトは削除される
+ * - ゲームのブラウザ版で保存可能なセーブ容量は2つのセーブ合わせて5MB程度までのため、セーブデータが大きくなりすぎるとセーブ不可となることがある
+ *   - 参考：`tWgm.isL`を`true`にしてプレイすることでセーブ時にセーブのサイズがコンソールログ出力される
  *
  */
 export class ModSave {
@@ -32,6 +88,7 @@ export class ModSave {
     this.isSaveAvailable = false;
 
     /**
+     * @internal
      * セーブオブジェクトの収集時イベント
      */
     this.saveObjectRequired = new ModEvent('saveObjectRequired');
