@@ -12,6 +12,7 @@
     "tGameRefresh": true,
     "tGameOpening": true,
     "tGameSave": true,
+    "tGameMap": true,
     "maginaiConfig": true,
     "LOADDATA": true
   },
