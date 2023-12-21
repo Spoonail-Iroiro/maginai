@@ -5,6 +5,8 @@ const logger = logging.getLogger('maginai.event');
 
 /**
  * イベントクラス
+ *
+ * ※実装されている具体的な各イベントは`MaginaiEvents`クラスドキュメントを参照
  */
 class ModEvent {
   /**

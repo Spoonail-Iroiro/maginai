@@ -183,13 +183,26 @@ export class MaginaiEvents {
   commandKeyClicked; // ModCommandKeyのフィールドから公開
 
   /**
-   * セーブの直前
+   * セーブの直前、セーブデータへ書き込むためのセーブオブジェクトが要求される時
    * 各Modはこのイベントハンドラ内でmaginai.modSave.setSaveObjectでセーブオブジェクトをセットすることでセーブに書き込まれる
-   * setSaveObject自体は他のタイミングでも有効だが、このイベントを利用することでセーブ直前にのみセーブデータ作成処理を行える
+   * setSaveObject自体は他のタイミングでも有効だが、このイベントを利用することでセーブ直前にセーブデータ作成処理を行える
+   * 詳細は`ModSave`クラスドキュメントへ
    */
   saveObjectRequired; // maginai.modSaveのフィールドから公開
 }
 
+/**
+ * maginai メインモジュールクラス
+ *
+ * maginaiでのMod導入手順に従って導入されるすべてのModは`maginai`グローバル変数でこのクラスのインスタンスにアクセス可能
+ * `maginai`自体の（internalでない）フィールドやメソッド、またはサブモジュールを通してModの実装に必要な機能を利用することができる
+ *
+ * サブモジュールと各機能：
+ * - logging - コンソールログ
+ * - patcher - メソッドのモンキーパッチ
+ * - events - イベント
+ * - modSave - Mod用セーブデータ
+ */
 export class Maginai {
   constructor() {
     /**

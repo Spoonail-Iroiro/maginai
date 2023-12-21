@@ -4,10 +4,12 @@ import logging from 'loglevel';
 const logger = logging.getLogger('maginai.event');
 
 /**
- * キーイベントクラス
+ * キャンセル可能イベントクラス
  *
  * このイベントのあるハンドラーがtrueを返した時
  * それ以降の他のハンドラーを実行しない
+ *
+ * ※実装されている具体的な各イベントは`MaginaiEvents`クラスドキュメントを参照
  */
 export class CancelableModEvent extends ModEvent {
   /**

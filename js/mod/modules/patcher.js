@@ -1,8 +1,11 @@
-import { closest, distance } from "fastest-levenshtein";
+import { closest, distance } from 'fastest-levenshtein';
 
 /**
  * `maginai.patcher`サブモジュールクラス
  * 直接インスタンス化せず`maginai.patcher`から使用してください
+ *
+ * `patchMethod`メソッドでメソッドを新しいメソッドでモンキーパッチすることが可能
+ * （詳細は`patchMethod`ドキュメントへ）
  */
 class Patcher {
   /**
