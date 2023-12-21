@@ -6,6 +6,8 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  * `maginai.modSave`サブモジュールクラス
  * 直接インスタンス化せず`maginai.modSave`から使用してください
  *
+ * `setSaveObject`/`getSaveObject`を使用して、セーブデータにMod独自のデータ（セーブオブジェクト）を読み書き可能
+ *
  * `setSaveObject(name, obj)`でキー`name`に対応するセーブオブジェクトとして、`obj`をセットする
  * 次にセーブ処理が行われるときにそのオブジェクトがセーブデータに保存される
  *
@@ -13,7 +15,7 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  *
  * `removeSaveObject(name)`でキー`name`のセーブオブジェクトを削除する
  *
- * いずれもタイトル画面などでセーブデータが読み込まれていない場合には例外を発生させる
+ * いずれもタイトル画面など特定のセーブデータが読み込まれていない状態では例外を発生させる
  *
  * maginaiイベントの`saveLoaded`はセーブ読み込み直後、`saveObjectRequired`はセーブデータ書き込み直前のイベントのため
  * `getSaveObject`・`setSaveObject`はそれらのイベント内での使用を推奨
@@ -21,10 +23,11 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  *
  * 使用例：
  * ```typescript
- * // セーブ回数をカウントするmod init.js
+ * // セーブ回数をカウントするMod init.js
  * (function () {
- *   let saveCount;
  *   const logger = maginai.logging.getLogger('sample4');
+ *   // セーブ回数カウント用変数
+ *   let saveCount;
  *   // タイプ数削減のためサブモジュールを変数に格納
  *   const sv = maginai.modSave;
  *   const ev = maginai.events;
@@ -34,7 +37,7 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  *     // getSaveObjectで現在読み込んでいるセーブデータ内の`sample4`のセーブオブジェクトを取得
  *     const saveObj = sv.getSaveObject('sample4');
  *     if (saveObj === undefined) {
- *       // `sample4`のセーブオブジェクトが存在しない場合undefinedが返されるので、saveCountの初期値0をセット
+ *       // `sample4`のセーブオブジェクトがまだ存在しない場合undefinedが返されるので、saveCountの初期値0をセット
  *       saveCount = 0;
  *     } else {
  *       // セーブオブジェクトが存在すればその中のsaveCountをセット
@@ -59,8 +62,8 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  * ```
  *
  * 注意：
- * - どのmodからでも同じnameで同じセーブオブジェクトへアクセスできるため、nameには衝突しない一意の名前が必要（基本的にはmod名をnameに指定することを推奨）
- * - セーブオブジェクトはセーブデータへ書き込まれる過程で`JSON.stringify`処理されるため、JSON化不可能なメソッドなどのオブジェクトは削除される
+ * - どのModからでも同じ`name`で同じセーブオブジェクトへアクセスできるため、`name`には衝突しない一意の名前が必要（基本的にはMod名を`name`に指定することを推奨）
+ * - セーブオブジェクトはセーブデータへ書き込まれる過程で`JSON.stringify`処理されるため、json化不可能なメソッドなどのオブジェクトは削除される
  * - ゲームのブラウザ版で保存可能なセーブ容量は2つのセーブ合わせて5MB程度までのため、セーブデータが大きくなりすぎるとセーブ不可となることがある
  *   - 参考：`tWgm.isL`を`true`にしてプレイすることでセーブ時にセーブのサイズがコンソールログ出力される
  *
@@ -94,6 +97,10 @@ export class ModSave {
     this.saveObjectRequired = new ModEvent('saveObjectRequired');
   }
 
+  /**
+   * @internal
+   * 初期化処理（要union.js）
+   */
   init() {
     const patcher = new Patcher();
     const self = this;
@@ -176,8 +183,8 @@ export class ModSave {
   }
 
   /**
-   * 指定されたnameのMod用セーブオブジェクトを取得します。
-   * 読み込まれているセーブにこのnameのセーブオブジェクトが存在しない場合はundefinedが返ります。
+   * 指定されたnameのMod用セーブオブジェクトを取得する
+   * 読み込まれているセーブにこのnameのセーブオブジェクトが存在しない場合はundefinedを返す
    * @type {string} name
    */
   getSaveObject(name) {
@@ -187,8 +194,8 @@ export class ModSave {
   }
 
   /**
-   * 指定されたnameのMod用セーブオブジェクトをセットします。
-   * 注意：実際にセーブデータに書き込まれるのはセーブ操作が行われたとき（メニュー＞セーブする等）です
+   * 指定されたnameのMod用セーブオブジェクトをセットする
+   * 注意：実際にセーブデータに書き込まれるのはセーブ操作が行われたとき（メニュー＞セーブする等）
    * @type {string} name
    * @type {object} saveObj
    */
@@ -204,8 +211,8 @@ export class ModSave {
   }
 
   /**
-   * 指定されたnameのMod用セーブオブジェクトを削除します。
-   * 注意：実際にセーブデータに書き込まれるのはセーブ操作が行われたとき（メニュー＞セーブする等）です
+   * 指定されたnameのMod用セーブオブジェクトを削除する
+   * 注意：実際にセーブデータに書き込まれるのはセーブ操作が行われたとき（メニュー＞セーブする等）
    * @type {string} name
    */
   removeSaveObject(name) {
