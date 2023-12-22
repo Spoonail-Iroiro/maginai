@@ -15,7 +15,9 @@ maginai作者制作のModです。
 
 - [簡易クイックセーブ/ロードMod](https://github.com/Spoonail-Iroiro/maginai-qsave/blob/master/README.md)
 - [固有NPC等口調差し替え・追加Mod](https://github.com/Spoonail-Iroiro/maginai-plustalk/blob/master/README.md)
+- [アビリティトラッカーMod](https://github.com/Spoonail-Iroiro/maginai-atrack)
 - [レターパックMod](https://github.com/Spoonail-Iroiro/maginai-letterpack/blob/master/README.md)
+
 
 # Mod の開発
 [Mod開発者向け説明](MOD_DEVELOP.md)
