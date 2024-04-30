@@ -1,3 +1,5 @@
+[English](README_en.md)
+
 # 概要
 
 非公式 異世界の創造者Modローダー
