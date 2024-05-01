@@ -1,3 +1,5 @@
+[Japanese](README.md)
+
 # Overview
 
 Unofficial Mod Loader for Creator of Another World
