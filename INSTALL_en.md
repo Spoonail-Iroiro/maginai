@@ -1,9 +1,9 @@
-<span>*</span> In this document, `CoAW/` path means the game directory, which contains `Game.exe`
+\* In this document, `CoAW/` path means the game directory, which contains `Game.exe`
 
 ## How to Install Mod Loader 'maginai'
 
 
-### 1. Place Mod Loader Files in the game directory
+### 1. Place Mod Loader Files in the Game Directory
 Download and unzip latest `maginai-X.Y.Z.zip` (X.Y.Z is the version number) from [Release](https://github.com/Spoonail-Iroiro/maginai/releases).  
 Copy `mod` folder inside it to `CoAW/game/js`.  
 If you have the following four folders in `CoAW/game/js`: `game`, `jquery`, `libs`, and `mod`, then everything is in the correct state.
@@ -11,7 +11,7 @@ If you have the following four folders in `CoAW/game/js`: `game`, `jquery`, `lib
 ![in-game-dir](docassets/in-game-dir.png)
 
 ### 2. Edit `index.html`
-Open `CoAW/game/index.html` with a text editor (notepad will work) and add these two lines after the line of `./js/game/union.js`:
+Open `CoAW/game/index.html` with a text editor (Notepad works fine) and add these two lines after the line of `./js/game/union.js`:
 
 ```html
 <script src="./js/mod/config.js"></script>
@@ -44,7 +44,7 @@ To launch CoAW from a web browser, see `●Open 『\game\index.html』 in a brow
 \* To access the developer console in Google Chrome, go to Menu > More Tools > Developer Tools.  
 \* F12 won't work once the game has started.
 
-### How to update
+### How to Update
 If you updated CoAW or want to update maginai, follow this installation steps again.  
 However, unless specifically announced, you can simply copy the existing `mods` folder, which contains mods and `mods_load.js`, without any issues.
 
@@ -58,15 +58,15 @@ If you completed installing maginai, you can now install a mod by:
 Get the desired mod from [Discord (CoAW modding)](https://discord.gg/RgYrD3uPZM) or somewhere.  
 [README](README.md) also has a mods list.
 
-Now, as an example, let's try installing this sample mod, which just log a message "sample modがロードされました" when the game started.
-It's distributed in a zip file, so please download and unzip it. 
+Now, as an example, let's try installing a sample mod, which just logs a message "sample modがロードされました" when the game starts.  
+Download and unzip the distribution file from the following link:
 
 https://drive.google.com/file/d/1dYoioGayloWRBwKY3CJtLIMJibTxRKb7/view?usp=drive_link
 
 Inside the extracted folder, you'll find `readme.txt` and `sample` folder.   
 The `sample` folder is the mod's main folder that should be placed in `mods` directory.
 
-Please note that the structure may vary depending on the mod author.   
+Please note that the structure of distribution materials may vary depending on the mod author.  
 Follow the instructions in the readme or the author's guidance.   
 If you're still unsure where mod's main folder is, the mod's main folder always contains an `init.js` file directly inside it, so find it. 
 
@@ -79,9 +79,9 @@ Copy mod's main folder (it's `sample` now) there.
 
 ### 3. Add Mod's Name to the List in `mods_load.js`
 
-Open the file named `mods_load.js` inside the `mods` directory using a text editor.  
+Open the file named `mods_load.js` inside the `mods` directory with a text editor.  
 The list defined in `mods` should contain the names of the mods to be loaded.  
-Add the name of the mod folder you just placed (in this case, `sample`) to the list.
+Add the name of the mod folder you just placed (it's `sample` now) to the list.  
 * Each mod name should be enclosed in either double quotes (`"`) or single quotes (`'`), and a comma `,` is required between each name.
 * Lines starting with `//` are comments, so they can be deleted without any issues.
 
@@ -120,9 +120,9 @@ Now, if you select a save slot and the game starts, you should see a log message
 
 With this, you've successfully installed a mod and the mod altered the game's behavior.
 
-## How to Delete a Mod
+## How to Remove a Mod
 Remove the mod name from the list in `mods_load.js`.  
-You can also remove the mod's main folder.
+maginai ignores mods not listed in `mods_load.js`, so you can remove mod's main folder after that.  
 
 ## Q&A
 ### Q. The Game is Laggy!
@@ -130,7 +130,7 @@ By default, mods' log level is set to `Info` and too many logs can affect perfor
 Open the `config.js` in `mods` directory and replace `info` in `logLevel: 'info'` with `warn` or `error`.  
 It supresses non-important logs, so performance might be improved.
 
-### Q. I want to install a mod by just placing mod's folder in `mods`. Editing `mods_load.js` is tedious.
+### Q. I want to install a mod by just placing the mod's folder in `mods`. Editing `mods_load.js` is tedious.
 CoAW is running on local HTML+JavaScript, so due to CORS restrictions, it's difficult to access all files within a specific directory.  
 Additionally, while installation may be possible with just placing the mod folder, there are often scenarios where one wants to configure the loading order of mods, hence the necessity of `mods_load.js,` which serves as a definition for loading order.  
 (Having a GUI application or something for editing `mods_load.js` might make it easier. Contributions are always welcome!)"
