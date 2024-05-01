@@ -17,7 +17,7 @@ console.log("Hello, world!");
 Place this `mysample` folder into the `mods` directory and add the mod name to the list in `load_mods.js`, as described in mod installation steps. Then, the mod will be loaded.
 
 Since the mod code uses console.log to output a message to the browser's developer console, let's launch the game from a web browser.   
-To launch CoAW from a web browser, see `●Open 『\game\index.html』 in a browser` section in `Please read this first.txt` in the game docs.  
+(To launch CoAW from a web browser, see `●Open 『\game\index.html』 in a browser` section in `Please read this first.txt` in the game docs.)
 
 ![mysample-hello](docassets/mysample-hello.png)
 
