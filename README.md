@@ -28,9 +28,8 @@ maginai作者制作のModです。
 [CONTRIBUTION.md](CONTRIBUTION.md)
 
 # 困ったときは
-いせそう非公式Discordの`改造・MOD用`で`@Spoonail`までメンションいただくか  
-Misskeyまでご連絡ください  
-https://misskey.io/@Spoonail
+本リポジトリにissueを立てるか以下の連絡先からSpoonailまでご連絡ください。
+https://whiteblackspace.hatenablog.com/contact-coaw
 
 # 注意事項
 非公式・ファンメイドのものですので公式へのお問い合わせはご遠慮ください。  
