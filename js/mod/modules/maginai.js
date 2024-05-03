@@ -92,7 +92,8 @@ class MaginaiImage {
   draw(targetLayer, isMainFailed, failedMods) {
     const info = this.getImageInfo(isMainFailed, failedMods);
     const dx = 5;
-    const dy = targetLayer.cvs.height - info.rect[3];
+    // オプション初期化ボタンと被らないよう左下コーナーより少し上に配置
+    const dy = targetLayer.cvs.height - info.rect[3] - 50;
     const drawRect = [dx, dy, info.rect[2], info.rect[3]];
     // targetLayer.ctx.clearRect(...drawRect);
     maginaiImage.pasteRect(targetLayer.ctx, info, drawRect[0], drawRect[1]);
