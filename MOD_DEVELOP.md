@@ -93,7 +93,7 @@ maginai.events.gameLoadFinished.addHandler(() => {
 ```
 
 すべてのイベントは以下に掲載されています。  
-https://spoonail-iroiro.github.io/maginai/classes/_internal_.MaginaiEvents.html
+https://spoonail-iroiro.github.io/maginai/classes/MaginaiEvents.html
 
 ## はじめての人向け
 まだModとか作ってないよという方向けの説明です。  
@@ -186,7 +186,7 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 
 # `maginai` API
 `maginai`が公開するすべての機能のドキュメントは以下で公開されています。  
-[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html)  
+[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/classes/Maginai.html)  
 ※`Internal`マークがついてるものは内部用でModからの利用は想定されていません  
 
 `maginai`は実際には`Maginai`クラスインスタンスですので`Maginai`クラス下に公開されているものを使用できます。  
@@ -210,7 +210,7 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 いくつかの例ではわかりやすさのため`console.log`でログ出力していますが、実際のModコードでは非推奨です。  
 かわりに以下に掲載の例の通り、`Logger`オブジェクトを取得してログ出力を行ってください。  
 
-[https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#logging](https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#logging)
+[https://spoonail-iroiro.github.io/maginai/classes/Maginai.html#logging](https://spoonail-iroiro.github.io/maginai/classes/Maginai.html#logging)
 
 loggerを使うことでどのModからのログなのかわかりやすく、ユーザーが表示レベル等を制御できます。  
 
@@ -224,7 +224,7 @@ IIFEでなくグローバルに書いた場合、たとえば同じ`const hoge`�
 ## `tGameMain`クラスはそのまま使用できない
 `tGameMain`クラスはゲーム初期化を遅らせるためダミーになっており直接使用できません。  
 メソッドのパッチなどでアクセスしたい場合は以下に記載の通りとしてください。  
-https://spoonail-iroiro.github.io/maginai/classes/_internal_.Maginai.html#origtGameMain
+https://spoonail-iroiro.github.io/maginai/classes/Maginai.html#origtGameMain
 
 ## Mod名は重複しない特徴的なものを付けるようにする
 Modはフォルダで導入するため同じMod名で別のModを入れることはできません。  
