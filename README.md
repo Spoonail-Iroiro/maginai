@@ -1,3 +1,5 @@
+[English](README_en.md)
+
 # 概要
 
 非公式 異世界の創造者Modローダー
@@ -15,7 +17,9 @@ maginai作者制作のModです。
 
 - [簡易クイックセーブ/ロードMod](https://github.com/Spoonail-Iroiro/maginai-qsave/blob/master/README.md)
 - [固有NPC等口調差し替え・追加Mod](https://github.com/Spoonail-Iroiro/maginai-plustalk/blob/master/README.md)
+- [アビリティトラッカーMod](https://github.com/Spoonail-Iroiro/maginai-atrack)
 - [レターパックMod](https://github.com/Spoonail-Iroiro/maginai-letterpack/blob/master/README.md)
+
 
 # Mod の開発
 [Mod開発者向け説明](MOD_DEVELOP.md)
@@ -24,9 +28,8 @@ maginai作者制作のModです。
 [CONTRIBUTION.md](CONTRIBUTION.md)
 
 # 困ったときは
-いせそう非公式Discordの`改造・MOD用`で`@Spoonail`までメンションいただくか  
-Misskeyまでご連絡ください  
-https://misskey.io/@Spoonail
+本リポジトリにissueを立てるか以下の連絡先からSpoonailまでご連絡ください。
+https://whiteblackspace.hatenablog.com/contact-coaw
 
 # 注意事項
 非公式・ファンメイドのものですので公式へのお問い合わせはご遠慮ください。  

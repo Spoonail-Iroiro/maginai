@@ -1,8 +1,9 @@
-※右上のハンバーガーボタンから目次を出せます。ボタンが表示されない場合はページリロードで正常に表示されるようになる場合があります
+<span>*</span> You can access the table of contents from the hamburger button in the top right corner. If the button is not visible, reloading this page may make it appear correctly.
 
-# 最もシンプルなMod
-Mod名を決めその名前のフォルダを作り、その中に`init.js`ファイルを作成します。  
-例として`mysample`というModにしてみます。
+# The Simplest Mod
+Name your mod and create a folder with that name, then create an `init.js` file inside it.  
+For example, let's create a mod named `mysample`.
+
 ```text
 mysample/
 ┗━━init.js
@@ -13,15 +14,18 @@ mysample/
 console.log("Hello, world!");
 ```
 
-この`mysample`フォルダをMod導入手順に従って`mods`に配置、`load_mods.js`でロード対象に追加すればModとしてロードされます。  
-今回は`console.log`でブラウザの開発者コンソールへメッセージを出力しましたので、`index.html`からゲームを起動し、開発者コンソールを開いてみます。  
+Place this `mysample` folder into the `mods` directory and add the mod name to the list in `load_mods.js`, as described in mod installation steps. Then, the mod will be loaded.
+
+Since the mod code uses console.log to output a message to the browser's developer console, let's launch the game from a web browser.   
+(To launch CoAW from a web browser, see `●Open 『\game\index.html』 in a browser` section in `Please read this first.txt` in the game docs.)
 
 ![mysample-hello](docassets/mysample-hello.png)
 
-`init.js`内のコードが実行され、メッセージが表示されていることがわかると思います。  
-また、`init.js`に書いたコードが実行されるのはModロード中、ゲームロード前のタイミングということがわかります。  
+You should see that the code inside `init.js` is executed and the message is displayed.  
+Additionally, you'll notice that the code written in `init.js` is executed during mod loading, before the game loads.
 
-おめでとうございます！初めてのModができました。
+Congratulations! You've created your mod.
+
 
 # ゲームに影響を与える
 これだけではせっかくのModなのにゲーム内に何も影響を与えていませんね。  

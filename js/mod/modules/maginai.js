@@ -9,6 +9,7 @@ import {
   MOD_COMMAND_KEY_CODES,
 } from './control/mod-command-key.js';
 import { versionToversionInfo } from './util.js';
+import { MaginaiBrowserUnlocker } from './maginai-browser-unlocker.js';
 
 const logger = logging.getLogger('maginai');
 
@@ -91,7 +92,8 @@ class MaginaiImage {
   draw(targetLayer, isMainFailed, failedMods) {
     const info = this.getImageInfo(isMainFailed, failedMods);
     const dx = 5;
-    const dy = targetLayer.cvs.height - info.rect[3];
+    // オプション初期化ボタンと被らないよう左下コーナーより少し上に配置
+    const dy = targetLayer.cvs.height - info.rect[3] - 50;
     const drawRect = [dx, dy, info.rect[2], info.rect[3]];
     // targetLayer.ctx.clearRect(...drawRect);
     maginaiImage.pasteRect(targetLayer.ctx, info, drawRect[0], drawRect[1]);
@@ -335,6 +337,12 @@ export class Maginai {
     this.events = new MaginaiEvents();
     this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
     this.events.saveObjectRequired = this.modSave.saveObjectRequired;
+
+    /**
+     * @internal
+     * Steam版でindex.html起動を使えるようにするクラス
+     */
+    this.browserUnlocker = new MaginaiBrowserUnlocker();
   }
 
   /**
@@ -449,6 +457,8 @@ export class Maginai {
       };
       return rtnFn;
     });
+
+    this.browserUnlocker.init();
 
     const readyLogger = magi.logging.getLogger('maginai.ready');
 
