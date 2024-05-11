@@ -126,7 +126,7 @@ The developer console shows logs and error messages from maginai and mods, which
 
 The available methods vary depending on which platform version of CoAW you are using.
 
-### (DLSite Ver. Only) Open the Developer Console from the Browser
+### (DLSite Version Only) Open the Developer Console from the Browser
 
 Open `CoAW/game/index.html` with your browser and open the developer console.  
 (It's the same as the starting steps described in '★Please read this first.txt' for Mac/Linux. It's also available for Windows.)  
@@ -138,10 +138,10 @@ For other browsers, refer to the respective browser's instructions on how to ope
 
 ![browser-dev-console](docassets/browser-dev-console.png)
 
-### (Both DLSite Ver. and Steam Ver.) Set Envvar to Open Developer Console When Game.exe is Launched
+### (Both DLSite Version and Steam Version) Set Envvar to Open Developer Console When Game.exe is Launched
 
-As running CoAW on a browser is not supported in the Steam ver., you should open the developer console with Game.exe.  
-This method is also available for the DLSite ver.
+As running CoAW on a browser is not supported in the Steam version, you should open the developer console with Game.exe.  
+This method is also available for the DLSite version
 
 To open the developer console, set the environment variable `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` to `--auto-open-devtools-for-tabs` and launch Game.exe.
 
@@ -160,7 +160,7 @@ set WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--auto-open-devtools-for-tabs
 start "" Game.exe
 ```
 
-For the DLSite ver. or if you have changed the installation path for Steam ver., replace `"C:\Program Files (x86)\Steam\steamapps\common\isekainosouzousha"` with the folder path where Game.exe is located.
+For the DLSite version or if you have changed the installation path for Steam version, replace `"C:\Program Files (x86)\Steam\steamapps\common\isekainosouzousha"` with the folder path where Game.exe is located.
 If Steam's installation location is the default one, the content above should work as it is.
 
 Now, double-clicking `launch.bat` will launch CoAW with the developer console window open.  
