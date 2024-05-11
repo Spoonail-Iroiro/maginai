@@ -39,12 +39,10 @@ If, upon launching the game, you see the text `Mod loader 'maginai' vX.Y.Z` (whe
 If the text appears in red or is not displayed at all, please check the installation steps again.   
 
 You can find detailed error messages in the browser's developer console when CoAW is running on a web browser.  
-To launch CoAW from a web browser, open `CoAW/game/index.html` with it.
+To launch CoAW from a web browser, see `●Open 『\game\index.html』 in a browser` section in `Please read this first.txt` in the game docs.
 
-\* Only Google Chrome is officially supported (described in `●Open 『\game\index.html』 in a browser` section in `Please read this first.txt` in the game docs (DLSite ver.))   
 \* To access the developer console in Google Chrome, go to Menu > More Tools > Developer Tools.  
-\* CoAW (Steam ver.) doesn't load the game when it's launched from a web browser until maginai is installed. Even in that case, you still be able to get some error messages from the developer console. 
-
+\* F12 won't work once the game has started.
 
 ### How to Update
 If you updated CoAW or want to update maginai, follow this installation steps again.  
@@ -115,8 +113,6 @@ Since you can't access the developer console when launching from Game.exe, it's 
 Additionally, only loading errors are displayed on the title screen.   
 Follow the instructions provided by each mod for checking errors that occur during gameplay.   
 (In many cases, the developer console will provide useful information here again)
-
-/* If you installed maginai, you can launch the game even if CoAW is Steam ver. However it's not officially supported environment and maginai also doesn't support whole gameplay. Use it as debugging only to use the developer console, use Game.exe for your usual gameplay.
 
 Now, if you select a save slot and the game starts, you should see a log message saying 'sample modがロードされました' (means "sample mod has been loaded"), which was added by the `sample` mod.
 
