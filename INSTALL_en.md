@@ -2,7 +2,6 @@
 
 ## How to Install Mod Loader 'maginai'
 
-
 ### 1. Place Mod Loader Files in the Game Directory
 Download and unzip latest `maginai-X.Y.Z.zip` (X.Y.Z is the version number) from [Release](https://github.com/Spoonail-Iroiro/maginai/releases).  
 Copy `mod` folder inside it to `CoAW/game/js`.  
@@ -38,13 +37,8 @@ If, upon launching the game, you see the text `Mod loader 'maginai' vX.Y.Z` (whe
 
 If the text appears in red or is not displayed at all, please check the installation steps again.   
 
-You can find detailed error messages in the browser's developer console when CoAW is running on a web browser.  
-To launch CoAW from a web browser, open `CoAW/game/index.html` with it.
-
-\* Only Google Chrome is officially supported (described in `●Open 『\game\index.html』 in a browser` section in `Please read this first.txt` in the game docs (DLSite ver.))   
-\* To access the developer console in Google Chrome, go to Menu > More Tools > Developer Tools.  
-\* CoAW (Steam ver.) doesn't load the game when it's launched from a web browser until maginai is installed. Even in that case, you still be able to get some error messages from the developer console. 
-
+You can find detailed error messages in the developer console.  
+(For how to, see [How to Open the Developer Console Section](#how-to-open-the-developer-console).)
 
 ### How to Update
 If you updated CoAW or want to update maginai, follow this installation steps again.  
@@ -110,13 +104,11 @@ If an error occurs during loading, a message starting with `Mod load failed:` fo
 ![mod-load-failed](docassets/mod-load-failed.png)
 
 You can find detailed error messages in the browser's developer console.  
-Since you can't access the developer console when launching from Game.exe, it's recommended to launch from index.html when you investigate any isssues.
+(For how to, see [How to Open the Developer Console Section](#how-to-open-the-developer-console).)
 
 Additionally, only loading errors are displayed on the title screen.   
 Follow the instructions provided by each mod for checking errors that occur during gameplay.   
 (In many cases, the developer console will provide useful information here again)
-
-/* If you installed maginai, you can launch the game even if CoAW is Steam ver. However it's not officially supported environment and maginai also doesn't support whole gameplay. Use it as debugging only to use the developer console, use Game.exe for your usual gameplay.
 
 Now, if you select a save slot and the game starts, you should see a log message saying 'sample modがロードされました' (means "sample mod has been loaded"), which was added by the `sample` mod.
 
@@ -127,6 +119,91 @@ With this, you've successfully installed a mod and the mod altered the game's be
 ## How to Remove a Mod
 Remove the mod name from the list in `mods_load.js`.  
 maginai ignores mods not listed in `mods_load.js`, so you can remove mod's main folder after that.  
+
+## How to Open the Developer Console
+
+The developer console shows logs and error messages from maginai and mods, which are useful for troubleshooting.
+
+The available methods vary depending on which platform version of CoAW you are using.
+
+### (DLSite Version Only) Open the Developer Console from the Browser
+
+Open `CoAW/game/index.html` with your browser and open the developer console.  
+(It's the same as the starting steps described in '★Please read this first.txt' for Mac/Linux. It's also available for Windows.)  
+
+For the browser, Google Chrome or Edge is recommended.
+
+In Google Chrome, you can open the developer console by navigating to Menu > More Tools > Developer Tools.  
+For other browsers, refer to the respective browser's instructions on how to open the developer console.  
+
+![browser-dev-console](docassets/browser-dev-console.png)
+
+### (Both DLSite Version and Steam Version) Set Envvar to Open Developer Console When Game.exe is Launched
+
+As running CoAW on a browser is not supported in the Steam version, you should open the developer console with Game.exe.  
+This method is also available for the DLSite version
+
+To open the developer console, set the environment variable `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` to `--auto-open-devtools-for-tabs` and launch Game.exe.
+
+Below, we explain how to do this with a bat file for those who are unfamiliar with things like this.  
+(The is also a good method in term of avoiding effect on the system-wide environment)
+
+#### Launch from a bat File
+
+First, create a text file with the following content and save it as `launch.bat`:
+
+```bat
+@echo off
+chcp 65001
+cd "C:\Program Files (x86)\Steam\steamapps\common\isekainosouzousha"
+set WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--auto-open-devtools-for-tabs
+start "" Game.exe
+```
+
+For the DLSite version or if you have changed the installation path for Steam version, replace `"C:\Program Files (x86)\Steam\steamapps\common\isekainosouzousha"` with the folder path where Game.exe is located.
+If Steam's installation location is the default one, the content above should work as it is.
+
+Now, double-clicking `launch.bat` will launch CoAW with the developer console window open.  
+\* In the image, `mydata` loading error is shown but it's working properly.
+
+![with-dev-console](docassets/with-dev-console.png)
+
+\* If Steam is not running, an error message window like the following will be displayed, and the game will not start. Please make sure Steam is running. If it still doesn't work, try "Launch from Steam Library" steps described in the next section.
+
+![error-no-steam](docassets/no-steam.png)
+
+#### Launch from Steam Library
+
+With a bat file and launch options, you can also open the developer console when you launch CoAW from Steam Library.
+
+First, create a text file with the following content and save it as "launch_steam.bat":
+
+```bat
+@echo off
+set WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--auto-open-devtools-for-tabs
+start "" %1
+```
+
+Next, right-click CoAW in your Steam library, open Properties, and enter the following in the Launch Options field:
+
+```
+"C:\path\to\launch_steam.bat" %command%
+```
+
+Replace `"C:\path\to\launch_steam.bat"` with the path where you saved `launch_steam.bat`.
+If you set it correctly, it will look like this:
+
+![launch-option](docassets/launch-option.png)
+
+After these settings have completed, launching CoAW from the Steam Library will also open the developer console.
+
+#### Disable the Developer Console
+
+Whether launching from a bat file or from the Steam Library, you can make the game launches normally without the developer console by adding `rem ` at the beginning of the line containing `set WEBVIEW2_...` in the bat file.
+
+```
+rem set WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--auto-open-devtools-for-tabs
+```
 
 ## Q&A
 ### Q. The Game is Laggy!
