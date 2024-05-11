@@ -14,7 +14,8 @@ console.log("Hello, world!");
 ```
 
 この`mysample`フォルダをMod導入手順に従って`mods`に配置、`load_mods.js`でロード対象に追加すればModとしてロードされます。  
-今回は`console.log`でブラウザの開発者コンソールへメッセージを出力しましたので、`index.html`からゲームを起動し、開発者コンソールを開いてみます。  
+今回は`console.log`で開発者コンソールへメッセージを出力しましたので、`index.html`からゲームを起動し、開発者コンソールを開いてみます。  
+（開発者コンソールの開き方は[INSTALL.mdの開発者コンソールの開き方セクション](README.md#開発者コンソールの開き方)を参照ください）
 
 ![mysample-hello](docassets/mysample-hello.png)
 

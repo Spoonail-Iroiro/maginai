@@ -9,7 +9,6 @@ import {
   MOD_COMMAND_KEY_CODES,
 } from './control/mod-command-key.js';
 import { versionToversionInfo } from './util.js';
-import { MaginaiBrowserUnlocker } from './maginai-browser-unlocker.js';
 
 const logger = logging.getLogger('maginai');
 
@@ -337,12 +336,6 @@ export class Maginai {
     this.events = new MaginaiEvents();
     this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
     this.events.saveObjectRequired = this.modSave.saveObjectRequired;
-
-    /**
-     * @internal
-     * Steam版でindex.html起動を使えるようにするクラス
-     */
-    this.browserUnlocker = new MaginaiBrowserUnlocker();
   }
 
   /**
@@ -457,8 +450,6 @@ export class Maginai {
       };
       return rtnFn;
     });
-
-    this.browserUnlocker.init();
 
     const readyLogger = magi.logging.getLogger('maginai.ready');
 
