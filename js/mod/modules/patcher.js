@@ -10,6 +10,10 @@ import { closest, distance } from 'fastest-levenshtein';
 class Patcher {
   /**
    * 指定したクラスのメソッドを新しいメソッドに置き換え（パッチ）する
+   *
+   * ※よりシンプルでミスしにくい新しいインターフェースを持つPatcher2の使用を推奨
+   *   詳細はPatcher2定義へ
+   *
    * ```js
    * class HelloClass {
    *   a = 1;
@@ -23,14 +27,16 @@ class Patcher {
    *   "hello", // helloメソッドをパッチする
    *   (origMethod) => {
    *   // 新しいhelloメソッドは…
-   *   const rtnFn = function () {
+   *   const rtnFn = function (...args) {
    *     // もとのメソッドを呼び出した後に'Bye'というメッセージを出力する
-   *     origMethod.call(this);
+   *     const rtn = origMethod.call(this, ...args);
    *     console.log("Bye");
+   *     return rtn;
+   *     // もとのメソッドは引数も返り値もないが、互換性のために常にargsをすべて渡し返り値を返している
    *   };
    *   return rtnFn;
    * })
-   * // パッチ以降はhelloメソッドの呼び出しは、新しいhelloメソッドを呼ぶ
+   * // パッチ以降のhelloメソッドの呼び出しは、新しいhelloメソッドを呼ぶ（たとえこのようにすでにインスタンスが作られていても）
    * helloobj.hello()
    * // Hello 1
    * // Bye
