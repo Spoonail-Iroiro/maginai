@@ -21,7 +21,7 @@ class MaginaiImage {
     /**
      * @internal
      */
-    this.cvs = new OffscreenCanvas(500, 100);
+    this.cvs = new OffscreenCanvas(500, 1000);
     /**
      * @internal
      * @type {OffscreenCanvasRenderingContext2D}
@@ -33,12 +33,14 @@ class MaginaiImage {
   /**
    * @private
    * 画面にmaginaiの情報を表示するためのcanvas,context,rectを作成し返す
+   * @param {string[]} completedMods
    * @param {boolean} isMainFailed
    * @param {[(Error|ErrorEvent), string][]} failedMods
    * @return {maginaiTypes.DrawInfoRect} drawInfo
    */
-  getImageInfo(isMainFailed, failedMods) {
+  getImageInfo(completedMods, isMainFailed, failedMods) {
     const gm = tWgm;
+    let maxWidthOfCanvas = 0;
     this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
     const mainInfo = gm.tGameText.createText({
       text: `%c[saveimport]Mod loader 'maginai' v${VERSION}`,
@@ -51,9 +53,28 @@ class MaginaiImage {
       },
     });
     let height = 0;
+    if (maxWidthOfCanvas < mainInfo.width) maxWidthOfCanvas = mainInfo.width;
+    maginaiImage.pasteTLWH(this.ctx, mainInfo, 0, height);
     height += mainInfo.height;
-    let width = mainInfo.width;
-    maginaiImage.pasteTLWH(this.ctx, mainInfo, 0, 0);
+
+    for (const name of completedMods) {
+      const loadedInfo = gm.tGameText.createText({
+        text: `%c[saveimport]'${name}' loded`,
+        maxWidth: 500,
+        fontSize: 13,
+        lineHeight: 0.2,
+        strokeData: {
+          color: 'rgba(0,0,0,0.5)',
+          width: 4,
+        },
+      });
+      if (maxWidthOfCanvas < loadedInfo.width) {
+        maxWidthOfCanvas = loadedInfo.width;
+      }
+
+      maginaiImage.pasteTLWH(this.ctx, loadedInfo, 0, height);
+      height += loadedInfo.height;
+    }
 
     if (failedMods && failedMods.length != 0) {
       const modsText =
@@ -70,27 +91,29 @@ class MaginaiImage {
           width: 4,
         },
       });
-      const bottom = height;
-      maginaiImage.pasteTLWH(this.ctx, modsInfo, 0, bottom);
+      maginaiImage.pasteTLWH(this.ctx, modsInfo, 0, height);
       height += modsInfo.height;
-      width = Math.max(width, modsInfo.width);
+      if (maxWidthOfCanvas < modsInfo.width) {
+        maxWidthOfCanvas = modsInfo.width;
+      }
     }
 
     return {
       cvs: this.cvs,
       ctx: this.ctx,
-      rect: [0, 0, width, height],
+      rect: [0, 0, maxWidthOfCanvas, height],
     };
   }
 
   /**
    * targetLayerにmaginaiの情報を描画
    * @param {object} targetLayer
+   * @param {string[]} completedMods
    * @param {boolean} isMainFailed
    * @param {[(Error|ErrorEvent), string][]} failedMods
    */
-  draw(targetLayer, isMainFailed, failedMods) {
-    const info = this.getImageInfo(isMainFailed, failedMods);
+  draw(targetLayer, completedMods, isMainFailed, failedMods) {
+    const info = this.getImageInfo(completedMods, isMainFailed, failedMods);
     const dx = 5;
     // オプション初期化ボタンと被らないよう左下コーナーより少し上に配置
     const dy = targetLayer.cvs.height - info.rect[3] - 50;
@@ -252,6 +275,13 @@ export class Maginai {
      * @type {any}
      */
     this.origtGameMain = null;
+
+    /**
+     * @internal
+     * ロードに成功したMod名のリスト
+     * @type {string[]}
+     */
+    this.completedMods = [];
 
     /**
      * @internal
@@ -430,6 +460,7 @@ export class Maginai {
             if (isOk) {
               magi.image.draw(
                 tWgm.screen.layers.ground,
+                magi.completedMods,
                 magi.isModLoadFatalErrorOccured,
                 magi.errorsOnLoadMods
               );
@@ -602,6 +633,8 @@ export class Maginai {
    * @param {string} modName
    */
   async loadOneMod(modName) {
+    // 後でfailedとの差分を取るためここではすべて入れる
+    this.completedMods.push(modName);
     const abortController = new AbortController();
     const onError = (e) => {
       logger.error('Error during mod loading:', modName, e.error ?? e);
@@ -638,6 +671,11 @@ export class Maginai {
       for (const modName of loaded['mods']) {
         await this.loadOneMod(modName);
       }
+
+      const failedModNames = this.errorsOnLoadMods.map(([_, name]) => name);
+      this.completedMods = this.completedMods.filter(
+        (name) => !failedModNames.includes(name)
+      );
 
       logger.info('Completed loading all mods. Starting the game...');
 
