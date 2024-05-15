@@ -69,9 +69,9 @@ class Patcher {
         `No new method returned from new method factory: ${newMethodFactory}`
       );
     }
-    // Old method is saved as __${methodName} method
+    // Old method is saved as __maginai__${methodName} method
     // TODO: Save all versions?
-    const origMethodKey = `__${methodName}`;
+    const origMethodKey = `__maginai__${methodName}`;
     cls.prototype[origMethodKey] = cls.prototype[methodName];
     // Assign new method
     cls.prototype[methodName] = newMethod;
