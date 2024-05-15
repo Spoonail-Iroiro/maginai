@@ -1,5 +1,6 @@
 import logging from 'loglevel';
 import { Patcher } from './patcher.js';
+import { Patcher2 } from './patcher2.js';
 import { ModEvent } from './event/mod-event.js';
 import { version as VERSION } from './version.js';
 import * as maginaiImage from './maginai-images';
@@ -308,6 +309,13 @@ export class Maginai {
      * 詳細は`Patcher`クラス定義へ
      */
     this.patcher = new Patcher();
+
+    /**
+     * `maginai.patcher` submodule
+     * Provides utility methods for method patching
+     * See `Patcher2` definition
+     */
+    this.patcher2 = new Patcher2();
 
     /**
      * `maginai.logging`サブモジュール===`loglevel`モジュール（maginai用に設定済）
