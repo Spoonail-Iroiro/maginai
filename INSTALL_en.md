@@ -95,11 +95,12 @@ Additionally, the order defined here determines the order in which mods are load
 Some mods may require adjustments to the loading order to function properly alongside others. (Please follow the mod author's guidance).
 
 ### 4. Test Installation
-If you launch the game and there are no red text in the `Mod Loader 'maginai'...` section of the title screen, the installation is successful.
+If you launch the game and there are no red text in the `Mod Loader 'maginai'...` section of the title screen, the installation is successful.  
+It also shows the names of the mods loaded successfully.
 
 ![mod-load-completed](docassets/mod-load-completed.png)
 
-If an error occurs during loading, a message starting with `Mod load failed:` followed by the name of the mod that caused the error will be displayed in red.
+If an error occured during loading, a message starting with `Mod load failed:` followed by the name of the mod that caused the error will be displayed in red.
 
 ![mod-load-failed](docassets/mod-load-failed.png)
 
