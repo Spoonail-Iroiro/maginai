@@ -63,9 +63,9 @@ export class Patcher2 {
       }
       throw new Error(message);
     }
-    // Old method is saved as __${methodName} method
+    // Old method is saved as __maginai__${methodName} method
     // TODO: Save all versions?
-    const origMethodKey = `__${methodName}`;
+    const origMethodKey = `__maginai__${methodName}`;
     const origMethod = cls.prototype[methodName];
     cls.prototype[origMethodKey] = origMethod;
     // Assign new method

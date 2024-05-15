@@ -38,5 +38,7 @@ test('patch method by Patcher', () => {
   patchRtn[0].should.be.equal(9); // 4 + 3 + 2
   patchRtn[1].should.be.equal('sub');
   // @ts-ignore
-  CaseClass.prototype['__showAndReturnAdd'].should.be.equal(origMethod);
+  CaseClass.prototype['__maginai__showAndReturnAdd'].should.be.equal(
+    origMethod
+  );
 });
