@@ -59,7 +59,7 @@ class MaginaiImage {
 
     for (const name of completedMods) {
       const loadedInfo = gm.tGameText.createText({
-        text: `%c[saveimport]'${name}' loded`,
+        text: `%c[saveimport]'${name}' loaded`,
         maxWidth: 500,
         fontSize: 13,
         lineHeight: 0.2,
