@@ -24,6 +24,7 @@ fs.rmSync(distDir, {
 const libDir = path.resolve('./lib');
 const files = [
   ['config.js', null],
+  ['modules/version.js', 'version.js'],
   ['mods_default', 'mods'],
 ];
 
