@@ -42,7 +42,7 @@ The execution order of the game's main script `union.js`, maginai's entry point 
 2. Execution of `loader.js` (maginai's main script)
 3. `init.js` of a mod
 4. [Postprocess](#postprocess) of a mod 
-5. (Repeat steps 3 and 4 until all Mods defined in `mods_load.js` are loaded)
+5. (Repeat steps 3 and 4 until all mods defined in `mods_load.js` are loaded)
 6. `tWgm = new tGameMain({});`
 7. `tWgmLoaded` event
 8. `gameLoadFinished` event (just before displaying the title screen)
@@ -52,7 +52,7 @@ The execution order of the game's main script `union.js`, maginai's entry point 
 
 The main places where code to modify the game are as follows:  
 - Modify methods: Directly in `init.js`
-    - At the time of loading the Mod's `init.js`, `union.js` has already been executed and classes, etc. are defined, so they can be modified
+    - At the time of loading the mod's `init.js`, `union.js` has already been executed and classes, etc. are defined, so they can be modified
     - You can use `maginai.patcher.patchMethod` to patch method in class
 - Async functions such as loading external data: Register them as [Postprocess](#postprocess)
     - Use `maginai.setModPostprocess` to set a `Promise` as Postprocess
@@ -62,8 +62,8 @@ The main places where code to modify the game are as follows:
     - The event fires after selecting save data and just before the character becomes controllable by player, so you can make modifications that need to access the loaded save data there.
 
 ### Postprocess
-Since only synchronous code can be written in `init.js`, to complete asynchronous processing before loading the next Mod (and before loading the game), use the Postprocess feature provided by maginai.  
-By calling `maginai.setModPostprocess` with a `Promise` object as an argument, the next Mod will not be loaded until that `Promise` is completed.  
+Since only synchronous code can be written in `init.js`, to complete asynchronous processing before loading the next mod (and before loading the game), use the Postprocess feature provided by maginai.  
+By calling `maginai.setModPostprocess` with a `Promise` object as an argument, the next mod will not be loaded until that `Promise` is completed.  
 
 ```js
 // init.js
