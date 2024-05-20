@@ -17,7 +17,7 @@ console.log("Hello, world!");
 Place this `mysample` folder into the `mods` directory and add the mod name to the list in `load_mods.js`, as described in mod installation steps. Then, the mod will be loaded.
 
 Since the mod code uses console.log to output a message to the developer console, let's open it.   
-(For how to, see [How to Open the Developer Console Section](README_en.md#how-to-open-the-developer-console).)
+(For how to, see [How to Open the Developer Console Section](INSTALL_en.md#how-to-open-the-developer-console).)
 
 ![mysample-hello](docassets/mysample-hello.png)
 
@@ -29,7 +29,7 @@ Congratulations! You've created your mod.
 # Modifying the Game
 However, despite being a mod, it doesn't affect anything in the game yet.  
 You could write all the code to modify the game yourself, but maginai provides some utilities.  
-Methods and modules provided by maginai can be accessed from the `maginai` global variable anywhere in your mod code.  
+Methods and modules provided by maginai can be accessed through the `maginai` global variable anywhere in your mod code.  
 
 [For Beginners](#for-beginners)  
 [For Experts](#for-experts)  
@@ -41,7 +41,7 @@ The execution order of the game's main script `union.js`, maginai's entry point 
 1. Execution of `union.js` (the game's main script)
 2. Execution of `loader.js` (maginai's main script)
 3. `init.js` of a mod
-4. [Postprocess](https://spoonail-iroiro.github.io/maginai/classes/Maginai.html#setModPostprocess) of a mod 
+4. [Postprocess](#postprocess) of a mod 
 5. (Repeat steps 3 and 4 until all Mods defined in `mods_load.js` are loaded)
 6. `tWgm = new tGameMain({});`
 7. `tWgmLoaded` event
@@ -57,9 +57,9 @@ The main places where code to modify the game are as follows:
 - Async functions such as loading external data: Register them as [Postprocess](#postprocess)
     - Use `maginai.setModPostprocess` to set a `Promise` as Postprocess
 - Modifying data: `gameLoadFinished` [event](#events) 
-    - Just before displaying the title screen, the initialization of instances of each class such as `tGameTalkResource`, which are members of `tWgm`, is completed. So you can modify tone data, etc there.
-- After loading save data: `saveLoaded` [event](#events)
-    - After selecting save data and just before the character becomes controllable by player, so you can make modifications that access the save data.
+    - The event fires just before displaying the title screen, the initialization of instances of each game class such as `tGameTalkResource` or `tGameCharactor`, which are members of `tWgm`, is completed. So you can modify tone data, etc. there.
+- Access data in the save: `saveLoaded` [event](#events)
+    - The event fires after selecting save data and just before the character becomes controllable by player, so you can make modifications that need to access the loaded save data there.
 
 ### Postprocess
 Since only synchronous code can be written in `init.js`, to complete asynchronous processing before loading the next Mod (and before loading the game), use the Postprocess feature provided by maginai.  
@@ -85,7 +85,7 @@ maginai.setModPostprocess(postprocess);
 ```
 
 ### Events
-Under `maginai.events`, events that are invoked at specific timings during the game are defined.  
+Under `maginai.events`, events that fire at specific timings during the game are defined.  
 You can register your event handler with calling event's `addHandler` method.
 
 ```js
@@ -244,12 +244,11 @@ Give a distinctive name to your mod.
 
 # Q&A
 
-## Q. Can't I implement a mod using ESModule?
-Creator of Another World, which runs on local html+javascript, cannot load ESModules directly due to CORS restrictions.  
-In other words, loading a script with `<script type="module">` or dynamic `import` causes an error.  
-
-If you want to write mod codes as ESModule, you need to build it into a script (`iife` library) using bundler, such as Rollup (vite internally use it).  
+## Q. Can't I implement a mod with ESModule?
+Yes, you can do, but you need to build ESModule(s) into a script (`iife` library) with bundler, such as Rollup (vite internally use it).  
 Please read [Example Mods](#example-mods) section to find a project example with bundler.  
+
+\* Creator of Another World, which runs on local html+javascript, cannot load ESModules directly due to CORS restrictions. In other words, loading a script with `<script type="module">` or dynamic `import` causes an error.  
 
 ## Q. Aren't there type definitions for `maginai`?
 We have!
@@ -257,8 +256,6 @@ We have!
 ```sh
 npm install maginai
 ```
-
-(It only contains types, so you need to mock it for testing, etc.)  
 
 ### When referencing as a global variable
 In a TypeScript project with `moduleResolution` set to `Node16` or `Bundler`, you can define the type of the global variable `maginai` like this:
@@ -273,7 +270,7 @@ declare var maginai: import('maginai/lib/modules/maginai.js').Maginai;
 ```
 
 ### When referencing with import
-In a project with build/bundle, you can reference the maginai module with import in the source as follows. 
+In a project with build/bundle, you can reference `maginai` module with import in the source as follows. 
 ```js
 import maginai from 'maginai';
 
@@ -289,11 +286,11 @@ The types of arguments to handlers are described in JSDoc, so please refer to th
 
 ### Types for `maginai.logging` are not displayed
 Currently in preparation.  
-Basically, just obtain the logger with `getLogger` and use `logger.info`, etc. for logging as instructed.
+See [API Docs](https://spoonail-iroiro.github.io/maginai/classes/Maginai.html#logging) for usage.
 
-## Q. Aren't there types for `union.js`?
-It can be installed as the package `maginai-game-types`.  
-For details, please read the repository readme below.  
+## Q. Aren't there type definitions for `union.js`?
+It can be installed as package `maginai-game-types`.  
+For details, please read the repository readme below:  
 https://github.com/Spoonail-Iroiro/maginai-game-types
 
 ## Q. Can't I use async functions?
@@ -301,4 +298,4 @@ You can use them.
 Since async functions return a `Promise`, register it as a Postprocess.   
 (See [Postprocess](#postprocess)).  
 
-\* Since it is not a module, top-level await in `init.js` will result in an error.  
+\* Since `init.js` is not a module, top-level await will result in an error.  
