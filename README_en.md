@@ -9,7 +9,10 @@ Unofficial Mod Loader for Creator of Another World
 - Utilities and events
 
 # Install Mod Loader 'maginai'
-[For mod user](INSTALL_en.md)
+It's highly recommended to use the mod manager `gmaginai-l` to install the mod loader and mods.  
+[**gmaginai-l**](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md)  
+
+[Manual Install](INSTALL_en.md)
 
 ## Mods List
 You can use these mods for your gameplay, mod installation testing, as a template for mod development or anything else you like.

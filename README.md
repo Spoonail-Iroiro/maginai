@@ -9,7 +9,10 @@
 - いくつかのユーティリティ関数や便利なイベントを提供
 
 # Modローダー（maginai）の導入・Modの導入
-[Modユーザー向け説明](INSTALL.md)
+Modマネージャー`gmaginai-l`より導入することをおすすめします。  
+[gmaginai-lのインストール・使い方はこちら](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README_ja.md)  
+
+[手動インストール手順](INSTALL.md)
 
 ## 作者Modリスト
 maginai作者制作のModです。  
