@@ -1,10 +1,10 @@
 (function () {
   maginai.events.gameLoadFinished.addHandler((e) => {
-    // わかりやすさのためconsole.log使用
-    console.log('sample modがロードされました');
-    // Modのログにははmaginai.logging.getLoggerでloggerを取得し使用してください
+    // To make things simple, we use `console.log` here
+    // Generally you should emit logs to the console through a logger, which you can obtain from `maginai.logging.getLogger`.
+    console.log("Loaded 'sample' mod.");
 
-    // ゲーム内ログへのメッセージの表示
-    maginai.logToInGameLogDebug('sample modがロードされました。');
+    // Emit a message to in-game log
+    maginai.logToInGameLogDebug("Loaded 'sample' mod.");
   });
 })();
