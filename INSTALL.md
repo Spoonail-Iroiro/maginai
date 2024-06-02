@@ -1,7 +1,9 @@
 ※以下ゲームフォルダ（ゲームのzipを解凍した中の`異世界の創造者1.1.4.0(製品版)`といったフォルダ）は`異世界の創造者`フォルダで表記統一
 
 ## Modローダー（maginai）の導入
-
+※Modマネージャー`gmaginai-l`より導入することをおすすめします。  
+[gmaginai-lのインストール・使い方はこちら](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README_ja.md)  
+以下は手動インストールの手順です。
 
 ### 1. 必要なファイルを解凍・ゲーム内に配置
 [Release](https://github.com/Spoonail-Iroiro/maginai/releases)ページより最新版の`maginai-X.Y.Z.zip`（X.Y.Zはバージョン）をダウンロードし解凍して下さい。  
@@ -47,6 +49,12 @@ index.htmlが以下のようになっていれば正しい状態です（一部�
 ゲームのバージョンアップにおいては、`index.html`は前使っていたものをコピー上書きするのではなく、再度ロード用タグの書き込みを行うことをおすすめします。
 
 ## Modの導入
+※Modマネージャー`gmaginai-l`より導入することをおすすめします。  
+[gmaginai-lのインストール・使い方はこちら](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README_ja.md)  
+以下は手動インストールの手順です。
+
+### 手動インストール
+
 Modローダーの導入が終わったら
 
 - `init.js`の入っているMod本体フォルダを`mods`フォルダに配置

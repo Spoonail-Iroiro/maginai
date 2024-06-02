@@ -1,6 +1,10 @@
 \* In this document, `CoAW/` path means the game directory, which contains `Game.exe`
 
 ## How to Install Mod Loader 'maginai'
+\* It's highly recommended to use the mod manager `gmaginai-l` to install the mod loader.  
+[**gmaginai-l**](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md)  
+
+The steps below describe how to install the mod loader manually.
 
 ### 1. Place Mod Loader Files in the Game Directory
 Download and unzip latest `maginai-X.Y.Z.zip` (X.Y.Z is the version number) from [Release](https://github.com/Spoonail-Iroiro/maginai/releases).  
@@ -45,10 +49,17 @@ If you updated CoAW or want to update maginai, follow this installation steps ag
 However, unless specifically announced, you can simply copy the existing `mods` folder, which contains mods and `mods_load.js`, without any issues.
 
 ## Install a Mod
+\* It's highly recommended to use the mod manager `gmaginai-l` to install mods.  
+[**gmaginai-l**](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md)  
+
+The steps below describe how to install mods manually.
+
+### Manual Install
+
 If you completed installing maginai, you can now install a mod by:
 
-- Copy a mod folder, which contains `init.js`, to `mods` directory
-- Add the name of the mod folder to the list in `mods_load.js`
+1. Copy a mod folder, which contains `init.js`, to `mods` directory
+2. Add the name of the mod folder to the list in `mods_load.js`
 
 ### 1. Get a Mod
 Get the desired mod from [Discord (CoAW modding)](https://discord.gg/RgYrD3uPZM) or somewhere.  
