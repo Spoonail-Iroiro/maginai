@@ -1,9 +1,9 @@
 # maginai
-[![npm](https://img.shields.io/npm/v/maginai)](https://www.npmjs.com/package/maginai)
-[![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai)](LICENSE)
-[![Discord](https://img.shields.io/discord/1234695202615197746)](https://discord.gg/Z7n5EPxQ)
-&nbsp;&nbsp;
 [English](README_en.md) | [日本語](README.md)
+
+[![npm](https://img.shields.io/npm/v/maginai?style=for-the-badge)](https://www.npmjs.com/package/maginai)
+[![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai?style=for-the-badge)](LICENSE)
+[![Discord](https://img.shields.io/discord/1234695202615197746?style=for-the-badge&logo=discord&label=Discord)](https://discord.gg/Z7n5EPxQ)
 
 非公式 異世界の創造者Modローダー
 
@@ -30,7 +30,7 @@ maginai作者制作のModです。
 # Mod の開発
 [Mod開発者向け説明](MOD_DEVELOP.md)
 
-[maginai API](https://spoonail-iroiro.github.io/maginai/index.html)
+[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/index.html)
 
 # maginai の開発
 [CONTRIBUTION.md](CONTRIBUTION.md)
