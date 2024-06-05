@@ -1,4 +1,20 @@
-\* You can access the table of contents from the hamburger button in the top right corner. If the button is not visible, reloading this page may make it appear correctly.
+# Table of Contents
+- [The Simplest Mod](#the-simplest-mod)
+- [Modifying the Game](#modifying-the-game)
+  - [For Experts](#for-experts)
+  - [For Beginners](#for-beginners)
+  - [Example Mods](#example-mods)
+- [`maginai` API](#maginai-api)
+- [Precautions for Implementation](#precautions-for-implementation)
+  - [Use logger instead of console.log for logging](#use-logger-instead-of-consolelog-for-logging)
+  - [Use IIFE in `init.js`](#use-iife-in-initjs)
+  - [The `tGameMain` class cannot be used directly](#the-tgamemain-class-cannot-be-used-directly)
+  - [Give your mod a distinctive name that is unlikely to be the same with others](#give-your-mod-a-distinctive-name-that-is-unlikely-to-be-the-same-with-others)
+- [Q&A](#qa)
+  - [Q. Can't I implement a mod with ESModule?](#q-cant-i-implement-a-mod-with-esmodule)
+  - [Q. Aren't there type definitions for `maginai`?](#q-arent-there-type-definitions-for-maginai)
+  - [Q. Aren't there type definitions for `union.js`?](#q-arent-there-type-definitions-for-unionjs)
+  - [Q. Can't I use async functions?](#q-cant-i-use-async-functions)
 
 # The Simplest Mod
 Name your mod and create a folder with that name, then create an `init.js` file inside it.  
