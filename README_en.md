@@ -1,6 +1,8 @@
 # maginai
 [![npm](https://img.shields.io/npm/v/maginai)](https://www.npmjs.com/package/maginai)
-[![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai)](LICENSE)  
+[![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai)](LICENSE)
+[![Discord](https://img.shields.io/discord/1234695202615197746)](https://discord.gg/Z7n5EPxQ)
+&nbsp;&nbsp;
 [English](README_en.md) | [日本語](README.md)
 
 Unofficial Mod Loader for Creator of Another World
