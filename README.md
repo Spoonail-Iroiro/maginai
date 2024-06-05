@@ -1,6 +1,7 @@
-[English](README_en.md)
-
-# 概要
+# maginai
+[![npm](https://img.shields.io/npm/v/maginai)](https://www.npmjs.com/package/maginai)
+[![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai)](LICENSE)  
+[English](README_en.md) | [日本語](README.md)
 
 非公式 異世界の創造者Modローダー
 
@@ -26,6 +27,8 @@ maginai作者制作のModです。
 
 # Mod の開発
 [Mod開発者向け説明](MOD_DEVELOP.md)
+
+[maginai API](https://spoonail-iroiro.github.io/maginai/index.html)
 
 # maginai の開発
 [CONTRIBUTION.md](CONTRIBUTION.md)

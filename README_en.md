@@ -1,6 +1,7 @@
-[Japanese](README.md)
-
-# Overview
+# maginai
+[![npm](https://img.shields.io/npm/v/maginai)](https://www.npmjs.com/package/maginai)
+[![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai)](LICENSE)  
+[English](README_en.md) | [日本語](README.md)
 
 Unofficial Mod Loader for Creator of Another World
 
@@ -24,6 +25,8 @@ You can use these mods for your gameplay, mod installation testing, as a templat
 
 # Develop Mods
 [For mod developer](MOD_DEVELOP_en.md)
+
+[maginai API](https://spoonail-iroiro.github.io/maginai/index.html)
 
 # Contribute to maginai
 [CONTRIBUTION_en.md](CONTRIBUTION_en.md)
