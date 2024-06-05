@@ -225,7 +225,10 @@ rem set WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--auto-open-devtools-for-tabs
 エラー時にしかログ出力されなくなるので、正常動作時の重さが改善する場合があります。  
 
 ### Q. zipを入れるだけで導入できないの？/mods_load.jsの編集がめんどくさい
+Modマネージャー[**gmaginai-l**](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md)を使用することで、`mods_load.js`がModのインストールや有効化に合わせて自動で編集されるため手動でいじる必要がなくなります。  
+
+`mods_load.js`が必要である理由は以下の通りです：  
 ローカルhtml+javascriptで動く異世界の創造者はCORS制約により特定フォルダ内のすべてのファイルを取るなどの処理が難しくなっています。  
-また、導入はzipファイル配置だけでできても、Modのロード順を設定したい場合が少なからずあると思いますので、ロード順の定義でもあるmods_load.jsは必要になります。  
-（mods_load.jsを操作しやすくなるGUI等があればもう少し楽かもしれません。コードの貢献はいつでもお待ちしています！）  
+よって、`maginai`がModの配置パスを知るために`mods_load.js`が必要になります。  
+また、導入はzipファイル配置だけでできても、Modのロード順を設定したい場合が少なからずあると思いますので、ロード順の定義でもある`mods_load.js`は必要になります。  
 

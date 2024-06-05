@@ -224,6 +224,11 @@ Open the `config.js` in `mods` directory and replace `info` in `logLevel: 'info'
 It supresses non-important logs, so performance might be improved.
 
 ### Q. I want to install a mod by just placing the mod's folder in `mods`. Editing `mods_load.js` is tedious.
-CoAW is running on local HTML+JavaScript, so due to CORS restrictions, it's difficult to access all files within a specific directory.  
-Additionally, while installation may be possible with just placing the mod folder, there are often scenarios where one wants to configure the loading order of mods, hence the necessity of `mods_load.js,` which serves as a definition for loading order.  
-(Having a GUI application or something for editing `mods_load.js` might make it easier. Contributions are always welcome!)"
+[**gmaginai-l**](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md) makes it very easy to install mods!  
+It automatically updates `mods_load.js` for you.
+
+`mods_load.js` is required because:  
+CoAW runs on local HTML+JavaScript, so due to CORS restrictions, it's difficult to access all files within a specific directory.  
+`maginai` reads `mods_load.js` and uses the mod names defined in it to know the paths to the mods.  
+Additionally, while it may be possible to install a mod by just placing the mod folder, there are often scenarios where one wants to configure the loading order of mods, hence the necessity of `mods_load.js,` which serves as a definition for loading order.  
+
