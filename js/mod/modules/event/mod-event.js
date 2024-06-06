@@ -4,15 +4,15 @@ import { readableTypeof } from '../util.js';
 const logger = logging.getLogger('maginai.event');
 
 /**
- * イベントクラス
+ * Event class
  *
- * ※実装されている具体的な各イベントは`MaginaiEvents`クラスドキュメントを参照
+ * \* See {@link MaginaiEvents} class for all events provided by `maginai`
  */
 class ModEvent {
   /**
    * @internal
-   * @param {string} name イベント名
-   * @param {string} description 説明
+   * @param {string} name - Event name
+   * @param {string} description - Description
    */
   constructor(name, description = 'Event') {
     if (typeof name !== 'string') {
@@ -35,8 +35,7 @@ class ModEvent {
 
   /**
    * @internal
-   * イベントの発火
-   * @param {object} e イベントオブジェクト
+   * @param {object} e - Event arg object
    */
   invoke(e) {
     for (const handler of this.handlers) {
@@ -51,7 +50,8 @@ class ModEvent {
   }
 
   /**
-   * イベントハンドラーの追加
+   * Add an event handler
+   *
    * @param {Function} handler
    */
   addHandler(handler) {
@@ -66,7 +66,8 @@ class ModEvent {
   }
 
   /**
-   * イベントハンドラーの削除
+   * Remove `handler` from the event
+   *
    * @param {Function} handler
    */
   removeHandler(handler) {

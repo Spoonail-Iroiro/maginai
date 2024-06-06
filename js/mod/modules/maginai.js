@@ -223,7 +223,7 @@ export class MaginaiEvents {
    * });
    * ```
    *
-   * @type {CancelableModEvent}
+   * @type {import('./event/cancelable-mod-event.js').CancelableModEvent}
    */
   commandKeyClicked; // Exposed from the field of `ModCommandKey`, so not set here
 
@@ -659,7 +659,7 @@ export class Maginai {
    * The set Postprocess will be executed after loading the mod.
    * Note: this method accepts any non-`Promise` value and converts it to a `Promise` using `Promise.resolve()`.
    *
-   * @param {Promise<any>} Postprocess
+   * @param {Promise<any>} promise - Postprocess
    */
   setModPostprocess(promise) {
     this.currentModPostprocess = Promise.resolve(promise);

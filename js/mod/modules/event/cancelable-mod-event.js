@@ -4,18 +4,17 @@ import logging from 'loglevel';
 const logger = logging.getLogger('maginai.event');
 
 /**
- * キャンセル可能イベントクラス
+ * Cancelable mod event class
  *
- * このイベントのあるハンドラーがtrueを返した時
- * それ以降の他のハンドラーを実行しない
+ * If one of the event handlers returned `true`, the subsequent handlers will not be called.
  *
- * ※実装されている具体的な各イベントは`MaginaiEvents`クラスドキュメントを参照
+ * \* See {@link MaginaiEvents} class for all events provided by `maginai`
  */
 export class CancelableModEvent extends ModEvent {
   /**
    * @internal
-   * @param {string} name イベント名
-   * @param {string} description 説明
+   * @param {string} name - Event name
+   * @param {string} description - Description
    */
   constructor(name, description = 'KeyEvent') {
     super(name, description);
@@ -23,9 +22,8 @@ export class CancelableModEvent extends ModEvent {
 
   /**
    * @internal
-   * イベントの発火
-   * @param {object} e イベントオブジェクト
-   * @returns {boolean} handled イベントを処理したハンドラーが存在したかどうか
+   * @param {object} e - Event arg object
+   * @returns {boolean} handled - Whether the event has been handled by a handler
    */
   invoke(e) {
     for (const handler of this.handlers) {
@@ -34,7 +32,7 @@ export class CancelableModEvent extends ModEvent {
         if (handled === true) return true;
       } catch (ex) {
         logger.error(
-          `An error occured during event ${this.name} is handled by ${handler}`
+          `An error occurred during event ${this.name} is handled by ${handler}`
         );
         logger.error(ex);
       }

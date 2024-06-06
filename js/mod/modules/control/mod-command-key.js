@@ -46,20 +46,6 @@ export class ModCommandKey {
     });
   }
 
-  // /**
-  //  * 追加キーのclickイベントハンドラの登録
-  //  * @param {string} keyCode
-  //  * @param {(end: () => void, ) =>void} fn ハンドラー
-  //  *    処理の終わりに必ず第一引数のend()関数を呼ぶべき（呼ばない場合フリーズ）
-  //  */
-  // addHandler(keyCode, fn) {
-  //   const keyList = ['f1', 'f2', 'f3', 'f4'];
-  //   if (!keyList.includes(keyCode)) {
-  //     throw new Error(`キーは次のうちの1つである必要があります: [${keyList}]`);
-  //   }
-  //   this.handlers[keyCode] = fn;
-  // }
-
   /**
    * @private
    */
@@ -95,7 +81,10 @@ export class ModCommandKey {
   }
 
   /**
-   * パッチを実行しModコマンドキーイベントを有効化する
+   * @internal
+   * Initialization
+   *
+   * Patches methods to enable the mod command keys
    */
   init() {
     this.patchIsClick();
@@ -103,8 +92,8 @@ export class ModCommandKey {
   }
 
   /**
-   * イベントハンドラーが処理終了時に呼ぶ必要があるメソッド
-   * ゲームの一時停止を解除する
+   * @internal
+   * `end` function passed to handlers
    */
   endKeyHandle() {
     const grm = tWgm.tGameRoutineMap;
