@@ -12,11 +12,9 @@ test('make version info', () => {
     'alpha',
     1,
   ]);
-  expect(() => versionToversionInfo('')).toThrowError(
-    'バージョン文字列が不正です'
-  );
+  expect(() => versionToversionInfo('')).toThrowError('Invalid version string');
 
   expect(() => versionToversionInfo('0.1.0-0')).toThrowError(
-    'バージョン文字列が不正です。prereleaseに--preid指定がありません'
+    `Invalid version string. --preid is required for prerelease`
   );
 });

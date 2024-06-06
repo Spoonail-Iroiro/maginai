@@ -8,7 +8,7 @@ function initLog() {
     logging.setLevel(maginaiConfig['logLevel']);
   } catch (e) {
     console.error(
-      'Configの読み込みに失敗しました。config.jsが存在しているか、内容が正しいか確認してください',
+      'Failed to load config. Please ensure `config.js` exists and contains the necessary content',
       e
     );
     throw e;

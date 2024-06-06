@@ -1,7 +1,9 @@
 ※以下ゲームフォルダ（ゲームのzipを解凍した中の`異世界の創造者1.1.4.0(製品版)`といったフォルダ）は`異世界の創造者`フォルダで表記統一
 
 ## Modローダー（maginai）の導入
-
+※Modマネージャー`gmaginai-l`より導入することをおすすめします。  
+[gmaginai-lのインストール・使い方はこちら](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README_ja.md)  
+以下は手動インストールの手順です。
 
 ### 1. 必要なファイルを解凍・ゲーム内に配置
 [Release](https://github.com/Spoonail-Iroiro/maginai/releases)ページより最新版の`maginai-X.Y.Z.zip`（X.Y.Zはバージョン）をダウンロードし解凍して下さい。  
@@ -47,6 +49,12 @@ index.htmlが以下のようになっていれば正しい状態です（一部�
 ゲームのバージョンアップにおいては、`index.html`は前使っていたものをコピー上書きするのではなく、再度ロード用タグの書き込みを行うことをおすすめします。
 
 ## Modの導入
+※Modマネージャー`gmaginai-l`より導入することをおすすめします。  
+[gmaginai-lのインストール・使い方はこちら](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README_ja.md)  
+以下は手動インストールの手順です。
+
+### 手動インストール
+
 Modローダーの導入が終わったら
 
 - `init.js`の入っているMod本体フォルダを`mods`フォルダに配置
@@ -217,7 +225,10 @@ rem set WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--auto-open-devtools-for-tabs
 エラー時にしかログ出力されなくなるので、正常動作時の重さが改善する場合があります。  
 
 ### Q. zipを入れるだけで導入できないの？/mods_load.jsの編集がめんどくさい
+Modマネージャー[**gmaginai-l**](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md)を使用することで、`mods_load.js`がModのインストールや有効化に合わせて自動で編集されるため手動でいじる必要がなくなります。  
+
+`mods_load.js`が必要である理由は以下の通りです：  
 ローカルhtml+javascriptで動く異世界の創造者はCORS制約により特定フォルダ内のすべてのファイルを取るなどの処理が難しくなっています。  
-また、導入はzipファイル配置だけでできても、Modのロード順を設定したい場合が少なからずあると思いますので、ロード順の定義でもあるmods_load.jsは必要になります。  
-（mods_load.jsを操作しやすくなるGUI等があればもう少し楽かもしれません。コードの貢献はいつでもお待ちしています！）  
+よって、`maginai`がModの配置パスを知るために`mods_load.js`が必要になります。  
+また、導入はzipファイル配置だけでできても、Modのロード順を設定したい場合が少なからずあると思いますので、ロード順の定義でもある`mods_load.js`は必要になります。  
 

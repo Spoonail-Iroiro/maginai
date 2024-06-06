@@ -1,6 +1,6 @@
 /**
- * `srcInfo`をもとにctxを使用して(x,y)に画像を貼り付けます
- * （srcInfoがtop/left/width/heightの時用）
+ * Pastes an image based on the information in `srcInfo` (for `srcInfo` with top/left/width/height）
+ *
  * @param {OffscreenCanvasRenderingContext2D} ctx
  * @param {maginaiTypes.DrawInfoTLWH} srcInfo
  * @param {number} x
@@ -22,8 +22,8 @@ function pasteTLWH(ctx, srcInfo, x, y) {
 }
 
 /**
- * `srcInfo`をもとにctxを使用して(x,y)に画像を貼り付けます
- * （srcInfoがrectの時用）
+ * Pastes an image based on the information in `srcInfo` (for `srcInfo` with rect)
+ *
  * @param {OffscreenCanvasRenderingContext2D} ctx
  * @param {maginaiTypes.DrawInfoRect} srcInfo
  * @param {number} x

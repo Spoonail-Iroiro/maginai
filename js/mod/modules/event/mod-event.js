@@ -4,27 +4,25 @@ import { readableTypeof } from '../util.js';
 const logger = logging.getLogger('maginai.event');
 
 /**
- * イベントクラス
+ * Event class
  *
- * ※実装されている具体的な各イベントは`MaginaiEvents`クラスドキュメントを参照
+ * \* See {@link MaginaiEvents} class for all events provided by `maginai`
  */
 class ModEvent {
   /**
    * @internal
-   * @param {string} name イベント名
-   * @param {string} description 説明
+   * @param {string} name - Event name
+   * @param {string} description - Description
    */
   constructor(name, description = 'Event') {
     if (typeof name !== 'string') {
       const type = readableTypeof(name);
-      throw new Error(
-        `nameの値が${type}のためModEventを作成できませんでした。nameは文字列である必要があります。`
-      );
+      throw new Error(`${type} is invalid type for name. It should be string`);
     }
     if (typeof description !== 'string') {
       const type = readableTypeof(description);
       throw new Error(
-        `descriptionの値が${type}のためModEventを作成できませんでした。descriptionは文字列である必要があります。`
+        `${type} is invalid type for description. It should be string`
       );
     }
     this.name = name;
@@ -35,8 +33,7 @@ class ModEvent {
 
   /**
    * @internal
-   * イベントの発火
-   * @param {object} e イベントオブジェクト
+   * @param {object} e - Event arg object
    */
   invoke(e) {
     for (const handler of this.handlers) {
@@ -44,21 +41,22 @@ class ModEvent {
         handler(e);
       } catch (ex) {
         // TODO: 「xxxx(Mod名)によって登録された～」を追加する
-        logger.error(`${this.name}イベント中に次のエラーが発生しました`);
+        logger.error(`An error occurred during ${this.name} event`);
         logger.error(ex);
       }
     }
   }
 
   /**
-   * イベントハンドラーの追加
+   * Add an event handler
+   *
    * @param {Function} handler
    */
   addHandler(handler) {
     if (typeof handler !== 'function') {
       const type = readableTypeof(handler);
       throw new Error(
-        `handlerの値が${type}のためイベントハンドラーとして追加できませんでした。handlerは関数である必要があります。`
+        `${type} is invalid type for event handler. It should be function`
       );
     }
     this.handlers.push(handler);
@@ -66,20 +64,19 @@ class ModEvent {
   }
 
   /**
-   * イベントハンドラーの削除
+   * Remove `handler` from the event
+   *
    * @param {Function} handler
    */
   removeHandler(handler) {
     if (typeof handler !== 'function') {
       const type = readableTypeof(handler);
       throw new Error(
-        `handlerの値が${type}のためイベントハンドラーの削除に失敗しました。handlerは関数である必要があります。`
+        `${type} is invalid argument type. Specify handler function to be removed`
       );
     }
     if (this.handlers.indexOf(handler) === -1) {
-      throw new Error(
-        `handlerが登録されていないためイベントハンドラーの削除に失敗しました`
-      );
+      throw new Error(`Passed function is not a handler of this event`);
     }
 
     this.handlers = this.handlers.filter((elm) => elm !== handler);

@@ -2,104 +2,107 @@ import { Patcher } from './patcher.js';
 import { ModEvent } from './event/mod-event.js';
 
 export const MAGINAI_SAVE_KEY = 'maginai';
+
 /**
- * `maginai.modSave`サブモジュールクラス
- * 直接インスタンス化せず`maginai.modSave`から使用してください
+ * `maginai.modSave` submodule class
  *
- * `setSaveObject`/`getSaveObject`を使用して、セーブデータにMod独自のデータ（セーブオブジェクト）を読み書き可能
+ * Do not instantiate directly; use from `maginai.modSave`.
  *
- * `setSaveObject(name, obj)`でキー`name`に対応するセーブオブジェクトとして、`obj`をセットする
- * 次にセーブ処理が行われるときにそのオブジェクトがセーブデータに保存される
+ * You can read and write mod-specific data to the save data using `getSaveObject` / `setSaveObject`
  *
- * `getSaveObject(name)`で現在読み込まれているセーブデータの、キーが`name`のセーブオブジェクトを取得する
+ * Use `getSaveObject(name)` to obtain the save object corresponding to the key `name` from the current save data.
  *
- * `removeSaveObject(name)`でキー`name`のセーブオブジェクトを削除する
+ * Use `setSaveObject(name, obj)` to set `obj` as a save object corresponding to the key `name`.
  *
- * いずれもタイトル画面など特定のセーブデータが読み込まれていない状態では例外を発生させる
+ * Use `removeSaveObject(name)` to delete the save object corresponding to the key `name`.
  *
- * maginaiイベントの`saveLoaded`はセーブ読み込み直後、`saveObjectRequired`はセーブデータ書き込み直前のイベントのため
- * `getSaveObject`・`setSaveObject`はそれらのイベント内での使用を推奨
- * （それ以外のタイミングで随時使用することも可能）
+ * The changes made by `setSaveObject` and `removeSaveObject` will be written to the current save data the next time save operation is performed.
  *
- * 使用例：
+ * Each of these methods throws an exception if no save data is loaded, such as on the title screen.
+ *
+ * There are two `maginai` events that work well with `maginai.modSave`: `saveLoaded` and `saveObjectRequired`.
+ * The former is triggered right after the save data is loaded, and the latter is triggered right before the save data is written.
+ * It is recommended to use `getSaveObject` and `setSaveObject` within your event handlers for those events.
+ *
+ * Example:
  * ```typescript
- * // セーブ回数をカウントするMod init.js
+ * // `init.js` of `sample4` mod, which counts how many times you performed saving
  * (function () {
  *   const logger = maginai.logging.getLogger('sample4');
- *   // セーブ回数カウント用変数
+ *   // Variable for counting saving
  *   let saveCount;
- *   // タイプ数削減のためサブモジュールを変数に格納
+ *   // Store the submodules in variables to reduce typing
  *   const sv = maginai.modSave;
  *   const ev = maginai.events;
  *
- *   // セーブデータのロード完了時に…
+ *   // When the save data is loaded...
  *   ev.saveLoaded.addHandler(() => {
- *     // getSaveObjectで現在読み込んでいるセーブデータ内の`sample4`のセーブオブジェクトを取得
+ *     // Use `getSaveObject` to get the save object for `sample4` from the current save data
  *     const saveObj = sv.getSaveObject('sample4');
  *     if (saveObj === undefined) {
- *       // `sample4`のセーブオブジェクトがまだ存在しない場合undefinedが返されるので、saveCountの初期値0をセット
+ *       // If no save object for `sample4` exists, it returns undefined, so set the initial value of `saveCount` to 0
  *       saveCount = 0;
  *     } else {
- *       // セーブオブジェクトが存在すればその中のsaveCountをセット
+ *       // If the save object exists, set `saveCount` from it
  *       saveCount = saveObj.saveCount;
  *     }
- *     // ログにセーブから読み込んだsaveCountを表示
+ *     // Log the `saveCount` loaded from the save
  *     logger.info(
- *       `セーブオブジェクトがロードされました。saveCount:` + saveCount.toString()
+ *       `Save object has been loaded. saveCount:` + saveCount.toString()
  *     );
  *   });
  *
- *   // セーブデータ書き込み直前に…
+ *   // Just before writing the save data...
  *   ev.saveObjectRequired.addHandler(() => {
- *     // saveCountを+1
+ *     // Increment `saveCount` by 1
  *     saveCount += 1;
  *
- *     // `sample4`のセーブオブジェクトとして、オブジェクトにsaveCountを含めてセット
+ *     // Set an object that contains `saveCount` as the save object `sample4`
  *     sv.setSaveObject('sample4', { saveCount });
- *     logger.info(`セーブがセットされました`);
+ *     logger.info(`Save has been set`);
  *   });
  * })();
  * ```
  *
- * 注意：
- * - どのModからでも同じ`name`で同じセーブオブジェクトへアクセスできるため、`name`には衝突しない一意の名前が必要（基本的にはMod名を`name`に指定することを推奨）
- * - セーブオブジェクトはセーブデータへ書き込まれる過程で`JSON.stringify`処理されるため、json化不可能なメソッドなどのオブジェクトは削除される
- * - ゲームのブラウザ版で保存可能なセーブ容量は2つのセーブ合わせて5MB程度までのため、セーブデータが大きくなりすぎるとセーブ不可となることがある
- *   - 参考：`tWgm.isL`を`true`にしてプレイすることでセーブ時にセーブのサイズがコンソールログ出力される
+ * Note:
+ * - Since the same save object can be accessed with the same `name` from any mod, it is necessary to have a unique `name` that does not conflict (it is generally recommended to use the mod's name as `name`)
+ * - Save objects are processed with `JSON.stringify` during the saving process, so objects that cannot be serialized as json, such as methods, will be removed
+ * - The save capacity of the browser version of CoAW is about 5MB for two save slots. Therefore, if the save data becomes too large, saving may fail
+ *   - Tips: If `tWgm.isL` is set to `true`, the save size will be logged to the dev console when a save operation is performed
  *
  */
 export class ModSave {
   constructor() {
     /**
      * @private
-     * UnzipWorkerの結果保存用（詳細はinit()へ）
+     * For saving the result of UnzipWorker (see `init()`)
      * @type {object | null}
      */
     this.previousUnzipWorkerResult = null;
 
     /**
      * @private
-     * ルートセーブオブジェクト
-     * 各nameのセーブオブジェクトはrootSaveObject[name]に格納される
+     * The root save object
+     * `rootSaveObject['<name>']` contains the save object for `<name>`
      * @type {object}
      */
     this.rootSaveObject = {};
 
     /**
-     * セーブデータが利用可能かどうか
+     * Whether save data is available
      */
     this.isSaveAvailable = false;
 
     /**
      * @internal
-     * セーブオブジェクトの収集時イベント
+     * Event triggered when collecting save objects from each mod
      */
     this.saveObjectRequired = new ModEvent('saveObjectRequired');
   }
 
   /**
    * @internal
-   * 初期化処理（要union.js）
+   * Initialization （`union.js` required）
    */
   init() {
     const patcher = new Patcher();
@@ -183,41 +186,41 @@ export class ModSave {
   }
 
   /**
-   * 指定されたnameのMod用セーブオブジェクトを取得する
-   * 読み込まれているセーブにこのnameのセーブオブジェクトが存在しない場合はundefinedを返す
-   * @type {string} name
+   * Returns the save object corresponding to the key `name` from the current save data
+   * If no save object for `name` exists, returns `undefined`.
+   *
+   * @param {string} name
    */
   getSaveObject(name) {
-    if (!this.isSaveAvailable)
-      throw new Error('セーブデータが読み込まれていません');
+    if (!this.isSaveAvailable) throw new Error('No save data loaded');
     return this.rootSaveObject[name];
   }
 
   /**
-   * 指定されたnameのMod用セーブオブジェクトをセットする
-   * 注意：実際にセーブデータに書き込まれるのはセーブ操作が行われたとき（メニュー＞セーブする等）
-   * @type {string} name
-   * @type {object} saveObj
+   * Sets `obj` as a save object corresponding to the key `name`
+   * The object will be written to the current save data the next time a save operation is performed (e.g. when the player selects 'Save' in the menu)
+   *
+   * @param {string} name
+   * @param {object} saveObj
    */
   setSaveObject(name, saveObj) {
-    if (!this.isSaveAvailable)
-      throw new Error('セーブデータが読み込まれていません');
+    if (!this.isSaveAvailable) throw new Error('No save data loaded');
     if (saveObj === undefined) {
       throw new Error(
-        'セーブオブジェクトとしてundefinedをセットすることはできません。removeSaveObjectを使用してください'
+        "You can't set undefined as a save object. Use removeSaveObject to remove existing save object"
       );
     }
     this.rootSaveObject[name] = saveObj;
   }
 
   /**
-   * 指定されたnameのMod用セーブオブジェクトを削除する
-   * 注意：実際にセーブデータに書き込まれるのはセーブ操作が行われたとき（メニュー＞セーブする等）
-   * @type {string} name
+   * Removes the save object corresponding to the key `name`.
+   * The removal will be reflected in the current save data the next time a save operation is performed (e.g. when the player selects 'Save' in the menu)
+   *
+   * @param {string} name
    */
   removeSaveObject(name) {
-    if (!this.isSaveAvailable)
-      throw new Error('セーブデータが読み込まれていません');
+    if (!this.isSaveAvailable) throw new Error('No save data loaded');
     delete this.rootSaveObject[name];
   }
 }

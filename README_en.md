@@ -1,6 +1,9 @@
-[Japanese](README.md)
+# maginai
+[English](README_en.md) | [日本語](README.md)
 
-# Overview
+[![npm](https://img.shields.io/npm/v/maginai?style=for-the-badge)](https://www.npmjs.com/package/maginai)
+[![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai?style=for-the-badge)](LICENSE)
+[![Discord](https://img.shields.io/discord/1234695202615197746?style=for-the-badge&logo=discord&label=Discord)](https://discord.gg/Z7n5EPxQ)
 
 Unofficial Mod Loader for Creator of Another World
 
@@ -9,7 +12,10 @@ Unofficial Mod Loader for Creator of Another World
 - Utilities and events
 
 # Install Mod Loader 'maginai'
-[For mod user](INSTALL_en.md)
+It's highly recommended to use the mod manager `gmaginai-l` to install the mod loader and mods.  
+[**gmaginai-l**](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md)  
+
+[Manual Install](INSTALL_en.md)
 
 ## Mods List
 You can use these mods for your gameplay, mod installation testing, as a template for mod development or anything else you like.
@@ -21,6 +27,8 @@ You can use these mods for your gameplay, mod installation testing, as a templat
 
 # Develop Mods
 [For mod developer](MOD_DEVELOP_en.md)
+
+[maginai API document](https://spoonail-iroiro.github.io/maginai/index.html)
 
 # Contribute to maginai
 [CONTRIBUTION_en.md](CONTRIBUTION_en.md)

@@ -1,5 +1,5 @@
 import { ModEvent } from '@/modules/event/mod-event';
-import { it, vi, should } from 'vitest';
+import { it, vi, should, expect } from 'vitest';
 import { applyAllLogger } from '../../test-util.js';
 
 it('has no handlers first', () => {
@@ -64,4 +64,23 @@ it('can remove handlers', () => {
 
   event.removeHandler(h2);
   event.hasHandler.should.be.equal(false);
+});
+
+it('returns nice errors on invalid arguments passed', () => {
+  const event = new ModEvent('Test');
+  // ModEvent constructor is not public API, so not tested here
+
+  // @ts-ignore
+  expect(() => event.addHandler(2)).toThrowError(
+    'number is invalid type for event handler. It should be function'
+  );
+
+  // @ts-ignore
+  expect(() => event.removeHandler(2)).toThrowError(
+    'number is invalid argument type. Specify handler function to be removed'
+  );
+
+  expect(() => event.removeHandler(vi.fn())).toThrowError(
+    'Passed function is not a handler of this event'
+  );
 });
