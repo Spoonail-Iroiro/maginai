@@ -8,14 +8,15 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  *
  * Do not instantiate directly; use from `maginai.modSave`.
  *
- * You can read and write mod-specific data to the save data using `setSaveObject` / `getSaveObject`
- *
- * Use `setSaveObject(name, obj)` to set `obj` as a save object corresponding to the key `name`.
- * The object will be written to the current save data the next time save operation is performed.
+ * You can read and write mod-specific data to the save data using `getSaveObject` / `setSaveObject`
  *
  * Use `getSaveObject(name)` to obtain the save object corresponding to the key `name` from the current save data.
  *
+ * Use `setSaveObject(name, obj)` to set `obj` as a save object corresponding to the key `name`.
+ *
  * Use `removeSaveObject(name)` to delete the save object corresponding to the key `name`.
+ *
+ * The changes made by `setSaveObject` and `removeSaveObject` will be written to the current save data the next time save operation is performed.
  *
  * Each of these methods throws an exception if no save data is loaded, such as on the title screen.
  *
@@ -67,7 +68,7 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  * - Since the same save object can be accessed with the same `name` from any mod, it is necessary to have a unique `name` that does not conflict (it is generally recommended to use the mod's name as `name`)
  * - Save objects are processed with `JSON.stringify` during the saving process, so objects that cannot be serialized as json, such as methods, will be removed
  * - The save capacity of the browser version of CoAW is about 5MB for two save slots. Therefore, if the save data becomes too large, saving may fail
- *   - Tips: By setting `tWgm.isL` to `true`, the save size will be logged to the dev console when a save operation is performed
+ *   - Tips: If `tWgm.isL` is set to `true`, the save size will be logged to the dev console when a save operation is performed
  *
  */
 export class ModSave {
