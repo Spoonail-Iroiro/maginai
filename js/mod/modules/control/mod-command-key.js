@@ -12,6 +12,9 @@ export const MOD_COMMAND_KEY_CODES = [
   'f4',
 ];
 
+/**
+ * @internal
+ */
 export class ModCommandKey {
   constructor() {
     this.commandKeyClicked = new CancelableModEvent('commandKeyClicked');

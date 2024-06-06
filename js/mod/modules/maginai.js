@@ -14,6 +14,7 @@ import { versionToversionInfo } from './util.js';
 const logger = logging.getLogger('maginai');
 
 /**
+ * @internal
  * Canvas control class for showing information about maginai (e.g. labels on title screen)
  */
 class MaginaiImage {
@@ -221,6 +222,8 @@ export class MaginaiEvents {
    *   // Pass through if keys other than `F1` are clicked (do not return true, do not call `end`)
    * });
    * ```
+   *
+   * @type {CancelableModEvent}
    */
   commandKeyClicked; // Exposed from the field of `ModCommandKey`, so not set here
 
@@ -230,6 +233,8 @@ export class MaginaiEvents {
    * Each mod can set the save object using `maginai.modSave.setSaveObject` in the event handler to write its data to the save.
    * the `maginai.modSave.setSaveObject` itself is effective at other times as well, but this event allows you to prepare your mod's save data just before saving
    * For details, refer to the `ModSave` class documentation
+   *
+   * @type {ModEvent}
    */
   saveObjectRequired; // Exposed from `taginai.modSave`, so not set here
 }
