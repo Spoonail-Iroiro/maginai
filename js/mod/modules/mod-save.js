@@ -192,8 +192,7 @@ export class ModSave {
    * @param {string} name
    */
   getSaveObject(name) {
-    if (!this.isSaveAvailable)
-      throw new Error('セーブデータが読み込まれていません');
+    if (!this.isSaveAvailable) throw new Error('No save data loaded');
     return this.rootSaveObject[name];
   }
 
@@ -205,11 +204,10 @@ export class ModSave {
    * @param {object} saveObj
    */
   setSaveObject(name, saveObj) {
-    if (!this.isSaveAvailable)
-      throw new Error('セーブデータが読み込まれていません');
+    if (!this.isSaveAvailable) throw new Error('No save data loaded');
     if (saveObj === undefined) {
       throw new Error(
-        'セーブオブジェクトとしてundefinedをセットすることはできません。removeSaveObjectを使用してください'
+        "You can't set undefined as a save object. Use removeSaveObject to remove existing save object"
       );
     }
     this.rootSaveObject[name] = saveObj;
@@ -222,8 +220,7 @@ export class ModSave {
    * @param {string} name
    */
   removeSaveObject(name) {
-    if (!this.isSaveAvailable)
-      throw new Error('セーブデータが読み込まれていません');
+    if (!this.isSaveAvailable) throw new Error('No save data loaded');
     delete this.rootSaveObject[name];
   }
 }
