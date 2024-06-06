@@ -32,7 +32,8 @@ class MaginaiImage {
 
   /**
    * @private
-   * 画面にmaginaiの情報を表示するためのcanvas,context,rectを作成し返す
+   * Creates and returns a canvas, context, and rect to display maginai information on the screen
+   *
    * @param {string[]} completedMods
    * @param {boolean} isMainFailed
    * @param {[(Error|ErrorEvent), string][]} failedMods
@@ -106,7 +107,8 @@ class MaginaiImage {
   }
 
   /**
-   * targetLayerにmaginaiの情報を描画
+   * Draws maginai information on the targetLayer
+   *
    * @param {object} targetLayer
    * @param {string[]} completedMods
    * @param {boolean} isMainFailed
@@ -115,7 +117,7 @@ class MaginaiImage {
   draw(targetLayer, completedMods, isMainFailed, failedMods) {
     const info = this.getImageInfo(completedMods, isMainFailed, failedMods);
     const dx = 5;
-    // オプション初期化ボタンと被らないよう左下コーナーより少し上に配置
+    // To avoid overlapping with the `Reset Options` button, place the image slightlyabove the bottom-left corner
     const dy = targetLayer.cvs.height - info.rect[3] - 50;
     const drawRect = [dx, dy, info.rect[2], info.rect[3]];
     // targetLayer.ctx.clearRect(...drawRect);
@@ -124,252 +126,290 @@ class MaginaiImage {
 }
 
 /**
- * `maginai.events`サブモジュールクラス
- * 直接インスタンス化せず`maginai.events`から使用してください
+ * `maginai.events` submodule class
  *
- * 各Modはここで定義されているイベントの`addHandler`を呼び出しハンドラを登録可能
+ * Defines various events of `maginai`.
+ * Do not instantiate directly; use from `maginai.events`.
+ *
+ * You can call `addHandler` in your mod to register handler(s) for the events.
+ * Example:
  * ```js
  * const ev = maginai.events;
  * ev.gameLoadFinished.addHandler(() => {
- *   console.log("ロード終了")
+ *   console.log("Load finished")
  * });
  * ```
  */
 export class MaginaiEvents {
   /**
-   * tGameMainがnewされtWgmにセットされた時
-   * ※ゲームデータのロードは終わっていない可能性あり
+   * Triggered when tGameMain is instantiated and set to tWgm.
+   *
+   * \* Game data might not have been fully loaded yet
+   *
    * callback type: `({}) => void`
    */
   tWgmLoaded = new ModEvent('tWgmLoad');
 
   /**
-   * @deprecated old name of tWgmLoaded
+   * @deprecated old name of `tWgmLoaded`
    */
   tWgmLoad = this.tWgmLoaded;
 
   /**
-   * 毎フレーム・本来の処理の前
+   * Triggered just before the original update process of the game.
+   *
    * callback type: `({frame: number}) => void`
-   *   `frame` 前回更新からの経過フレーム
+   *   `frame` frames elapsed since the last update
    */
   beforeRefresh = new ModEvent('beforeRefresh');
 
   /**
-   * 毎フレーム・本来の処理の後
+   * Triggered just after the original update process of the game.
+   *
    * callback type: `({frame: number}) => void`
-   * - `frame` 前回更新からの経過フレーム
+   *   `frame` frames elapsed since the last update
    */
   afterRefresh = new ModEvent('afterRefresh');
 
   /**
-   * ゲームデータのロードが終了し、1度目のタイトル画面表示直前
+   * Triggered when game data loading is finished, just before the title screen displays.
+   *
    * callback type: `({}) => void`
    */
   gameLoadFinished = new ModEvent('gameLoadFinished');
 
   /**
-   * セーブデータのロードが終了し、操作可能となる直前
-   * またはゲームをはじめから開始時、はじまりの地が表示される時
-   * イベント引数のisNewGameは前者の場合false、後者の場合true
+   * Triggered:
+   * - When the save data loading is completed and just before it becomes operable when you select your save to continue the game.
+   * - When the Place of Beginning is displayed at the start of a new game.
+   *
+   * `isNewGame` in the event arg is `false` for the former and `true` for the latter.
    * callback type: `({isNewGame: boolean}) => void`
    */
   saveLoaded = new ModEvent('saveLoaded');
 
   /**
-   * Mod用コマンドキーがクリックされた時のイベント
-   * Mod用コマンドキーの一覧はmaginai.MOD_COMMAND_KEY_CODESを参照
+   * Triggered when one of the mod command keys is clicked.
    *
-   * 設定されるハンドラーはキーを処理する場合trueを返す必要がある
-   * また引数eのe.endを呼び出すまでデフォルト状態の更新が一時停止されキー受付を止めるため、
-   * タイトル画面に戻るなどの一部例外を除いては、処理終了時にe.endを呼び出す必要がある
+   * See `maginai.MOD_COMMAND_KEY_CODES` for the list of the mod command keys.
+   *
+   * The handler must return `true` if it processed the `keyCode`.
+   * Since the default updates and key reception are stopped until `end` in the arg is called,
+   * `end` must be called at the end of the handler process in most cases.
+   * (An exception to the "most cases" is returning to the title screen, where the default updates are no longer necessary)
+   *
    * callback type: `({keyCode: string, end: ()=>void}) => boolean`
-   * - `keyCode` クリックされたキーのキーコード
-   * - `end` デフォルト状態へ戻る関数
+   * - `keyCode` The key code of the clicked key
+   * - `end` Function to return to the default state
+   *
    * ```js
    * maginai.events.commandKeyClicked.addHandler((e) => {
-   *   // このハンドラーではF1キーが押されたときに処理を行う
+   *   // This handler handles clicking the `F1` key
    *   if (e.keyCode === 'f1') {
-   *     console.log('F1キーが押されました')
-   *     // 処理完了時はe.end()を呼び再びデフォルトの状態でキー入力可能にする
+   *     console.log('F1 key clicked')
+   *     // You should call `end` at the end to allow default key input and updates again
    *     e.end();
-   *     // ここではすぐに処理が完了するためe.endを同期的に呼んでいるが
-   *     // メニューを開くなど非同期的処理が行われる場合は処理完了時の
-   *     // コールバック内等で呼ぶ必要がある
+   *     // `end` is called synchronously here as the process completes immediately,
+   *     // but if asynchronous processing such as opening a window is performed,
+   *     // you should call `end` when the process ends, such as in the completion callback of the window.
    *
-   *     // 処理対象のキーが押されたのでtrueを返す（後続のキー処理は行われなくなる）
-   *     // ※trueを返さない場合他のキー処理と重複し予期しない結果になる可能性がある
+   *     // Return true because this handler has processed the key `keyCode`.
+   *     // By this, subsequent key processing will not occur.
+   *     // *If `true` is not returned, it may conflict with other key handlers and result in unexpected results
    *     return true;
    *   }
-   *   // F1キー以外が押されたときはスルー（trueを返さない、e.endも呼ばない）
+   *   // Pass through if keys other than `F1` are clicked (do not return true, do not call `end`)
    * });
    * ```
    */
-  commandKeyClicked; // ModCommandKeyのフィールドから公開
+  commandKeyClicked; // Exposed from the field of `ModCommandKey`, so not set here
 
   /**
-   * セーブの直前、セーブデータへ書き込むためのセーブオブジェクトが要求される時
-   * 各Modはこのイベントハンドラ内でmaginai.modSave.setSaveObjectでセーブオブジェクトをセットすることでセーブに書き込まれる
-   * setSaveObject自体は他のタイミングでも有効だが、このイベントを利用することでセーブ直前にセーブデータ作成処理を行える
-   * 詳細は`ModSave`クラスドキュメントへ
+   * Triggered just before saving, when a save object to be written to the save data is requested.
+   *
+   * Each mod can set the save object using `maginai.modSave.setSaveObject` in the event handler to write its data to the save.
+   * the `maginai.modSave.setSaveObject` itself is effective at other times as well, but this event allows you to prepare your mod's save data just before saving
+   * For details, refer to the `ModSave` class documentation
    */
-  saveObjectRequired; // maginai.modSaveのフィールドから公開
+  saveObjectRequired; // Exposed from `taginai.modSave`, so not set here
 }
 
 /**
- * maginai メインモジュールクラス
+ * `maginai` main module class
  *
- * maginaiでのMod導入手順に従って導入されるすべてのModは`maginai`グローバル変数でこのクラスのインスタンスにアクセス可能
- * `maginai`自体の（internalでない）フィールドやメソッド、またはサブモジュールを通してModの実装に必要な機能を利用することができる
+ * All mods can access the `maginai` global variable, which is an instance of this class.
+ * You can use various `maginai` features through its fields and methods.
+ * Some properties, such as `maginai.logging`, are submodules that provide specific functions under them.
  *
- * サブモジュールと各機能：
- * - logging - コンソールログ
- * - patcher - メソッドのモンキーパッチ
- * - events - イベント
- * - modSave - Mod用セーブデータ
+ * Submodules and their features:
+ * - {@link Maginai.logging | logging} - Console logging
+ * - {@link Maginai.patcher2 | patcher2} - Patching methods
+ * - {@link Maginai.events | events} - Events
+ * - {@link Maginai.modSave | modSave} - Save data for each mod
  */
 export class Maginai {
   constructor() {
     /**
-     * バージョン文字列
+     * Version string
+     *
      * @type {string}
      */
     this.VERSION = VERSION;
 
     /**
-     * バージョン情報
-     * バージョン文字列を[major, minor, patch, preid, prerelease]に分解したもの
-     * prereleaseでない時、(preid, prerelease)は(null, null)
-     * @type {[number, number, number, string, number]}
+     * Version information
+     *
+     * Represents [major, minor, patch, preid, prerelease] parts of the version string.
+     * If the version is not prelease, (preid, prerelease) === (null, null)
+     *
+     * @type {[number, number, number, string | null, number | null]}
      */
     this.VERSION_INFO = versionToversionInfo(VERSION);
 
     /**
      * @internal
-     * loadJsで読み込まれたことのあるJavaScriptパス
+     * JavaScript file paths loaded by `loadJs`
+     *
      * @type {Record<string,boolean>}
      */
     this.loadedJs = {};
 
     /**
      * @internal
-     * gameLoadFinishedイベントが発生したことがあるならtrue、ないならfalse
-     * 上記イベントの制御用
+     * Whether `gameLoadFinished` is already triggered
+     *
+     * For controlling the event
      */
     this.isGameLoadFinished = false;
 
     /**
      * @internal
-     * tWgmを1度だけ初期化するために$(document).readyとmain postprocessの
-     * どちらか遅い方で初期化する必要があるのでその制御用
-     * 早い方（`new tGameMain`しない）が呼び出されたかどうかのフラグ
+     * To initialize `tWgm` only once, we should do it on the earlier of $(document).ready or main postprocess.
+     * This field is for controlling it.
      */
     this.isFirstDummytWgmMainLoadFinished = false;
 
     /**
-     * ダミーに差し替える前のtGameMain
-     * maginaiでは`new tGameMain()`を遅らせるため、`tGameMain`クラスを
-     * ダミーにパッチするため、Modからは`tGameMain`でアクセスできなくなる
-     * もし本来の`tGameMain`のメソッドにパッチしたいなどでアクセスする場合
-     * この`origtGameMain`を使用すること
+     * Actual `tGameMain`
+     *
+     * `maginai` replace `tGameMain` with a dummy class, so mods can't access actual `tGameMain` directly.
+     * Use this `origtGameMain` property to access it.
+     *
      * @type {any}
      */
     this.origtGameMain = null;
 
     /**
      * @internal
-     * ロードに成功したMod名のリスト
+     * Successfully loaded mods
+     *
      * @type {string[]}
      */
     this.completedMods = [];
 
     /**
      * @internal
-     * 各Modのロード中に発生したエラーについて、エラーとModNameの組のlist
+     * List of `(<error>, <mod's name>)` during mod loading
+     *
      * @type {[(Error|ErrorEvent), string][]}
      */
     this.errorsOnLoadMods = [];
 
     /**
      * @internal
-     * Modのロードのメインプロセスでエラーが発生したかどうか（個別Modは関係なし）
-     * 初期はtrueで成功で完了時にfalseにセット
-     * タイトルへの表示等用
+     * Indicates whether an error occured during the main process of loading mods.
+     * (Ignores errors during the loading of each mod)
+     * Initially `true`; set to `false` on success.
+     * Used for displaying the loading status on the title screen
      */
     this.isModLoadFatalErrorOccured = true;
 
     /**
      * @internal
-     * タイトル画面等への情報表示用Canvas制御クラス
+     * Instance of canvas control class for displaying information on title screens, etc.
+     *
      * @type {MaginaiImage?}
      */
     this.image = null;
 
     /**
      * @internal
-     * ゲーム内ログへ出力するメッセージのキュー
+     * Queue for `logToInGameLogDebug`
+     *
      * @type {string[]}
      */
     this.inGameDebugLogQueue = [];
 
     /**
      * @internal
-     * ロード中のModのPostprocess
-     * Modのロード→Mod自身の`init.js`から`setModPostprocess`でset→maginaiから`popModPostprocess`でpopし実行→次のModのロード…
-     * というサイクルでPostprocessを実行する
-     * @type {Promise<any>}
+     * Current postprocess of the loading mod
+     *
+     * Cycle of executing Postprocess:
+     * 1. `maginai` starts loading a mod
+     * 2. The mod sets their Postprocess in `init.js` using `maginai.setModPostprocess`
+     * 3. `maginai` pops the PostProcess using `popModPostprocess` and executes it
+     * 4. `maginai` proceeds to load the next mod
+     *
+     * @type {Promise<any> | null}
      */
     this.currentModPostprocess = null;
 
     /**
      * @internal
-     * Modコマンドキー設定用クラスオブジェクト
+     * Instance of `ModCommandKey` for setting mod command key
      */
     this.modCommandKey = new ModCommandKey();
 
     /**
-     * Modコマンドキーとして設定可能なキーコード
+     * Key codes available for the mod command key
      */
     this.MOD_COMMAND_KEY_CODES = MOD_COMMAND_KEY_CODES;
 
-    // 以下サブモジュールの公開
+    // Submodules
+
     /**
-     * `maginai.patcher`サブモジュール
-     * メソッドのパッチに便利なメソッドを提供する
-     * 詳細は`Patcher`クラス定義へ
+     * `maginai.patcher` submodule
+     *
+     * Provides utility methods for method patching
+     * See {@link Patcher} class definition for details.
      */
     this.patcher = new Patcher();
 
     /**
-     * `maginai.patcher` submodule
-     * Provides utility methods for method patching
-     * See `Patcher2` definition
+     * `maginai.patcher2` submodule
+     *
+     * Provides utility methods for method patching.
+     * See {@link Patcher2} class definition for details.
      */
     this.patcher2 = new Patcher2();
 
     /**
-     * `maginai.logging`サブモジュール===`loglevel`モジュール（maginai用に設定済）
-     * maginai用各Modでのログはこれを使用することが推奨されます
+     * `maginai.logging` submodule (=== `loglevel` module of the [loglevel package](https://www.npmjs.com/package/loglevel))
+     *
+     * It's recommended to use this for logging in each mod.
+     *
      * ```js
-     * const logger = maginai.logging.getLogger("myMod") // getLoggerの引数はMod名を推奨
-     * // ログレベルはtrace/debug/info/warn/errorの5段階
-     * logger.info('infoレベルログ')
-     * logger.debug('debugレベルログ')
+     * const logger = maginai.logging.getLogger("my-mod") // Pass your mod's name to `getLogger`
+     * // Available log levels are trace/debug/info/warn/error
+     * logger.info('info level log')
+     * logger.debug('debug level log')
      * ```
      */
     this.logging = logging;
 
     /**
-     * `maginai.modSave`サブモジュール
-     * Mod用セーブデータの取得・セットが可能
-     * 詳細は`ModSave`定義へ
+     * `maginai.modSave` submodule
+     *
+     * Provides methods for getting and setting the save data for each mod.
+     * See {@link ModSave} class definition for details.
      */
     this.modSave = new ModSave();
 
     /**
-     * `maginai.events`サブモジュール
-     * 各種のイベント（`ModEvent`オブジェクト）を定義しておりハンドラーの設定などが可能
-     * 詳細は`MaginaiEvents`定義へ
+     * `maginai.events` submodule
+     *
+     * Provides the events of `maginai`.
+     * See {@link MaginaiEvents} for details.
      */
     this.events = new MaginaiEvents();
     this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
@@ -378,8 +418,9 @@ export class Maginai {
 
   /**
    * @internal
-   * 初期化処理（union.jsのロードが必要）
-   * Maginaiのインスタンス作成だけであればunion.jsは不要
+   * Initialization which requires `union.js` loaded
+   *
+   * \* Note: just instantiating `Maginai` doesn't require `union.js`.
    */
   init() {
     logger.info(`Mod loader 'maginai' v${VERSION}`);
@@ -389,7 +430,7 @@ export class Maginai {
     const magi = this;
     const ev = this.events;
 
-    // viewTitleにパッチし、タイトル表示時にgameLoadFinishedイベントがinvokeされるようにする
+    // Patches `viewTitle`, to make `gameLoadFinished` triggered when the title screen is displayed
     this.patcher.patchMethod(tGameTitle, 'viewTitle', (origMethod) => {
       const rtnFn = function (...args) {
         if (!magi.isGameLoadFinished) {
@@ -401,7 +442,7 @@ export class Maginai {
       return rtnFn;
     });
 
-    // loadActにパッチし、セーブロード時にsaveLoadedイベントがinvokeされるようにする
+    // Patches `loadAct` to make `saveLoaded` triggered when the save is loaded
     this.patcher.patchMethod(tGameSave, 'loadAct', (origMethod) => {
       const rtnFn = function (a, b, c, callback, ...args) {
         const newCallback = (isOk, ...cbArgs) => {
@@ -416,9 +457,8 @@ export class Maginai {
       return rtnFn;
     });
 
-    // ゲームをはじめから開始した場合はloadActが呼び出されないため
-    // tGameOpening.viewに渡されるcallback実行後にsaveLoadedイベントが
-    // invokeされるようにする
+    // When you start new game, `loadAct` won't be called.
+    // Therefore, we make `saveLoaded` triggered after the call of the callback passed to `tGameOpening.view`
     this.patcher.patchMethod(tGameOpening, 'view', (origMethod) => {
       const rtnFn = function (a, callback, ...args) {
         const newCallback = (...cbArgs) => {
@@ -431,7 +471,7 @@ export class Maginai {
       return rtnFn;
     });
 
-    // setCallBackにパッチし、毎フレーム呼び出される本来のcallbackの前後でbeforeRefresh/afterRefreshイベントがinvokeされるようにする
+    // Patches `setCallBack` to make `beforeRefresh` and `afterRefresh` triggered before and after the original callback
     this.patcher.patchMethod(
       tGameRefresh,
       'setCallBack',
@@ -447,12 +487,12 @@ export class Maginai {
       }
     );
 
-    // Mod情報をタイトル画面に描画するためにdrawBackground_titleにパッチ
+    // Patches `drawBackground_title` to draw mod's informatioon on the title screen
     this.patcher.patchMethod(
       tGameTitle,
       'drawBackground_title',
       (origMethod) => {
-        // 本来渡されたCBの前にタイトル画面描画を行う新しいCBを作り、それを渡してもとのメソッドを呼び出す
+        // Creates a new CB, which perform drawing before the original CB, and pass it to the original `drawBackground_title`
         // newMethod is...
         const rtnFn = function (callback, ...args) {
           // Inject drawing labels for maginai, before passed callback called
@@ -467,7 +507,7 @@ export class Maginai {
             }
             callback(isOk, ...cbArgs);
           };
-          // call origMethod with new callback and return through
+          // Call origMethod with new callback and return through
           const rtn = origMethod.call(this, newCB, ...args);
           return rtn;
         };
@@ -475,7 +515,7 @@ export class Maginai {
       }
     );
 
-    //logToInGameLogDebugでゲーム内ログ出力するためaddAndViewLogにパッチ
+    // Patches `addAndViewLog` to log to the in-game log by `logToInGameLogDebug`
     this.patcher.patchMethod(tGameLog, 'addAndViewLog', (origMethod) => {
       const rtnFn = function (...args) {
         const rtn = origMethod.call(this, ...args);
@@ -491,10 +531,9 @@ export class Maginai {
     });
 
     const readyLogger = magi.logging.getLogger('maginai.ready');
-
-    // Modのロード前にゲームがロードされるのを防ぐためtGameMainクラスをダミーに置き換える
-    // （tGameMainのnew≒ゲームの諸々の初期化）
-    // このためModからtGameMainクラスにアクセスする場合はmaginai.origtGameMainを参照する必要がある
+    // Replaces `tGameMain` with a dummy class to prevent the game from loading before mods are loaded.
+    // (Note: Instantiating `tGameMain` triggers instantiation and initialization of all game classes.)
+    // Mods should use `maginai.origtGameMain` instead of `tGameMain` to access the actual `tGameMain`.
     this.origtGameMain = tGameMain;
     tGameMain = function (...args) {
       if (!magi.isFirstDummytWgmMainLoadFinished) {
@@ -515,16 +554,17 @@ export class Maginai {
       }
     };
 
-    // Modコマンドキー関連のパッチ
+    // Patches for the mod command keys
     this.modCommandKey.init();
 
-    // Mod用セーブ関連のパッチ
+    // Patches for the mod save
     this.modSave.init();
   }
 
   /**
    * @internal
-   * ゲームをロードする
+   * Loads the game
+   *
    * @return {any} new tGameMain({})
    */
   loadtWgm() {
@@ -535,7 +575,8 @@ export class Maginai {
 
   /**
    * @internal
-   * ゲームのロード直後処理
+   * Triggers `tWgmLoaded`
+   *
    * @param {object} e
    */
   ontWgmLoaded(e) {
@@ -545,8 +586,10 @@ export class Maginai {
   }
 
   /**
-   * JavaScriptファイルをロード
-   * DOM操作でscriptタグによりロードし、ロードしたscript要素を含むオブジェクトを返す
+   * Loads a JavaScript file.
+   *
+   * Loads the file by adding a `script` tag via DOM operation and returns an object containing the `HTMLScriptElement` of the loaded script.
+   *
    * @param {string} path
    * @return {Promise<{script:HTMLScriptElement}}
    */
@@ -575,10 +618,10 @@ export class Maginai {
   }
 
   /**
-   * JavaScriptファイルから`var LOADDATA=...`で定義されたデータをロードし返す
-   * 非同期
+   * Loads an object from `var LOADDATA=...` style JavaScript file
+   *
    * @param {string} path
-   * @returns {Promise<any>} ロードされたデータ
+   * @returns {Promise<any>} object loaded
    */
   async loadJsData(path) {
     const e = await this.loadJs(path);
@@ -589,10 +632,14 @@ export class Maginai {
   }
 
   /**
-   * ゲーム内ログへログ出力する（デバッグ用）
-   * ゲーム内の処理でログが出力されるときに"相乗り"して出力するため、タイトル等で呼んでも確実に出力されるかわりに
-   * 出力タイミングが遅れる可能性あるため、デバッグやエラー表示目的での使用を意図している
-   * MOD動作本来のログ（アイテムの使用表示等）は直接`addAndViewLog`を使用することを推奨
+   * Logs to the in-game log (for debugging)
+   *
+   * This method logs the passed `message` to the in-game log by "piggybacking" on the original logging process.
+   * You can call it from anywhere, and the `message` will be logged at the next logging reliably.
+   * However, due to the nature of this process, you cannot control exactly when the `message` will be logged, and there may be delays in logging.
+   * Use this method strictly for debugging purposes.
+   * For actual logging tasks, such as displaying used items, it's recommended to use the game's `addAndViewLog` method of the game.
+   *
    * @param {string} message
    */
   logToInGameLogDebug(message) {
@@ -601,10 +648,13 @@ export class Maginai {
   }
 
   /**
-   * ModのJavaScriptロード後に実行される`Promise`をセットする
-   * `init.js`実行中のMod自身から呼ぶべきであり、それ以外の場面で呼んではいけない
-   * `Promise`でないものも`Promise.resolve()`で変換して受け付け、エラーにならない
-   * @param {Promise<any>} promise
+   * Sets Postprocess `Promise`
+   *
+   * This should be called in `init.js`.
+   * The set Postprocess will be executed after loading the mod.
+   * Note: this method accepts any non-`Promise` value and converts it to a `Promise` using `Promise.resolve()`.
+   *
+   * @param {Promise<any>} Postprocess
    */
   setModPostprocess(promise) {
     this.currentModPostprocess = Promise.resolve(promise);
@@ -612,9 +662,10 @@ export class Maginai {
 
   /**
    * @private
-   * ModのJavaScriptロード後に実行されるPromiseをpopする
-   * 事前にsetされていなくてもPromise.resolve()を返し、エラーにならない
-   * @return {Promise<any>} setされていたPromise
+   * Pops Postprocess `Promise`
+   *
+   * Note: this method returns `Promise.resolve()` even if no Postprocess has been set.
+   * @return {Promise<any>} Postprocess
    */
   popModPostprocess() {
     const rtn = this.currentModPostprocess ?? Promise.resolve();
@@ -624,16 +675,21 @@ export class Maginai {
 
   /**
    * @private
-   * 1Modのロード処理
-   * 独自エラーハンドラのset→Mod init.jsのロード→Postprocessのpopと実行→独自エラーハンドラをunset
-   * 独自エラーハンドラによりどのModからエラーが発生したかの識別と集計が可能
-   * 集計はerrorsOnLoadModsに集められる
-   * またエラーは外に伝搬しないため、個別のModのエラーは他のModやメイン処理に影響しない
-   * 非同期
+   * Loads a mod
+   *
+   * 1. Sets a custom error handler for catching errors during loading the mod
+   * 2. Loads `init.js`
+   * 3. Pops the Postprocess of the mod and execute it
+   * 4. Unsets the error handler
+   *
+   * By the custom error handler, we can identify and aggregate errors from each mod.
+   * The errors are collected in `errorsOnLoadMods`.
+   * Exceptions during loading the mod are caught to prevent failure from affecting other mods or the main process.
+   *
    * @param {string} modName
    */
   async loadOneMod(modName) {
-    // 後でfailedとの差分を取るためここではすべて入れる
+    // Will be diffed with failed mods later, so pushing all here
     this.completedMods.push(modName);
     const abortController = new AbortController();
     const onError = (e) => {
@@ -657,11 +713,10 @@ export class Maginai {
 
   /**
    * @internal
-   * ロード処理 - すべてのModのロードからゲームロード終了まで
-   * mods_load.jsのmodsから読み込み順と対象modNameを取得
-   * 各modNameで1modのロード処理（getModLoadPromise参照）を生成し連結
-   * その後はloadtWgmでゲームロード開始
-   * 非同期
+   * Loads all mods and the game
+   *
+   * Retrieves all mod's names from `mods_load.js` and loads all mods.
+   * After that, loads the game with `loadtWgm`
    */
   async loadMods() {
     const postProcessLogger = this.logging.getLogger('maginai.postprocess');
@@ -686,11 +741,11 @@ export class Maginai {
         postProcessLogger.debug('Second true tWgm load');
         this.loadtWgm();
       }
-      // ※readyの方でtrueに設定し直される可能性がある
+      // It may set to `true` on the ready
       this.isModLoadFatalErrorOccured = false;
     } catch (e) {
-      // 各Modでのエラーはそれぞれで処理済のため、ここでcatchされるのはfatal errorのはず
-      // （必要なファイルが存在しない、mod_load.jsの構造がおかしい…etc）
+      // Errors from the mods are already caught, so only fatal errors rech here
+      // (e.g. missing necessary files, invalid `mods_load.js`, etc.)
       logger.error('Mod load main proccess failed:', e);
       throw e;
     }

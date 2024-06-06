@@ -2,13 +2,15 @@ import { closest, distance } from 'fastest-levenshtein';
 
 /**
  * `maginai.patcher2` submodule class
- * Don't instanciate directly, use `maginai.patcher2`
+ *
+ * Don't instanciate directly, use from `maginai.patcher2`.
  *
  * You can patch a method of class with `patchMethod` method
  */
 export class Patcher2 {
   /**
-   * Patches the specified method `methodName` of the class `cls` with `newMethod`.
+   * Patches the specified method `methodName` of the class `cls` with `newMethod`
+   *
    * The args for `newMethod` is `(self, originalMethod, args)`.
    *
    * ```js
@@ -22,30 +24,30 @@ export class Patcher2 {
    * const helloobj = new HelloClass();
    *
    * maginai.patcher2.patchMethod(
-   *   HelloClass, // Patches `hello` method of `HelloClass`...
+   *   HelloClass, // Patches the `hello` method of the `HelloClass`...
    *   "hello",
    *   // The new `hello` method...
-   *   (self, original, args) => {
-   *   // calls original and then returns the returned value + 2 and say "Bye"
-   *   const rtn = original(...args) + 2;
-   *   console.log("Bye");
-   *   return rtn;
-   *   // The original `hello` definition currently has no args, but we passed args for compatibility.
-   *   // For the same reason, it's recommended to return the original value (or you changed) even if the original method currently has no return value.
-   * })
+   *   (self, originalMethod, args) => {
+   *     // Calls the original `hello` and then returns the returned value + 2 and says "Bye"
+   *     const rtn = originalMethod(...args) + 2;
+   *     console.log("Bye");
+   *     return rtn;
+   *     // The original `hello` definition currently has no args, but we passed args for compatibility.
+   *     // For the same reason, it's recommended to return the original value (or you changed) even if the original method currently has no return value.
+   * });
    *
-   * // After the patching, even objects already instanciated uses the new method
+   * // After the patching, even already instanciated objects use the new method
    * console.log(helloobj.hello())
    * // Hello 1
    * // Bye
    * // 3
    * ```
-   * @param {Function} cls the class which has the method {methodName}
-   * @param {string} methodName the name of method to be patched
-   * @param {(self: Object, original: Function, args: any[]) => void} new method
-   *     self===this
-   *     original is the original method
-   *     args is the args passed to the method
+   * @param {Function} cls - The class which has the method `methodName`
+   * @param {string} methodName - The name of method to be patched
+   * @param {(self: Object, originalMethod: Function, args: any[]) => void} newMethod
+   *     `self` is the instance (`this`) on which the method is called.
+   *     `originalMethod` is the original method `methodName`, bound to `this`.
+   *     `args` is the list of the args passed to the method.
    */
   patchMethod(cls, methodName, newMethod) {
     // Prevent patching undefined method
