@@ -1,7 +1,9 @@
 /**
  * @internal
- * typeofの人間が読めるバージョン
- * ログ出力用のため戻り値は条件分岐などに使うべきではない
+ * human-readable `typeof`
+ *
+ * The returned value should not be used for conditionals or similar purposes, intended for logging output.
+ *
  * @param {any} value
  * @returns {string}
  */
@@ -40,7 +42,8 @@ function readableTypeof(value) {
 }
 
 /**
- * version文字列を[major, minor, patch, preid, prerelease]に分解した配列を作成
+ * Splits the version string into `[major, minor, patch, preid, prerelease]`
+ *
  * @param {string} version
  * @return {[number, number, number, string, number]} versionInfo
  */
@@ -72,4 +75,3 @@ export function versionToversionInfo(version) {
 }
 
 export { readableTypeof };
-

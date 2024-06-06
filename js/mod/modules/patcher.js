@@ -1,18 +1,19 @@
 import { closest, distance } from 'fastest-levenshtein';
 
 /**
- * `maginai.patcher`サブモジュールクラス
- * 直接インスタンス化せず`maginai.patcher`から使用してください
+ * `maginai.patcher` submodule class
  *
- * `patchMethod`メソッドでメソッドを新しいメソッドでモンキーパッチすることが可能
- * （詳細は`patchMethod`ドキュメントへ）
+ * Do not instantiate directly; use from `maginai.patcher`.
+ *
+ * You can patch a method of class with `patchMethod` method
  */
 class Patcher {
   /**
-   * 指定したクラスのメソッドを新しいメソッドに置き換え（パッチ）する
+   * Patches the specified method `methodName` of the class `cls` with a new method
    *
-   * ※よりシンプルでミスしにくい新しいインターフェースを持つPatcher2の使用を推奨
-   *   詳細はPatcher2定義へ
+   * `newMethodFactory` should be a function which returns a new method for `methodName`.
+   *
+   * \* It's recommended to use `Patcher2`, which is a simpler patcher with a user-friendly interface
    *
    * ```js
    * class HelloClass {
@@ -23,28 +24,29 @@ class Patcher {
    * }
    * const helloobj = new HelloClass();
    * maginai.patcher.patchMethod(
-   *   HelloClass, // HelloClassの
-   *   "hello", // helloメソッドをパッチする
+   *   HelloClass, // Patches the `hello` method of `HelloClass`...
+   *   "hello",
    *   (origMethod) => {
-   *   // 新しいhelloメソッドは…
+   *   // The new `hello` method...
    *   const rtnFn = function (...args) {
-   *     // もとのメソッドを呼び出した後に'Bye'というメッセージを出力する
+   *     // calls the original method and then says 'Bye'
    *     const rtn = origMethod.call(this, ...args);
    *     console.log("Bye");
    *     return rtn;
-   *     // もとのメソッドは引数も返り値もないが、互換性のために常にargsをすべて渡し返り値を返している
+   *     // The original `hello` definition currently has no args, but we passed args for compatibility.
+   *     // For the same reason, it's recommended to return the original value (or you changed) even if the original method currently has no return value.
    *   };
    *   return rtnFn;
    * })
-   * // パッチ以降のhelloメソッドの呼び出しは、新しいhelloメソッドを呼ぶ（たとえこのようにすでにインスタンスが作られていても）
+   * // After the patching, even already instanciated objects use the new method
    * helloobj.hello()
    * // Hello 1
    * // Bye
    * ```
-   * @param {Function} cls パッチ対象クラス
-   * @param {string} methodName パッチ対象メソッド名
-   * @param {(origMethod: Function) => Function} newMethodFactory 新しい`methodName`メソッドとなる関数を返すファクトリ関数
-   *     origMethodは元々の`methodName`メソッド
+   * @param {Function} cls - the class which has the method `methodName`
+   * @param {string} methodName - the name of the method to be patched
+   * @param {(origMethod: Function) => Function} newMethodFactory - a function which returns a new method for `methodName`
+   *     `origMethod` is the original method `methodName`
    */
   patchMethod(cls, methodName, newMethodFactory) {
     // Prevent patch undefined method
