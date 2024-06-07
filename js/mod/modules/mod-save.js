@@ -72,6 +72,9 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  *
  */
 export class ModSave {
+  /**
+   * @internal
+   */
   constructor() {
     /**
      * @private

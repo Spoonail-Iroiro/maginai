@@ -9,6 +9,10 @@ import { closest, distance } from 'fastest-levenshtein';
  */
 export class Patcher2 {
   /**
+   * @internal
+   */
+  constructor() {}
+  /**
    * Patches the specified method `methodName` of the class `cls` with `newMethod`
    *
    * The args for `newMethod` is `(self, originalMethod, args)`.
