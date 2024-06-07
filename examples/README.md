@@ -18,6 +18,7 @@
 | --- | --- |
 | [Add Item](./item/add-item.js) | プレイヤーの持ち物にアイテムを追加します |
 | [Add Money](./item/add-money.js) | プレイヤーにお金を取得させます |
+| [Custom Item](./item/custom-item.js) | カスタムアイテムを追加します |
 
 ## Log
 | Example | Description |
