@@ -9,6 +9,10 @@ import { closest, distance } from 'fastest-levenshtein';
  */
 class Patcher {
   /**
+   * @internal
+   */
+  constructor() {}
+  /**
    * Patches the specified method `methodName` of the class `cls` with a new method
    *
    * `newMethodFactory` should be a function which returns a new method for `methodName`.

@@ -143,6 +143,10 @@ class MaginaiImage {
  */
 export class MaginaiEvents {
   /**
+   * @internal
+   */
+  constructor() {}
+  /**
    * Triggered when tGameMain is instantiated and set to tWgm.
    *
    * \* Game data might not have been fully loaded yet
@@ -253,6 +257,9 @@ export class MaginaiEvents {
  * - {@link Maginai.modSave | modSave} - Save data for each mod
  */
 export class Maginai {
+  /**
+   * @internal
+   */
   constructor() {
     /**
      * Version string
