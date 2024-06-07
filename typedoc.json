@@ -9,7 +9,9 @@
   },
   "plugin": [
     "typedoc-plugin-missing-exports",
+    "./tools/typedoc-theme-method-tag-filter/index.cjs"
   ],
+  "theme": "method-tag-filter",
   "placeInternalsInOwningModule": true,
   "logLevel": "Verbose",
   "tsconfig": "./tsconfig.typedoc.json",
