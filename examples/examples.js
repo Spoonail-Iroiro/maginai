@@ -1,4 +1,4 @@
-// Used from `tools/copyExamples.js`
+// Used by `tools/copyExamples.js`
 
 export const examples = [
   'character/add-enemy.js',
