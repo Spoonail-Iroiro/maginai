@@ -15,7 +15,7 @@
         tWgm.tGameCharactor.charas[charaId];
 
       // 画面に表示するためにマップ情報を更新
-      tWgm.tGameRoutineMap.updateMapInfoAll(undefined);
+      tWgm.tGameRoutineMap.updateMapInfoAll();
     }
   });
 })();

@@ -2,6 +2,7 @@
 
 # Table of Contents
 - [Character](#character)
+- [Item](#item)
 - [Log](#log)
 - [Maginai](#maginai)
 - [Map](#map)
@@ -10,6 +11,12 @@
 | Example | Description |
 | --- | --- |
 | [Add Enemy](./character/add-enemy.js) | ランダムな敵をマップに追加します |
+| [Chara List](./character/chara-list.js) | すべてのキャラをコンソールに出力します |
+
+## Item
+| Example | Description |
+| --- | --- |
+| [Add Item](./character/add-item.js) | プレイヤーの持ち物にアイテムを追加します |
 
 ## Log
 | Example | Description |

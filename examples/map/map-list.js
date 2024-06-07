@@ -5,7 +5,7 @@
   maginai.events.saveLoaded.addHandler(() => {
     for (const mapId in tWgm.tGameMap.maps) {
       const map = tWgm.tGameMap.maps[mapId];
-      logger.info(map);
+      logger.info(mapId, map);
     }
   });
 })();
