@@ -1,12 +1,12 @@
 // Used by `tools/copyExamples.js`
 
 export const examples = [
-  'character/add-enemy.js',
-  'character/chara-list.js',
-  'item/add-item.js',
-  'item/add-money.js',
-  'item/custom-item.js',
-  'log/add-log.js',
-  'maginai/events.js',
-  'map/map-list.js',
+  'character/example-add-enemy',
+  'character/example-chara-list',
+  'item/example-add-item',
+  'item/example-add-money',
+  'item/example-custom-item',
+  'log/example-add-log',
+  'maginai/example-events',
+  'map/example-map-list',
 ];

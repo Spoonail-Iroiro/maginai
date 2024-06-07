@@ -16,17 +16,16 @@ if (!fs.existsSync(gamePath)) {
 }
 
 for (const example of examples) {
-  const exampleName = path.basename(example, '.js');
+  const exampleName = path.basename(example);
   const examplePath = `../examples/${example}`;
-  const modPath = `${modsPath}/example-${exampleName}`;
+  const modPath = `${modsPath}/${exampleName}`;
 
   fs.rmSync(modPath, { recursive: true, force: true });
   fs.mkdirSync(modPath, { recursive: true });
 
-  fs.copyFileSync(
-    `${import.meta.dirname}/${examplePath}`,
-    `${modPath}/init.js`
-  );
+  fs.cpSync(`${import.meta.dirname}/${examplePath}`, modPath, {
+    recursive: true,
+  });
 
   console.log(`Copied ${example}`);
 }
