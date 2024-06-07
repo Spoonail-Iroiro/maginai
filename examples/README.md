@@ -16,8 +16,8 @@
 ## Item
 | Example | Description |
 | --- | --- |
-| [Add Item](./character/add-item.js) | プレイヤーの持ち物にアイテムを追加します |
-| [Add Money](./character/add-money.js) | プレイヤーにお金を取得させます |
+| [Add Item](./item/add-item.js) | プレイヤーの持ち物にアイテムを追加します |
+| [Add Money](./item/add-money.js) | プレイヤーにお金を取得させます |
 
 ## Log
 | Example | Description |
