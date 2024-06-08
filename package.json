@@ -24,6 +24,8 @@
     "build:docs": "typedoc",
     "build:sample": "node ./tools/releaseSampleMod.js",
     "copy-examples": "node ./tools/copyExamples.js",
+    "format": "prettier -w ./**/*.js ./**/*.ts",
+    "lint": "eslint . --ext .js,.ts .",
     "test": "vitest run",
     "test:dev": "vitest --inspect-brk --test-timeout 100000 --single-thread",
     "preview:docs": "typedoc --excludeExternals",
@@ -34,9 +36,10 @@
     "bump-version:patch": "npm run npver -- patch && npm run genversion"
   },
   "devDependencies": {
-    "eslint": "^8.49.0",
+    "eslint": "^8.57.0",
     "genversion": "^3.1.1",
     "maginai-game-types": "latest",
+    "prettier": "3.3.1",
     "rimraf": "^5.0.5",
     "typedoc": "^0.25.1",
     "typedoc-plugin-missing-exports": "^2.2.0",
