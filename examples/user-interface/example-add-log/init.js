@@ -18,7 +18,7 @@
     // en: You can add colors to logs using the %c[] syntax
     // ja: %c[]構文を使ってログに色を付けられます
     tWgm.tGameLog.addLog(
-      'Default. %c[charactor]Character. %c[logitem]Item. %c[logdamage]Damage. %c[logcure]Heal.',
+      'Default. %c[charactor]Character. %c[logitem]Item. %c[logdamage]Damage. %c[logcure]Heal. %c[log]Default again.',
       true
     );
 
