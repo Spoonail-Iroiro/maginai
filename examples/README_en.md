@@ -5,9 +5,9 @@
 - [Character](#character)
 - [Debug](#debug)
 - [Item](#item)
-- [Log](#log)
 - [Maginai](#maginai)
 - [Map](#map)
+- [User Interface](#user-interface)
 
 ## Character
 | Example | Description |
@@ -28,11 +28,6 @@
 | [Add Money](./item/example-add-money/init.js) | プレイヤーにお金を取得させます |
 | [Custom Item](./item/example-custom-item/init.js) | カスタムアイテムを追加します |
 
-## Log
-| Example | Description |
-| --- | --- |
-| [Add Log](./log/example-add-log/init.js) | ゲームのログにメッセージを出力します |
-
 ## Maginai
 | Example | Description |
 | --- | --- |
@@ -42,3 +37,9 @@
 | Example | Description |
 | --- | --- |
 | [Map List](./map/example-map-list/init.js) | すべてのマップをコンソールに出力します |
+
+## User Interface
+| Example | Description |
+| --- | --- |
+| [Add Log](./user-interface/example-add-log/init.js) | Output a message to the game log. |
+| [Convert Value](./user-interface/example-convert-value/init.js) | Use the %v[] syntax of `convertValue` to embed values into a string. |

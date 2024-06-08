@@ -7,7 +7,8 @@ export const examples = [
   'item/example-add-item',
   'item/example-add-money',
   'item/example-custom-item',
-  'log/example-add-log',
   'maginai/example-events',
   'map/example-map-list',
+  'user-interface/example-add-log',
+  'user-interface/example-convert-value',
 ];
