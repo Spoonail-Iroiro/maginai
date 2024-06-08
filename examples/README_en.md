@@ -18,7 +18,7 @@
 
 | Example | Description |
 | --- | --- |
-| [Skip Opening](./debug/example-skip-opening/init.js) | `isTest`を有効にしてオープニングをスキップさせます |
+| [Skip Opening](./debug/example-skip-opening/init.js) | Enable `isTest` to skip the opening sequence. |
 
 ## Item
 | Example | Description |
