@@ -1,8 +1,8 @@
 (function () {
   const logger = maginai.logging.getLogger('example-add-log');
 
-  // en: Display a message in the game log when loading save data
-  // ja: セーブデータロード時にゲームのログにメッセージを表示
+  // en: Display a message in the game log when loading a save is completed
+  // ja: セーブの読み込みが完了したときにゲームのログにメッセージを表示
   maginai.events.saveLoaded.addHandler(() => {
     // en: Add a log
     // ja: ログを追加

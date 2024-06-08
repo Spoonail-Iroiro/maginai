@@ -17,19 +17,19 @@ maginaiを使ったModの開発に便利なサンプルコードです。
 | Example | Description |
 | --- | --- |
 | [Add Enemy](./character/example-add-enemy/init.js) | ランダムな敵をマップに追加します |
-| [Chara List](./character/example-chara-list/init.js) | すべてのキャラをコンソールに出力します |
+| [Chara List](./character/example-chara-list/init.js) | すべてのキャラクターをコンソールに出力します |
 
 ## Debug
 
 | Example | Description |
 | --- | --- |
-| [Skip Opening](./debug/example-skip-opening/init.js) | `isTest`を有効にしてオープニングをスキップさせます |
+| [Skip Opening](./debug/example-skip-opening/init.js) | `isTest`を有効にしてオープニングをスキップします |
 
 ## Item
 | Example | Description |
 | --- | --- |
 | [Add Item](./item/example-add-item/init.js) | プレイヤーの持ち物にアイテムを追加します |
-| [Add Money](./item/example-add-money/init.js) | プレイヤーにお金を取得させます |
+| [Add Money](./item/example-add-money/init.js) | プレイヤーにお金を与えます |
 | [Custom Item](./item/example-custom-item/init.js) | ゲームにカスタムアイテムを追加します |
 
 ## Maginai
@@ -45,5 +45,5 @@ maginaiを使ったModの開発に便利なサンプルコードです。
 ## User Interface
 | Example | Description |
 | --- | --- |
-| [Add Log](./user-interface/example-add-log/init.js) | ゲームのログにメッセージを出力します |
+| [Add Log](./user-interface/example-add-log/init.js) | ゲームのログにメッセージを表示します |
 | [Convert Value](./user-interface/example-convert-value/init.js) | `convertValue`の%v[]構文を使って文字列に値を埋め込みます |
