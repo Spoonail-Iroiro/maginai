@@ -1,7 +1,11 @@
 # Examples
 [English](./README_en.md) | [日本語](./README.md)
 
-# Table of Contents
+maginaiを使ったModの開発に便利なサンプルコードです。
+
+新しいサンプルコードを追加したい場合は[Discord](https://discord.gg/Z7n5EPxQ)などでお知らせください。
+
+# 目次
 - [Character](#character)
 - [Debug](#debug)
 - [Item](#item)
@@ -26,7 +30,7 @@
 | --- | --- |
 | [Add Item](./item/example-add-item/init.js) | プレイヤーの持ち物にアイテムを追加します |
 | [Add Money](./item/example-add-money/init.js) | プレイヤーにお金を取得させます |
-| [Custom Item](./item/example-custom-item/init.js) | カスタムアイテムを追加します |
+| [Custom Item](./item/example-custom-item/init.js) | ゲームにカスタムアイテムを追加します |
 
 ## Maginai
 | Example | Description |
