@@ -5,6 +5,8 @@ These examples are useful for developing Mods using maginai.
 
 If you would like to add new examples, please let us know on [Discord](https://discord.gg/Z7n5EPxQ) or through other channels.
 
+Each `example-*` folder is a valid mod's main folder, so you can install it as a mod using [gmaginai-l](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README.md) or [manually](../INSTALL_en.md)
+
 # Table of Contents
 - [Character](#character)
 - [Debug](#debug)
