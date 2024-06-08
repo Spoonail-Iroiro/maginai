@@ -3,6 +3,7 @@
 
 # Table of Contents
 - [Character](#character)
+- [Debug](#debug)
 - [Item](#item)
 - [Log](#log)
 - [Maginai](#maginai)
