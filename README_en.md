@@ -30,6 +30,8 @@ You can use these mods for your gameplay, mod installation testing, as a templat
 
 [maginai API document](https://spoonail-iroiro.github.io/maginai/index.html)
 
+[maginai Examples](./examples/README_en.md)
+
 # Contribute to maginai
 [CONTRIBUTION_en.md](CONTRIBUTION_en.md)
 

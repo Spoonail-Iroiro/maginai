@@ -32,6 +32,8 @@ maginai作者制作のModです。
 
 [maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/index.html)
 
+[maginai Examples](./examples/README.md)
+
 # maginai の開発
 [CONTRIBUTION.md](CONTRIBUTION.md)
 
