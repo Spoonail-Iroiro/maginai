@@ -10,22 +10,44 @@
   // 生成用コード: 10000000000 + Math.floor(Math.random() * 10000000000)
   const customItemId = 13558178434;
 
-  // en: Add a custom item to the master data
-  // ja: マスターデータにカスタムアイテムを追加
+  // en:
+  // Add a custom item to the master data
+  // Note:
+  // Initially, it is recommended to copy the master data values from an existing item similar to the custom item you want to add.
+  // For example, if you want to add a new gift, copy the values from HP gift and then make some adjustments.
+  // To see the master data values of existing items, see `tWgm.tGameItem.masterData.items` on the developer console.
+  //
+  // ja:
+  // マスターデータにカスタムアイテムを追加
+  // ヒント：
+  // 最初に追加したいカスタムアイテムと似た既存のアイテムからマスターデータの値をコピーすることをおすすめします。
+  // 例えば新しいギフトを追加したいならHPのギフトの値をコピーしてくるのがよいでしょう。
+  // 既存のアイテムのマスターデータの値を見るには、`tWgm.tGameItem.masterData.items`を開発者コンソールで参照してください。
   maginai.events.gameLoadFinished.addHandler(() => {
     tWgm.tGameItem.masterData.items[customItemId] = [
-      1, // ?
+      // [0]
+      // en: item type (1=potion, 2=scroll, 3=gem...)
+      // ja: アイテム種別(1=薬, 2=巻物, 3=宝玉...)
+      1,
+      // [1]
       // en: The name of the item
       // ja: アイテム名
       'カスタムアイテム',
-      1, // ?
+      // [2]
+      // en: key to determine icon and unidentified name
+      // ja: アイコンと未鑑定名を決定するキー
+      1,
+      // [3]
       // en: The description of the item
       // ja: アイテムの説明
       'これはカスタムアイテムの説明です。',
       null, // ?
       1, // ?
       40000, // ?
-      80, // ?
+      // [7]
+      // en: price
+      // ja: 価格
+      80,
       1, // ?
       8000, // ?
       null, // ?
@@ -42,7 +64,10 @@
       1, // ?
       0, // ?
       0, // ?
-      1, // ?
+      // [22]
+      // en: Whether the item is the target of 'Item acquisition' statistics
+      // ja: アイテム獲得の実績の対象かどうか
+      1,
     ];
   });
 
