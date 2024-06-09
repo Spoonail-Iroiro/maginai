@@ -3,7 +3,7 @@
 
 [![npm](https://img.shields.io/npm/v/maginai?style=for-the-badge)](https://www.npmjs.com/package/maginai)
 [![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai?style=for-the-badge)](LICENSE)
-[![Discord](https://img.shields.io/discord/1234695202615197746?style=for-the-badge&logo=discord&label=Discord)](https://discord.gg/Z7n5EPxQ)
+[![Discord](https://img.shields.io/discord/1234695202615197746?style=for-the-badge&logo=discord&label=Discord)](https://discord.gg/RgYrD3uPZM)
 
 非公式 異世界の創造者Modローダー
 
