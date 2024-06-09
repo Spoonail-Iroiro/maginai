@@ -12,17 +12,9 @@
 
   // en:
   // Add a custom item to the master data
-  // Note:
-  // Initially, it is recommended to copy the master data values from an existing item similar to the custom item you want to add.
-  // For example, if you want to add a new gift, copy the values from HP gift and then make some adjustments.
-  // To see the master data values of existing items, see `tWgm.tGameItem.masterData.items` on the developer console.
   //
   // ja:
   // マスターデータにカスタムアイテムを追加
-  // ヒント：
-  // 最初に追加したいカスタムアイテムと似た既存のアイテムからマスターデータの値をコピーすることをおすすめします。
-  // 例えば新しいギフトを追加したいならHPのギフトの値をコピーしてくるのがよいでしょう。
-  // 既存のアイテムのマスターデータの値を見るには、`tWgm.tGameItem.masterData.items`を開発者コンソールで参照してください。
   maginai.events.gameLoadFinished.addHandler(() => {
     tWgm.tGameItem.masterData.items[customItemId] = [
       // [0]
