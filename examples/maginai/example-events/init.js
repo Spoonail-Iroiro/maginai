@@ -28,8 +28,17 @@
     }
   });
 
+  // en:
+  // This handler can block all other command key handlers!
+  // Please remove this code if you want to use other mods that use the command keys with this mod.
+  //
+  // ja:
+  // このハンドラーは他のmodのコマンドキーイベントハンドラーをすべてブロックする可能性があります！
+  // コマンドキーを使う他のmodとこのmodを一緒にインストールする場合は、このハンドラー追加コードを削除してください
   maginai.events.commandKeyClicked.addHandler((e) => {
     logger.info('commandKeyClicked', e);
+    e.end();
+    return true;
   });
 
   maginai.events.gameLoadFinished.addHandler(() => {
