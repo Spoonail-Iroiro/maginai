@@ -30,9 +30,9 @@ maginai作者制作のModです。
 # Mod の開発
 [Mod開発者向け説明](MOD_DEVELOP.md)
 
-[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/index.html)
+[Modサンプルコード](./examples/README.md)
 
-[maginai Examples](./examples/README.md)
+[maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/index.html)
 
 # maginai の開発
 [CONTRIBUTION.md](CONTRIBUTION.md)

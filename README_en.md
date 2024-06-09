@@ -24,13 +24,12 @@ You can use these mods for your gameplay, mod installation testing, as a templat
 - [Custom Talk for Named NPCs Mod](https://github.com/Spoonail-Iroiro/maginai-plustalk/blob/master/README.md)
 - [Ability Tracker Mod](https://github.com/Spoonail-Iroiro/maginai-atrack)
 
-
 # Develop Mods
-[For mod developer](MOD_DEVELOP_en.md)
+[Developer Guide](MOD_DEVELOP_en.md)
 
-[maginai API document](https://spoonail-iroiro.github.io/maginai/index.html)
+[Mod Examples](./examples/README_en.md)
 
-[maginai Examples](./examples/README_en.md)
+[maginai API Document](https://spoonail-iroiro.github.io/maginai/index.html)
 
 # Contribute to maginai
 [CONTRIBUTION_en.md](CONTRIBUTION_en.md)
