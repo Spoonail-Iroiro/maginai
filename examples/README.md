@@ -6,7 +6,7 @@ maginaiを使ったModの開発に便利なサンプルコードです。
 新しいサンプルコードを追加したい場合は[Discord](https://discord.gg/Z7n5EPxQ)などでお知らせください。
 
 各`example-*`フォルダは有効なMod本体フォルダとなっているので、Modとしてインストールできます。  
-Modのインストールは[gmagina-l](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README_ja.md)を使用するか[手動](../INSTALL.md)で行うことができます。
+Modのインストールは[gmagina-l](https://github.com/Spoonail-Iroiro/gmaginai-l/blob/master/README_ja.md)を使用するか[手動](../INSTALL.md#modの導入)で行うことができます。
 
 # 目次
 - [Character](#character)
