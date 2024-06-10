@@ -18,11 +18,23 @@ It's highly recommended to use the mod manager `gmaginai-l` to install the mod l
 [Manual Install](INSTALL_en.md)
 
 ## Mods List
-You can use these mods for your gameplay, mod installation testing, as a template for mod development or anything else you like.
+\* For the mods marked with (Discord), you need to join [our Discord server](https://discord.gg/RgYrD3uPZM) to access the links.
 
-- [Quick Save/Load Mod](https://github.com/Spoonail-Iroiro/maginai-qsave/blob/master/README.md)
-- [Custom Talk for Named NPCs Mod](https://github.com/Spoonail-Iroiro/maginai-plustalk/blob/master/README.md)
-- [Ability Tracker Mod](https://github.com/Spoonail-Iroiro/maginai-atrack)
+### By Spoonail
+These are mods created by Spoonail, the owner of `maginai` repository.  
+You can use them for your gameplay, mod installation testing, as templates for mod development, or for anything else you like.
+
+- [qsave](https://github.com/Spoonail-Iroiro/maginai-qsave/blob/master/README_en.md) - Quick Save/Load Mod
+- [plustalk](https://github.com/Spoonail-Iroiro/maginai-plustalk/blob/master/README_en.md) - Custom Tones for Unique NPCs Mod
+- [atrack](https://github.com/Spoonail-Iroiro/maginai-atrack/blob/master/README_en.md) - Ability Tracker Mod
+- [chtools](https://discord.com/channels/1234695202615197746/1234757740094820383/1239367744504336495) - Cheating Mod (Discord)
+
+### By Others
+Use these mods according to the each author's instruction.
+
+- [showabilities](https://discord.com/channels/1234695202615197746/1234757740094820383/1245018530701906003) - Ability List Mod by めじ (Discord)
+
+\* [Let us know](#contact) if you want to add your mod to this list
 
 # Develop Mods
 [Developer Guide](MOD_DEVELOP_en.md)
@@ -35,7 +47,7 @@ You can use these mods for your gameplay, mod installation testing, as a templat
 [CONTRIBUTION_en.md](CONTRIBUTION_en.md)
 
 # Contact
-If you encounter any problems, please create an issue on this repository or contact Spoonail via [contact information provided here](https://whiteblackspace.hatenablog.com/contact-coaw)
+If you encounter any problems, please create an issue on this repository or contact Spoonail via [contact information provided here](https://whiteblackspace.hatenablog.com/contact-coaw).
 
 # Disclaimer and Warning
 The authors (Spoonail and the contributors) take no responsibility for any consequences resulting from the use of this software.
