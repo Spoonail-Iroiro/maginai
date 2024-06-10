@@ -43,7 +43,9 @@ Modのインストールは[gmagina-l](https://github.com/Spoonail-Iroiro/gmagin
 ## Map
 | Example | Description |
 | --- | --- |
+| [Custom Map](./map/example-custom-map/init.js) | カスタムマップを作成します |
 | [Map List](./map/example-map-list/init.js) | すべてのマップをコンソールに出力します |
+| [View Map](./map/example-view-map/init.js) | プレイヤーをマップ間で移動させます |
 
 ## User Interface
 | Example | Description |
