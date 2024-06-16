@@ -98,6 +98,14 @@ export class ModSave {
 
     /**
      * @internal
+     * Event triggered after a save slot is selected and before loading data from the save to all game objects (such as tWgm.tGameCharactor)
+     *
+     * Each mod's save object is available in the handler.
+     */
+    this.saveLoading = new ModEvent('saveLoading');
+
+    /**
+     * @internal
      * Event triggered when collecting save objects from each mod
      */
     this.saveObjectRequired = new ModEvent('saveObjectRequired');
@@ -113,7 +121,7 @@ export class ModSave {
     // tGameSave.unzipDataWorkerにパッチして、unzipした結果のデータを_previousUnzipWorkerResultにストアする
     // 結果はcallbackの引数に渡されるので、callbackを新しいものに差し替えてその中で結果を取得、ストアする
     // ※直接ロードされたセーブデータにアクセスできるメソッドへのパッチができないため、ここでUnzipの前結果を保存しておき
-    // このあとtGameCharactorのsetSaveが呼ばれたらそのときUnzipの前結果==セーブデータオブジェクトとして扱う、という二段構えにしている
+    // このあとtGameDataのsetSaveが呼ばれたらそのときUnzipの前結果==セーブデータオブジェクトとして扱う、という二段構えにしている
     patcher.patchMethod(tGameSave, 'unzipDataWorker', (origMethod) => {
       const rtnFn = function (a, callback, ...args) {
         const newCallback = (result, ...cbArgs) => {
@@ -126,10 +134,10 @@ export class ModSave {
       return rtnFn;
     });
 
-    // tGameMap.setSaveに"相乗り"してMod用セーブデータを取得するためパッチ
+    // tGameData.setSaveに"相乗り"してMod用セーブデータを取得するためパッチ
     // 二段構え構成でMod用セーブデータの取得を実現している(詳細は上記)
     // セーブデータ取得後、利用可能フラグをtrueにする
-    patcher.patchMethod(tGameMap, 'setSaveData', (origMethod) => {
+    patcher.patchMethod(tGameData, 'setSaveData', (origMethod) => {
       const rtnFn = function (...args) {
         if (self.previousUnzipWorkerResult !== null) {
           // このsetSaveが呼ばれたときの_previousUnzipWorkerResultがunzipされて展開済のセーブデータオブジェクトなので MAGINAI_SAVE_KEYのプロパティにアクセス
@@ -143,18 +151,20 @@ export class ModSave {
           }
           self.isSaveAvailable = true;
           self.previousUnzipWorkerResult = null;
+          self.saveLoading.invoke({ isNewGame: false });
         }
         return origMethod.call(this, ...args);
       };
       return rtnFn;
     });
 
-    // tGameMap.initSaveDataにパッチし、ゲームを最初から始めたときに
+    // tGameSave.initSaveDataにパッチし、ゲームを最初から始めたときに
     // Mod用セーブデータに空のオブジェクトをセットし、セーブ利用可能フラグをtrueにする
-    patcher.patchMethod(tGameMap, 'initSaveData', (origMethod) => {
+    patcher.patchMethod(tGameSave, 'initSaveData', (origMethod) => {
       const rtnFn = function (...args) {
         self.isSaveAvailable = true;
         self.rootSaveObject = {};
+        self.saveLoading.invoke({ isNewGame: true });
         origMethod.call(this, ...args);
       };
       return rtnFn;

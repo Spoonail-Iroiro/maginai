@@ -45,6 +45,10 @@
     logger.info('gameLoadFinished');
   });
 
+  maginai.events.saveLoading.addHandler(() => {
+    logger.info('saveLoading');
+  });
+
   maginai.events.saveLoaded.addHandler(() => {
     logger.info('saveLoaded');
   });

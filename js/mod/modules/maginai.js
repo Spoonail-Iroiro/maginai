@@ -184,11 +184,26 @@ export class MaginaiEvents {
   gameLoadFinished = new ModEvent('gameLoadFinished');
 
   /**
-   * Triggered:
-   * - When the save data loading is completed and just before it becomes operable when you select your save to continue the game.
-   * - When the Place of Beginning is displayed at the start of a new game.
+   * Triggered after a save slot is selected by the player and before all game objects (such as `tWgm.tGameCharactor`) load data from the save.
    *
-   * `isNewGame` in the event arg is `false` for the former and `true` for the latter.
+   * Each mod's save object is available in the handler.
+   * This is a good place to retrieve values from the mod's save object through `maginai.modSave.getSaveObject` and initialize objects or variables that work with each save.
+   *
+   * This event is also triggered at the start of new game, just before save objects of all game objects are initialized.
+   *
+   * `isNewGame` in the event arg is whether it's triggerd for the new game.
+   *
+   * callback type: `({isNewGame: boolean}) => void`
+   */
+  saveLoading;
+
+  /**
+   * Triggered when the save data loading is completed and just before it becomes operable when the player selected a save slot to continue the game.
+   *
+   * This event is also triggered at the start of new game, when the Place of Beginning is displayed.
+   *
+   * `isNewGame` in the event arg is whether it's triggerd for the new game.
+   *
    * callback type: `({isNewGame: boolean}) => void`
    */
   saveLoaded = new ModEvent('saveLoaded');
@@ -426,6 +441,7 @@ export class Maginai {
     this.events = new MaginaiEvents();
     this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
     this.events.saveObjectRequired = this.modSave.saveObjectRequired;
+    this.events.saveLoading = this.modSave.saveLoading;
   }
 
   /**

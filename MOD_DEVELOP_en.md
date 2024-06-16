@@ -64,6 +64,7 @@ The execution order of the game's main script `union.js`, maginai's entry point 
 8. `gameLoadFinished` event (just before displaying the title screen)
 9. Display the title screen
 10. (User selects a save)
+11. `saveLoading` event
 11. `saveLoaded` event
 
 The main places where code to modify the game are as follows:  
@@ -224,7 +225,7 @@ The features that are likely to be used frequently are as follows.
 - `VERSION`, `VERSION_INFO` - Version information of `maginai`
   - \* Note that these properties do not exist in v0.2.0, so be careful when comparing
 - `modSave` - Submodule for reading/writing save data for each mod
-  - Use in conjunction with `saveLoaded` event and `saveObjectRequired` event to read/write each mod's data from/to the save data
+  - Use in conjunction with `saveLoading` event and `saveObjectRequired` event to read/write each mod's data from/to the save data
 
 For more details, please refer to the documentation.  
 

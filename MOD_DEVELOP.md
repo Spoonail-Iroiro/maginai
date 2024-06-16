@@ -61,6 +61,7 @@ maginaiが提供するメソッドやモジュールはModのコード内なら�
 9. タイトル画面表示
 10. （ユーザーがセーブを選択）
 11. `saveLoaded`イベント
+11. `saveLoading`イベント
 
 Modがゲームを変更するコードを書く場所は主に以下の通りになるかと思います。  
 - メソッドの変更…`init.js`に直接
@@ -217,7 +218,7 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 - `VERSION`, `VERSION_INFO` - `maginai`のバージョン情報
   - ※v0.2.0では存在しないプロパティのため比較の際は注意して下さい
 - `modSave` - Mod用セーブデータ読み込み/書き込み用サブモジュール
-  - セーブロード直後イベント`saveLoaded`、セーブ直前イベント`saveObjectRequired`と合わせて使用し、セーブデータにMod用データを読み書きすることが可能
+  - ロードイベント`saveLoading`、セーブ直前イベント`saveObjectRequired`と合わせて使用し、セーブデータにMod用データを読み書きすることが可能
 
 
 # 実装における注意事項
