@@ -224,8 +224,8 @@ The features that are likely to be used frequently are as follows.
 - `logToInGameLogDebug` - Output log to in-game log (for debugging and error display)
 - `VERSION`, `VERSION_INFO` - Version information of `maginai`
   - \* Note that these properties do not exist in v0.2.0, so be careful when comparing
-- `modSave` - Submodule for reading/writing save data for each mod
-  - Use in conjunction with `saveLoading` event and `saveObjectRequired` event to read/write each mod's data from/to the save data
+- `modSave` - Submodule for custom save data for each mod
+  - To store and retrieve custom save data, add handlers for that using `addSaveObjectHandlers`
 
 For more details, please refer to the documentation.  
 

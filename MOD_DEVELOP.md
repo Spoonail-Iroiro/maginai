@@ -218,8 +218,7 @@ https://github.com/Spoonail-Iroiro/maginai-buildsample
 - `VERSION`, `VERSION_INFO` - `maginai`のバージョン情報
   - ※v0.2.0では存在しないプロパティのため比較の際は注意して下さい
 - `modSave` - Mod用セーブデータ読み込み/書き込み用サブモジュール
-  - ロードイベント`saveLoading`、セーブ直前イベント`saveObjectRequired`と合わせて使用し、セーブデータにMod用データを読み書きすることが可能
-
+  - Mod用セーブデータの読み書きは`addSaveObjectHandlers`メソッドでハンドラーを登録することで行える
 
 # 実装における注意事項
 動作するModを実装するにはここまで説明した通りで問題ありませんが  

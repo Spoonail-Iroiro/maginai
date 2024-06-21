@@ -187,7 +187,6 @@ export class MaginaiEvents {
    * Triggered after a save slot is selected by the player and before all game objects (such as `tWgm.tGameCharactor`) load data from the save.
    *
    * Each mod's save object is available in the handler.
-   * This is a good place to retrieve values from the mod's save object through `maginai.modSave.getSaveObject` and initialize objects or variables that work with each save.
    *
    * This event is also triggered at the start of new game, just before save objects of all game objects are initialized.
    *
@@ -248,10 +247,6 @@ export class MaginaiEvents {
 
   /**
    * Triggered just before saving, when a save object to be written to the save data is requested.
-   *
-   * Each mod can set the save object using `maginai.modSave.setSaveObject` in the event handler to write its data to the save.
-   * the `maginai.modSave.setSaveObject` itself is effective at other times as well, but this event allows you to prepare your mod's save data just before saving
-   * For details, refer to the `ModSave` class documentation
    *
    * @type {ModEvent}
    */
@@ -427,7 +422,7 @@ export class Maginai {
     /**
      * `maginai.modSave` submodule
      *
-     * Provides methods for getting and setting the save data for each mod.
+     * Provides methods for storing and retrieving the save object for each mod.
      * See {@link ModSave} class definition for details.
      */
     this.modSave = new ModSave();
