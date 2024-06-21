@@ -8,67 +8,49 @@ export const MAGINAI_SAVE_KEY = 'maginai';
  *
  * Do not instantiate directly; use from `maginai.modSave`.
  *
- * You can read and write mod-specific data to the save data using `getSaveObject` / `setSaveObject`
+ * You can store and retrieve a json-serializable object for each `name` to/from the save.
+ * In this document, we call the object 'save object'.
+ * `name` is the unique key for the corresponding save object; usually, mod's name is used to avoid conflict with other mods' save objects.
  *
- * Use `getSaveObject(name)` to obtain the save object corresponding to the key `name` from the current save data.
+ * Use {@link addSaveObjectHandlers} for standard store/retrieve handling.
+ * See the detail and examples of the method.
  *
- * Use `setSaveObject(name, obj)` to set `obj` as a save object corresponding to the key `name`.
+ * In few cases, you might need to use {@link getSaveObject}, {@link setSaveObject} or {@link removeSaveObject} directly.
+ * You can call these methods at any time as long as a save is loaded.
  *
- * Use `removeSaveObject(name)` to delete the save object corresponding to the key `name`.
+ * Use `getSaveObject(name)` to obtain the save object for `name` from the current save.
  *
- * The changes made by `setSaveObject` and `removeSaveObject` will be written to the current save data the next time save operation is performed.
+ * Use `setSaveObject(name, obj)` to set `obj` as a save object for `name`.
+ *
+ * Use `removeSaveObject(name)` to delete the save object for `name`.
+ *
+ * The changes made by `setSaveObject` and `removeSaveObject` will be written to the current save the next time save operation is performed.
  *
  * Each of these methods throws an exception if no save data is loaded, such as on the title screen.
  *
- * There are two `maginai` events that work well with `maginai.modSave`: `saveLoaded` and `saveObjectRequired`.
- * The former is triggered right after the save data is loaded, and the latter is triggered right before the save data is written.
- * It is recommended to use `getSaveObject` and `setSaveObject` within your event handlers for those events.
+ * Notes:
  *
- * Example:
- * ```typescript
- * // `init.js` of `sample4` mod, which counts how many times you performed saving
- * (function () {
- *   const logger = maginai.logging.getLogger('sample4');
- *   // Variable for counting saving
- *   let saveCount;
- *   // Store the submodules in variables to reduce typing
- *   const sv = maginai.modSave;
- *   const ev = maginai.events;
+ * - Calling `addSaveObjectHandlers` is the same as:
  *
- *   // When the save data is loaded...
- *   ev.saveLoaded.addHandler(() => {
- *     // Use `getSaveObject` to get the save object for `sample4` from the current save data
- *     const saveObj = sv.getSaveObject('sample4');
- *     if (saveObj === undefined) {
- *       // If no save object for `sample4` exists, it returns undefined, so set the initial value of `saveCount` to 0
- *       saveCount = 0;
- *     } else {
- *       // If the save object exists, set `saveCount` from it
- *       saveCount = saveObj.saveCount;
- *     }
- *     // Log the `saveCount` loaded from the save
- *     logger.info(
- *       `Save object has been loaded. saveCount:` + saveCount.toString()
- *     );
- *   });
+ * ```js
+ * maginai.events.saveLoading.addHandler((e) => {
+ *   const modSaveObject = maginai.modSave.getSaveObject(name);
+ *   if (modSaveObject === undefined) {
+ *     notFoundHandler(e.isNewGame);
+ *   } else {
+ *     loadHandler(modSaveObject);
+ *   }
+ * });
  *
- *   // Just before writing the save data...
- *   ev.saveObjectRequired.addHandler(() => {
- *     // Increment `saveCount` by 1
- *     saveCount += 1;
- *
- *     // Set an object that contains `saveCount` as the save object `sample4`
- *     sv.setSaveObject('sample4', { saveCount });
- *     logger.info(`Save has been set`);
- *   });
- * })();
+ * maginai.events.saveObjectRequired.addHandler(() => {
+ *   const modSaveObject = saveHandler();
+ *   maginai.modSave.setSaveObject(name, modSaveObject);
+ * });
  * ```
  *
- * Note:
- * - Since the same save object can be accessed with the same `name` from any mod, it is necessary to have a unique `name` that does not conflict (it is generally recommended to use the mod's name as `name`)
- * - Save objects are processed with `JSON.stringify` during the saving process, so objects that cannot be serialized as json, such as methods, will be removed
+ * - Using the same `name` results in operation on the same save object. You can use this to extend other mods
  * - The save capacity of the browser version of CoAW is about 5MB for two save slots. Therefore, if the save data becomes too large, saving may fail
- *   - Tips: If `tWgm.isL` is set to `true`, the save size will be logged to the dev console when a save operation is performed
+ *   - Tip: If `tWgm.isL` is set to `true`, the save size will be logged to the dev console when a save operation is performed
  *
  */
 export class ModSave {
@@ -291,14 +273,10 @@ export class ModSave {
    * })();
    * ```
    *
-   * Note:
-   * Technically, `name` should be a unique key corresponding to the save object.
-   * Mods with the same name can't be loaded at the same time, so mod's name is suitable for a unique key.
-   *
-   * @param {string} name - mod's name
+   * @param {string} name - Mod's name
    * @param {(isNewGame: boolean) => void} notFoundHandler - Called when the selected save is loading, but there's no existing save object for `name` in it
    * @param {(saveObject: object) => void} loadHandler - Called when the selected save is loading, and `saveObject` is the existing save object for `name`
-   * @param {() => object} saveHandler - Called just before saving, and it should return a save object to be written
+   * @param {() => object} saveHandler - Called just before saving, and it should return a save object for `name` to be written
    *
    */
   addSaveObjectHandlers(name, notFoundHandler, loadHandler, saveHandler) {
