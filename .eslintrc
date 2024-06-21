@@ -15,7 +15,8 @@
     "tGameMap": true,
     "tGameData": true,
     "maginaiConfig": true,
-    "LOADDATA": true
+    "LOADDATA": true,
+    "maginai": true
   },
   "env": {
     "browser": true,

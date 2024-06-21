@@ -203,6 +203,7 @@ export class ModSave {
    * If no save object for `name` exists, returns `undefined`.
    *
    * @param {string} name
+   * @return {object} saveObject
    */
   getSaveObject(name) {
     if (!this.isSaveAvailable) throw new Error('No save data loaded');
@@ -235,5 +236,84 @@ export class ModSave {
   removeSaveObject(name) {
     if (!this.isSaveAvailable) throw new Error('No save data loaded');
     delete this.rootSaveObject[name];
+  }
+
+  /**
+   * Adds handlers for the save object of your mod
+   *
+   * By adding these handlers, you can store and retrieve your mod's save object to/from the save.
+   *
+   * Example:
+   *
+   * ```js
+   * // `init.js` of `sample4` mod, which counts how many times you performed saving
+   * (function () {
+   *   const logger = maginai.logging.getLogger('sample4');
+   *
+   *   // Variable for counting saving
+   *   let saveCount;
+   *
+   *   maginai.modSave.addSaveObjectHandlers(
+   *     // `name` - Mod's name
+   *     'sample4',
+   *
+   *     // `notFoundHandler` - Called when no existing save object for `name`
+   *     (isNewGame) => {
+   *       // Initialize saveCount
+   *       saveCount = 0;
+   *       // Show a message and whether it's a new game
+   *       logger.info(
+   *         `'sample4' is applied to this save for the first time. isNewGame: ${isNewGame}`
+   *       );
+   *     },
+   *
+   *     // `loadHandler` - Called when existing save object found for `name`
+   *     (saveObj) => {
+   *       saveCount = saveObj.saveCount;
+   *       // Show the `saveCount` loaded from the save
+   *       logger.info(
+   *         `Save object has been loaded. saveCount:` + saveCount.toString()
+   *       );
+   *     },
+   *
+   *     // `saveHandler` - Should return a save object to be written for `name`
+   *     () => {
+   *       // Increment `saveCount` by 1
+   *       saveCount += 1;
+   *       // Show the current `saveCount`
+   *       logger.info(
+   *         `Save object has been saved. saveCount:` + saveCount.toString()
+   *       );
+   *       // Return a new save object
+   *       return { saveCount };
+   *     }
+   *   );
+   * })();
+   * ```
+   *
+   * Note:
+   * Technically, `name` should be a unique key corresponding to the save object.
+   * Mods with the same name can't be loaded at the same time, so mod's name is suitable for a unique key.
+   *
+   * @param {string} name - mod's name
+   * @param {(isNewGame: boolean) => void} notFoundHandler - Called when the selected save is loading, but there's no existing save object for `name` in it
+   * @param {(saveObject: object) => void} loadHandler - Called when the selected save is loading, and `saveObject` is the existing save object for `name`
+   * @param {() => object} saveHandler - Called just before saving, and it should return a save object to be written
+   *
+   */
+  addSaveObjectHandlers(name, notFoundHandler, loadHandler, saveHandler) {
+    maginai.events.saveLoading.addHandler((e) => {
+      const modSaveObject = maginai.modSave.getSaveObject(name);
+      if (modSaveObject === undefined) {
+        notFoundHandler(e.isNewGame);
+      } else {
+        loadHandler(modSaveObject);
+      }
+    });
+
+    maginai.events.saveObjectRequired.addHandler(() => {
+      const modSaveObject = saveHandler();
+      maginai.modSave.setSaveObject(name, modSaveObject);
+    });
   }
 }
