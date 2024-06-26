@@ -1,25 +1,25 @@
-## はじめに
+## Introduction
 
-maginaiの開発に興味をもっていただきありがとうございます！  
+Thank you for your interest in contributing to maginai's development!  
 
-現時点ではあまり強い制限やルールなく受け付けていこうと思っています。  
-コードやドキュメントの改善に関しても、かならずPRやissueをたてなければいけないというわけではなく  
-ここが動かなかった！こうしたら動いた！といった断片情報でもお気軽にREADMEに記載の連絡先まで連絡いただければ幸いです。  
+At this point, we're open to contributions without many strict restrictions or rules.  
+For improvements to code or documentation, you don't necessarily have to submit a PR or create an issue.  
+If you encounter any problems or find solutions, we'd be grateful if you could share even small pieces of information with us using the contact details provided in the README.  
 
-もちろん、issueともし修正があればそれに紐付けたPRを作成いただければ作業しやすく助かります。  
+Of course, if you do create an issue and have a fix for it, submitting a PR linked to that issue would be very helpful and make our work easier.  
 
 ## Development
 
 ### Requirement
 
-Node.js v18以上
+Node.js v18 or higher
 
-動作確認済開発環境：
+Verified development environment:
 Ubuntu 22.04 LTS
 
 ### Install and Dev Build
 
-リポジトリのclone後、異世界の創造者フォルダを`game/`としてコピー  
+After cloning the repository, copy the Creator of Another World folder as `game/`  
 
 ```text
 ./
@@ -41,73 +41,72 @@ Ubuntu 22.04 LTS
 npm install
 ```
 
-以下でMODローダーのビルド  
+Build the mod loader with the following command:  
 
 ```
 npm run dev
 ```
 
-`game/js/mod`に出力されるため、そのままゲームを起動して動作確認可能  
-
+Since it's output to `game/js/mod`, you can launch the game directly and verify its functionality.  
 
 ### Branches
 - `develop` 
-  - 開発ブランチ
-  - PRはこちら宛に
+  - Development branch
+  - PRs should be directed here
 - `master`
-  - リリースブランチ
-  - `develop`からのPRでのみ更新
+  - Release branch
+  - Updated only through PRs from `develop`
 - `gh-pages`
-  - [ドキュメント](https://spoonail-iroiro.github.io/maginai/)GitHub Pages用
-  - Actionsにより自動更新
+  - For [documentation](https://spoonail-iroiro.github.io/maginai/) on GitHub Pages
+  - Automatically updated by Actions
 
 ### Test
-vitestを使用  
-`tests`フォルダ下のテスト対象の`*.test.ts`をテストコードとする  
-階層は`js/mod`をルートとしてテスト対象と対応するように（例えば`js/mod/modules/maginai.ts`のテストなら`tests/modules/maginai.test.ts`）  
+Using vitest  
+Test files with the extension `*.test.ts` located in the `tests` folder are considered test code  
+The directory structure should correspond to the structure of the code being tested, with `js/mod` as the root (for example, the test for `js/mod/modules/maginai.ts` would be `tests/modules/maginai.test.ts`)  
 
 ### Release
-※作業は基本Spoonailが行います
+\* The following tasks are primarily performed by Spoonail.
 
-- `npm run bump-version:{major/minor/patch}`でversion更新 
-- `develop`->`master`へ[release PR](https://github.com/spoonail-iroiro/maginai/compare/master...develop?quick_pull=1&template=release.md&title=Release:+vX.Y.Z)を作成
-  - タイトルは`Release: vX.Y.Z`
-- PRの各種チェックに合格したら`master`へmerge
-  - Actionsによりrelease draftの作成
-- 作成されたdraftを確認、changelogの生成と必要なら変更
-  - 配布バイナリの添付とバージョン番号タグは自動
-- releaseを確定
-  - Actionsによりtypedocドキュメント生成、`gh-pages`へのpush
-  - Actionsにより`npm publish`
+- Update the version using `npm run bump-version:{major/minor/patch}`
+- Create a [release PR](https://github.com/spoonail-iroiro/maginai/compare/master...develop?quick_pull=1&template=release.md&title=Release:+vX.Y.Z) from `develop` to `master`
+  - The title should be `Release: vX.Y.Z`
+- Once the PR passes all checks, merge it into `master`
+  - Actions will automatically create a release draft
+- Review the created draft, generate the changelog, and make any necessary changes
+  - Binary attachments and version number tags are added automatically
+- Finalize the release
+  - Actions will generate TypeDoc documentation and push it to `gh-pages`
+  - Actions will execute `npm publish`
 
 ### Scripts
 
-#### 型定義パッケージのビルド
+#### Building Type Definition Package
 ```
 npm run build:package
 ```
 
-`libs/`下にMOD開発用パッケージ用の型定義出力  
+Outputs type definitions for MOD development packages under the `libs/` directory  
 
-#### 配布zipのビルド
+#### Building the Distribution ZIP
 ```
 npm run build:dist
 ```
 
-`dist/`下に配布zip出力  
-`dist/maginai/`フォルダがzipの内容  
+Outputs the distribution zip under the `dist/` directory  
+The `dist/maginai/` folder contains the contents of the zip  
 
-#### ドキュメント
+#### Documentation
 ```
 npm run preview:docs
 ```
-外部モジュールを除いたドキュメントのビルド  
-開発中の確認は基本これで  
+Build the documentation excluding external modules  
+This is generally used for checking during development  
 
 ```
 npm run build:docs
 ```
-すべてのページのビルド（外部モジュールまで含むため遅い）
+Build all pages (including external modules, which makes it slower).
 
 
 
