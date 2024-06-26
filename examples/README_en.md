@@ -42,7 +42,9 @@ Each `example-*` folder is a valid mod's main folder, so you can install it as a
 ## Map
 | Example | Description |
 | --- | --- |
+| [Custom Map](./map/example-custom-map/init.js) | Creates a custom map |
 | [Map List](./map/example-map-list/init.js) | Outputs all maps to the console |
+| [View Map](./map/example-view-map/init.js) | Transports the player between maps |
 
 ## User Interface
 | Example | Description |
