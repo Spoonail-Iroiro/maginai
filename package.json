@@ -24,7 +24,7 @@
     "build:docs": "typedoc",
     "build:sample": "node ./tools/releaseSampleMod.js",
     "copy-examples": "node ./tools/copyExamples.js",
-    "format": "prettier -w ./**/*.js ./**/*.ts",
+    "format": "prettier -w ./**/*.js ./**/*.ts ./**/*.md",
     "lint": "eslint . --ext .js,.ts .",
     "test": "vitest run",
     "test:dev": "vitest --inspect-brk --test-timeout 100000 --single-thread",
