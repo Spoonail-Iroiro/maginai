@@ -184,11 +184,25 @@ export class MaginaiEvents {
   gameLoadFinished = new ModEvent('gameLoadFinished');
 
   /**
-   * Triggered:
-   * - When the save data loading is completed and just before it becomes operable when you select your save to continue the game.
-   * - When the Place of Beginning is displayed at the start of a new game.
+   * Triggered after a save slot is selected by the player and before all game objects (such as `tWgm.tGameCharactor`) load data from the save.
    *
-   * `isNewGame` in the event arg is `false` for the former and `true` for the latter.
+   * Each mod's save object is available in the handler.
+   *
+   * This event is also triggered at the start of new game, just before save objects of all game objects are initialized.
+   *
+   * `isNewGame` in the event arg is whether it's triggerd for the new game.
+   *
+   * callback type: `({isNewGame: boolean}) => void`
+   */
+  saveLoading;
+
+  /**
+   * Triggered when the save data loading is completed and just before it becomes operable when the player selected a save slot to continue the game.
+   *
+   * This event is also triggered at the start of new game, when the Place of Beginning is displayed.
+   *
+   * `isNewGame` in the event arg is whether it's triggerd for the new game.
+   *
    * callback type: `({isNewGame: boolean}) => void`
    */
   saveLoaded = new ModEvent('saveLoaded');
@@ -233,10 +247,6 @@ export class MaginaiEvents {
 
   /**
    * Triggered just before saving, when a save object to be written to the save data is requested.
-   *
-   * Each mod can set the save object using `maginai.modSave.setSaveObject` in the event handler to write its data to the save.
-   * the `maginai.modSave.setSaveObject` itself is effective at other times as well, but this event allows you to prepare your mod's save data just before saving
-   * For details, refer to the `ModSave` class documentation
    *
    * @type {ModEvent}
    */
@@ -412,7 +422,7 @@ export class Maginai {
     /**
      * `maginai.modSave` submodule
      *
-     * Provides methods for getting and setting the save data for each mod.
+     * Provides methods for storing and retrieving the save object for each mod.
      * See {@link ModSave} class definition for details.
      */
     this.modSave = new ModSave();
@@ -426,6 +436,7 @@ export class Maginai {
     this.events = new MaginaiEvents();
     this.events.commandKeyClicked = this.modCommandKey.commandKeyClicked;
     this.events.saveObjectRequired = this.modSave.saveObjectRequired;
+    this.events.saveLoading = this.modSave.saveLoading;
   }
 
   /**
