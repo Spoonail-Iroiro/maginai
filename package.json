@@ -44,6 +44,7 @@
     "typedoc": "^0.25.1",
     "typedoc-plugin-missing-exports": "^2.2.0",
     "typescript": "^5.2.2",
+    "typescript-eslint": "^7.14.1",
     "vite": "^4.4.5",
     "vitest": "^0.34.4"
   },
