@@ -5,3 +5,11 @@ coverage
 dist
 node_modules
 vite.config.ts
+dist
+dist-ssr
+*.local
+/game/
+/game_bak/
+/js_scripts/prac/
+/lib/
+/_docs/
