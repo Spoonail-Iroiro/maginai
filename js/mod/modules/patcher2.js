@@ -46,12 +46,13 @@ export class Patcher2 {
    * // Bye
    * // 3
    * ```
-   * @param {Function} cls - The class which has the method `methodName`
+   * @param {new T} cls - The class which has the method `methodName`
    * @param {string} methodName - The name of method to be patched
-   * @param {(self: Object, originalMethod: Function, args: any[]) => void} newMethod
+   * @param {(self: T, originalMethod: Function, args: any[]) => void} newMethod
    *     `self` is the instance (`this`) on which the method is called.
    *     `originalMethod` is the original method `methodName`, bound to `this`.
    *     `args` is the list of the args passed to the method.
+   * @template T
    */
   patchMethod(cls, methodName, newMethod) {
     // Prevent patching undefined method
