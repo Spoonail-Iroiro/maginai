@@ -70,17 +70,17 @@ it('returns nice errors on invalid arguments passed', () => {
   const event = new ModEvent('Test');
   // ModEvent constructor is not public API, so not tested here
 
-  // @ts-ignore
+  // @ts-expect-error Runtime type guard test
   expect(() => event.addHandler(2)).toThrowError(
-    'number is invalid type for event handler. It should be function'
+    'number is invalid type for event handler. It should be function',
   );
 
-  // @ts-ignore
+  // @ts-expect-error Runtime type guard test
   expect(() => event.removeHandler(2)).toThrowError(
-    'number is invalid argument type. Specify handler function to be removed'
+    'number is invalid argument type. Specify handler function to be removed',
   );
 
   expect(() => event.removeHandler(vi.fn())).toThrowError(
-    'Passed function is not a handler of this event'
+    'Passed function is not a handler of this event',
   );
 });
