@@ -3,7 +3,7 @@
 
 [![npm](https://img.shields.io/npm/v/maginai?style=for-the-badge)](https://www.npmjs.com/package/maginai)
 [![license](https://img.shields.io/github/license/Spoonail-Iroiro/maginai?style=for-the-badge)](LICENSE)
-[![Discord](https://img.shields.io/discord/1234695202615197746?style=for-the-badge&logo=discord&label=Discord)](https://discord.gg/Z7n5EPxQ)
+[![Discord](https://img.shields.io/discord/1234695202615197746?style=for-the-badge&logo=discord&label=Discord)](https://discord.gg/RgYrD3uPZM)
 
 非公式 異世界の創造者Modローダー
 
@@ -17,18 +17,29 @@ Modマネージャー`gmaginai-l`より導入することをおすすめしま�
 
 [手動インストール手順](INSTALL.md)
 
-## 作者Modリスト
+## Modリスト
+※(Discord)がついているものは[Discordサーバー](https://discord.gg/RgYrD3uPZM)上でのみ配布されています。リンクへアクセスするにはサーバーへの参加が必要です
+
+### By Spoonail
 maginai作者制作のModです。  
-導入テストや制作の参考にもご利用下さい。  
+導入テストや制作の参考等、自由にご利用下さい。  
 
-- [簡易クイックセーブ/ロードMod](https://github.com/Spoonail-Iroiro/maginai-qsave/blob/master/README.md)
-- [固有NPC等口調差し替え・追加Mod](https://github.com/Spoonail-Iroiro/maginai-plustalk/blob/master/README.md)
-- [アビリティトラッカーMod](https://github.com/Spoonail-Iroiro/maginai-atrack)
-- [レターパックMod](https://github.com/Spoonail-Iroiro/maginai-letterpack/blob/master/README.md)
+- [qsave](https://github.com/Spoonail-Iroiro/maginai-qsave/blob/master/README.md) - 簡易クイックセーブ/ロードMod
+- [plustalk](https://github.com/Spoonail-Iroiro/maginai-plustalk/blob/master/README.md) - 固有NPC等口調差し替え・追加Mod
+- [atrack](https://github.com/Spoonail-Iroiro/maginai-atrack/blob/master/README.md) - アビリティトラッカーMod
+- [letterpack](https://github.com/Spoonail-Iroiro/maginai-letterpack/blob/master/README.md) - レターパックMod
 
+### By Others
+各Mod作者の案内にしたがってModを利用してください。
+
+- [showabilities](https://discord.com/channels/1234695202615197746/1234751996595015710/1245000749952532480) - アビリティリストMod by めじ (Discord)
+
+※ここに掲載したいModがある場合は[こちら](#困ったときは)からご連絡ください
 
 # Mod の開発
 [Mod開発者向け説明](MOD_DEVELOP.md)
+
+[Modサンプルコード](./examples/README.md)
 
 [maginai APIドキュメント](https://spoonail-iroiro.github.io/maginai/index.html)
 

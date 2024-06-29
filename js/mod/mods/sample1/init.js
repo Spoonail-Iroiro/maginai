@@ -18,6 +18,10 @@
     }
   });
 
+  maginai.events.saveLoading.addHandler((e) => {
+    logger.info(`Save loading. isNewGame: ${e.isNewGame}`);
+  });
+
   maginai.events.saveLoaded.addHandler((e) => {
     logger.info(`Save loaded. isNewGame: ${e.isNewGame}`);
   });

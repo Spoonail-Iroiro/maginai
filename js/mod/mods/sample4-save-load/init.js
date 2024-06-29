@@ -1,38 +1,46 @@
 // import { Maginai } from '../../modules/maginai.js';
 // const maginai = new Maginai();
 
-// セーブ回数をカウントするmod
+// `init.js` of `sample4` mod, which counts how many times you performed saving
 (function () {
-  let saveCount;
   const logger = maginai.logging.getLogger('sample4');
-  // タイプ数削減のためサブモジュールを変数に格納
-  const sv = maginai.modSave;
-  const ev = maginai.events;
 
-  // セーブデータのロード完了時に…
-  ev.saveLoaded.addHandler(() => {
-    // getSaveObjectで現在読み込んでいるセーブデータ内の`sample4`のセーブオブジェクトを取得
-    const saveObj = sv.getSaveObject('sample4');
-    if (saveObj === undefined) {
-      // `sample4`のセーブオブジェクトが存在しない場合undefinedが返されるので、saveCountの初期値0をセット
+  // Variable for counting saving
+  let saveCount;
+
+  maginai.modSave.addSaveObjectHandlers(
+    // `name` - Mod's name
+    'sample4',
+
+    // `notFoundHandler` - Called when no existing save object for `name`
+    (isNewGame) => {
+      // Initialize saveCount
       saveCount = 0;
-    } else {
-      // セーブオブジェクトが存在すればその中のsaveCountをセット
+      // Show a message and whether it's a new game
+      logger.info(
+        `'sample4' is applied to this save for the first time. isNewGame: ${isNewGame}`
+      );
+    },
+
+    // `loadHandler` - Called when existing save object found for `name`
+    (saveObj) => {
       saveCount = saveObj.saveCount;
+      // Show the `saveCount` loaded from the save
+      logger.info(
+        `Save object has been loaded. saveCount:` + saveCount.toString()
+      );
+    },
+
+    // `saveHandler` - Should return a save object to be written for `name`
+    () => {
+      // Increment `saveCount` by 1
+      saveCount += 1;
+      // Show the current `saveCount`
+      logger.info(
+        `Save object has been saved. saveCount:` + saveCount.toString()
+      );
+      // Return a new save object
+      return { saveCount };
     }
-    // ログにセーブから読み込んだsaveCountを表示
-    logger.info(
-      `セーブオブジェクトがロードされました。saveCount:` + saveCount.toString()
-    );
-  });
-
-  // セーブデータ書き込み直前に…
-  ev.saveObjectRequired.addHandler(() => {
-    // saveCountを+1
-    saveCount += 1;
-
-    // `sample4`のセーブオブジェクトとして、オブジェクトにsaveCountを含めてセット
-    sv.setSaveObject('sample4', { saveCount });
-    logger.info(`セーブがセットされました`);
-  });
+  );
 })();

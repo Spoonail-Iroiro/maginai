@@ -25,9 +25,21 @@ class ModEvent {
         `${type} is invalid type for description. It should be string`
       );
     }
+    /**
+     * @internal
+     */
     this.name = name;
+    /**
+     * @internal
+     */
     this.description = description;
+    /**
+     * @internal
+     */
     this.handlers = [];
+    /**
+     * @internal
+     */
     this.hasHandler = false;
   }
 
