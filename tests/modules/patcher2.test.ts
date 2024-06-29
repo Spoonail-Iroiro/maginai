@@ -27,19 +27,19 @@ test('patch method by Patcher2', () => {
   patcher2.patchMethod(
     CaseClass,
     'showAndReturnAdd',
-    (self: CaseClass, original: Function, args: any[]) => {
+    (self, original, args) => {
       const patchValue = 4;
       args[0] += patchValue;
-      let rtn = original(...args);
+      const rtn = original(...args);
       return [rtn, self.subMethod()];
-    }
+    },
   );
 
   const patchRtn = caseObj.showAndReturnAdd(3) as any;
   patchRtn[0].should.be.equal(9); // 4 + 3 + 2
   patchRtn[1].should.be.equal('sub');
-  // @ts-ignore eee
+  // @ts-expect-error Assertion for saved original method
   CaseClass.prototype['__maginai__showAndReturnAdd'].should.be.equal(
-    origMethod
+    origMethod,
   );
 });
