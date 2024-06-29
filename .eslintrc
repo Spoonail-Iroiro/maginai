@@ -14,6 +14,7 @@
     "tGameSave": true,
     "tGameMap": true,
     "tGameData": true,
+    "tGameItem": true,
     "maginaiConfig": true,
     "LOADDATA": true,
     "maginai": true
